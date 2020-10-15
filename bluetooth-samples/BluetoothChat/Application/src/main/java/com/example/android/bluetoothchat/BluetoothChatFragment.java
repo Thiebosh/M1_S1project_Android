@@ -209,23 +209,6 @@ public class BluetoothChatFragment extends Fragment {
     /**
      * Updates the status on the action bar.
      *
-     * @param resId a string resource ID
-     */
-    private void setStatus(int resId) {
-        FragmentActivity activity = getActivity();
-        if (null == activity) {
-            return;
-        }
-        final ActionBar actionBar = activity.getActionBar();
-        if (null == actionBar) {
-            return;
-        }
-        actionBar.setSubtitle(resId);
-    }
-
-    /**
-     * Updates the status on the action bar.
-     *
      * @param subTitle status
      */
     private void setStatus(CharSequence subTitle) {
@@ -255,11 +238,11 @@ public class BluetoothChatFragment extends Fragment {
                             mConversationArrayAdapter.clear();
                             break;
                         case BluetoothChatService.STATE_CONNECTING:
-                            setStatus(R.string.title_connecting);
+                            setStatus(getString(R.string.title_connecting));
                             break;
                         case BluetoothChatService.STATE_LISTEN:
                         case BluetoothChatService.STATE_NONE:
-                            setStatus(R.string.title_not_connected);
+                            setStatus(getString(R.string.title_not_connected));
                             break;
                     }
                     break;

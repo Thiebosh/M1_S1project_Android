@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import fr.yncrea.m1_s1project_android.R;
 
@@ -15,10 +16,21 @@ import fr.yncrea.m1_s1project_android.R;
  */
 public class BackupActivity extends AppCompatActivity {
 
+    /*
+     * Section Cycle de vie
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backup);
+    }
+
+
+    @Override
+    public void onRestart() {//retour à l'écran principal avant déconnexion
+        super.onRestart();
+        startActivity((new Intent(BackupActivity.this, ConnectActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     /*
@@ -38,7 +50,6 @@ public class BackupActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.menu_toMainBoardActivity:
                 startActivity((new Intent(BackupActivity.this, MainBoardActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-
                 return true;
             case R.id.menu_toConnectActivity:
                 startActivity((new Intent(BackupActivity.this, ConnectActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

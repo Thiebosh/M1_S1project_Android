@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import fr.yncrea.m1_s1project_android.R;
 
@@ -15,10 +16,25 @@ import fr.yncrea.m1_s1project_android.R;
  */
 public class MainBoardActivity extends AppCompatActivity {
 
+    /*
+     * Section Cycle de vie
+     */
+
+    private boolean mFlagChangeActivity = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_board);
+    }
+
+    @Override
+    public void onRestart() {//retour à l'écran principal avant déconnexion
+        super.onRestart();
+        if (!mFlagChangeActivity) {
+            startActivity((new Intent(MainBoardActivity.this, ConnectActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        }
+        else mFlagChangeActivity = false;
     }
 
     /*
@@ -37,11 +53,13 @@ public class MainBoardActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_toBackupActivity:
+                mFlagChangeActivity = true;
                 startActivity((new Intent(MainBoardActivity.this, BackupActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 //MainBoardActivity.this.finish(); //peut remplacer le flag mais pas même retour visuel
                 return true;
 
             case R.id.menu_toConnectActivity:
+                mFlagChangeActivity = true;
                 startActivity((new Intent(MainBoardActivity.this, ConnectActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 return true;
 

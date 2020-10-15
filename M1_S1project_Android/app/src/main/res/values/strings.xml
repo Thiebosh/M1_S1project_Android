@@ -7,6 +7,16 @@
     <string name="menu_toMainBoardActivity">Main board</string>
     <string name="menu_toBackupActivity">Backup</string>
 
+    <!--  Connect -->
+    <string name="connect_bluetooth_paired_devices">Paired Devices</string>
+    <string name="connect_bluetooth_other_devices">Other Available Devices</string>
+    <string name="connect_bluetooth_scan">Scan for devices</string>
+    <string name="connect_bluetooth_scanning">scanning for devices...</string>
+
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+
     <!--  Category -->
     <string name="id">text</string>
 </resources>
