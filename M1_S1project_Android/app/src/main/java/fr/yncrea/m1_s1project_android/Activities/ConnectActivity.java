@@ -1,37 +1,18 @@
 package fr.yncrea.m1_s1project_android.activities;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 
-import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.MIVS_RC_Application;
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
 
 /**
  * Activité de connexion bluetooth à un appareil. Une fois connecté, peut accéder à l'activité principale
