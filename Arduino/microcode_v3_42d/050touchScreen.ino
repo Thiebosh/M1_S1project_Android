@@ -7,12 +7,40 @@
 */
 
 uint8_t getInputFromTouchScreen() {
+  Serial.println("exec fct getInputFromTouchScreen in 050"); // changement
 
   uint8_t x = 255; // init, means no result yet
   uint8_t y = 255;
 
   if (ts.touched()) { //gets a point if ts touched  during this iteration
-    while (ts.touched()) {}
+    Serial.println("if ts touched in 050"); // changement
+    while (ts.touched()) { // changement : block while = while (ts.touched()) {}
+
+      if (hc06.available() > 0) {
+        strCmd = hc06.readString();
+        Serial.print("I received : ");
+        Serial.println(strCmd);
+        //hc06.print(strCmd);
+        //hc06.println("\n");
+        if (strCmd.equals("get")) {
+          uint8_t reponse = getChannelValue(0);
+          hc06.print(reponse);
+        }
+        if (strCmd.equals("set")) {
+          setChannelValue(0,(getChannelValue(0)+1)%2);
+        }
+      }
+
+      /*
+        while(hc06.available())
+        {
+        char data = hc06.read();
+        Serial.write(data);
+        hc06.write(data);
+        }
+      */
+    }
+    Serial.println("after while ts touched in 050"); // changement
 
     while  (!ts.bufferEmpty()) {
       p = ts.getPoint();

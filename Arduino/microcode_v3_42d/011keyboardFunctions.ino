@@ -5,6 +5,7 @@
   changes global variables keyboardXBounds,keyboardYBounds
 */
 void buildKeyboardKeyBounds() {
+  Serial.println("exec fct buildKeyboardKeyBounds in 011"); // changement
   for (int i = 0; i < 4; i++) {
     keyboardXBounds[2 * i] = 5 + 60 * i;
     keyboardXBounds[2 * i + 1] = keyboardXBounds[2 * i] + 50;
@@ -28,6 +29,7 @@ void buildKeyboardKeyBounds() {
   changes global variables calculatedDacValue and calculatedRange
 */
 void extractFromKeyboardValue(uint8_t sourceType, uint8_t channel) {
+  Serial.println("exec fct extractFromKeyboardValue in 011"); // changement
 
   float absval;
 
@@ -99,6 +101,7 @@ void extractFromKeyboardValue(uint8_t sourceType, uint8_t channel) {
     return: nothing
 */
 void keyboardKeyButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct keyboardKeyButton in 011"); // changement
   tft.fillRoundRect(KBDBUTTON_X + x0, KBDBUTTON_Y + y0, KBDBUTTON_W, KBDBUTTON_H, RADIUS, ILI9341_BLUE);
 } // end keyboardKeyButton()
 
@@ -110,6 +113,7 @@ void keyboardKeyButton(uint16_t x0, uint16_t y0) {
    Return: nothing
 */
 void keyboardButtonLabel(uint16_t x0, uint16_t y0, uint8_t index, uint8_t sourceType) {
+  Serial.println("exec fct keyboardButtonLabel in 011"); // changement
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
   tft.setCursor(3 + x0, 8 + y0);
@@ -121,6 +125,7 @@ void keyboardButtonLabel(uint16_t x0, uint16_t y0, uint8_t index, uint8_t source
 
 */
 void resetKeyboardDisplayZone(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct resetKeyboardDisplayZone in 011"); // changement
   tft.fillRect(KBZONE_X + x0, KBZONE_Y + y0, KBZONE_W, KBZONE_H, ILI9341_BLACK);
   tft.drawRoundRect(KBZONE_X + x0, KBZONE_Y + y0, KBZONE_W, KBZONE_H, RADIUS, ILI9341_WHITE);
 } // end resetKeyboardDisplayZone()
@@ -129,6 +134,7 @@ void resetKeyboardDisplayZone(uint16_t x0, uint16_t y0) {
 
 */
 TS_Point getTsPoint(void) {
+  Serial.println("exec fct getTsPoint in 011"); // changement
   TS_Point p;
   while (!ts.touched()) {}  // wait until a key is pressed
   while (ts.touched()) {} // wait until the key is released
@@ -145,6 +151,7 @@ TS_Point getTsPoint(void) {
 
 */
 int keyboardWhichKeyPressed(TS_Point p) {
+  Serial.println("exec fct keyboardWhichKeyPressed in 011"); // changement
   int  i0 = -1;
   for (uint8_t i = 0; i < 4; i++) {
     if (isInside(p.x, keyboardXBounds[2 * i], keyboardXBounds[2 * i + 1])) i0 = i;

@@ -5,6 +5,7 @@
 */
 
 void consoleErrorMessage(uint8_t error) {
+  Serial.println("exec fct consoleErrorMessage in 004"); // changement
   switch (error) {
     case 0: // nothing available on console, no message
       break;
@@ -60,6 +61,7 @@ void consoleErrorMessage(uint8_t error) {
    returns: integer value
 */
 uint16_t hexToDec(String hexString) {
+  Serial.println("exec fct hexToDec in 004"); // changement
 
   uint16_t decValue = 0;
   int nextInt;
@@ -85,6 +87,7 @@ uint16_t hexToDec(String hexString) {
    returns: nothing
 */
 uint8_t voltageCalibration(uint8_t channel) {
+  Serial.println("exec fct voltageCalibration in 004"); // changement
   String phrase;
 
   float fineOffsetStep = LSB_VALUE / 8;
@@ -167,6 +170,7 @@ uint8_t voltageCalibration(uint8_t channel) {
    returns: nothing
 */
 uint8_t currentCalibration(uint8_t channel, uint8_t range) {
+  Serial.println("exec fct currentCalibration in 004"); // changement
   String phrase;
 
   float fineOffsetStep = LSB_VALUE / 8;
@@ -262,6 +266,7 @@ uint8_t currentCalibration(uint8_t channel, uint8_t range) {
    returns: formatted fine offset
 */
 int formatFineOffset( int value) {
+  Serial.println("exec fct formatFineOffset in 004"); // changement
 
   if (value > 127) return 127;
   else if (value < -128) return -128;
@@ -275,6 +280,7 @@ int formatFineOffset( int value) {
    returns: formatted fine gain
 */
 int formatFineGain( int value) {
+  Serial.println("exec fct formatFineGain in 004"); // changement
 
   if (value > 31) return 31;
   else if (value < -32) return -32;
@@ -289,6 +295,7 @@ int formatFineGain( int value) {
 */
 
 int consoleGetValueWithMultiplier(uint8_t index, uint8_t type, float *returnedValue) {
+  Serial.println("exec fct consoleGetValueWithMultiplier in 004"); // changement
   int stringLen;
   float multiplier;
   String lastChar;
@@ -338,6 +345,7 @@ int consoleGetValueWithMultiplier(uint8_t index, uint8_t type, float *returnedVa
 
 
 void sendChannelStatus(uint8_t channel) {
+  Serial.println("exec fct sendChannelStatus in 004"); // changement
 
   float val;
 

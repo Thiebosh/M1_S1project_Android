@@ -6,8 +6,9 @@
   returns: nothing
 */
 void setChannelType(uint8_t channel, uint8_t type) {
+  Serial.println("exec fct setChannelType in 100"); // changement
   switch (channel) {
-
+    
     case 0:
       IV00.setType(type);
       break;
@@ -33,7 +34,6 @@ void setChannelType(uint8_t channel, uint8_t type) {
       IV07.setType(type);
       break;
   }
-
   channelDisplayValue[channel]=0;
   
 } // end setChannelType()
@@ -46,6 +46,7 @@ void setChannelType(uint8_t channel, uint8_t type) {
   returns: type 0: volt 1: current
 */
 uint8_t getChannelType(uint8_t channel) {
+  Serial.println("exec fct getChannelType in 100"); // changement
   uint8_t type;
   switch (channel) {
 
@@ -84,6 +85,7 @@ uint8_t getChannelType(uint8_t channel) {
    returns: nothing
 */
 void setChannelValue(uint8_t channel, int16_t value) {
+  Serial.println("exec fct setChannelValue in 100"); // changement
   switch (channel) {
     case 0:
       IV00.setValue(value);
@@ -121,6 +123,7 @@ void setChannelValue(uint8_t channel, int16_t value) {
    returns: value in mV between -800 and 8000
 */
 int16_t getChannelValue(uint8_t channel) {
+  Serial.println("exec fct getChannelValue in 100"); // changement
   int16_t value;
   switch (channel) {
     case 0:
@@ -159,6 +162,7 @@ int16_t getChannelValue(uint8_t channel) {
   returns: nothing
 */
 void setChannelRange(uint8_t channel, uint8_t range) {
+  Serial.println("exec fct setChannelRange in 100"); // changement
   switch (channel) {
 
     case 0:
@@ -197,6 +201,7 @@ void setChannelRange(uint8_t channel, uint8_t range) {
   returns: range 0..3
 */
 uint8_t getChannelRange(uint8_t channel) {
+  Serial.println("exec fct getChannelRange in 100"); // changement
   uint8_t range;
   switch (channel) {
 
@@ -236,6 +241,7 @@ uint8_t getChannelRange(uint8_t channel) {
 */
 
 void switchChannelOn(uint8_t channel) {
+  Serial.println("exec fct switchChannelOn in 100"); // changement
   switch (channel) {
     case 0:
       IV00.sourceOn();
@@ -272,6 +278,7 @@ void switchChannelOn(uint8_t channel) {
    returns: nothing
 */
 void switchChannelOff(uint8_t channel) {
+  //println("exec fct switchChannelOff in 100"); // changement
   switch (channel) {
     case 0:
       IV00.sourceOff();

@@ -10,6 +10,7 @@
    returns: nothing
 */
 void menuDisplayContext() {
+  Serial.println("exec fct menuDisplayContext in 008"); // changement
   tft.fillScreen(ILI9341_BLACK);
 
   menuSourceTypeButton(0, 10);
@@ -26,6 +27,7 @@ void menuDisplayContext() {
    returns: nothing
 */
 void menuSourceTypeButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuSourceTypeButton in 008"); // changement
   tft.fillRoundRect(MENUBUTTON_X + x0, MENUBUTTON_Y + y0, MENUBUTTON_W, MENUBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -34,6 +36,7 @@ void menuSourceTypeButton(uint16_t x0, uint16_t y0) {
 }
 
 void menuModifyLimitsButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuModifyLimitsButton in 008"); // changement
   tft.fillRoundRect(MENUBUTTON_X + x0, MENUBUTTON_Y + y0, MENUBUTTON_W, MENUBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -42,6 +45,7 @@ void menuModifyLimitsButton(uint16_t x0, uint16_t y0) {
 }
 
 void menuUserStoreButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuUserStoreButton in 008"); // changement
   tft.fillRoundRect(MENUBUTTON_X + x0, MENUBUTTON_Y + y0, MENUBUTTON_W, MENUBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -50,6 +54,7 @@ void menuUserStoreButton(uint16_t x0, uint16_t y0) {
 }
 
 void menuUserRecallButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuUserRecallButton in 008"); // changement
   tft.fillRoundRect(MENUBUTTON_X + x0, MENUBUTTON_Y + y0, MENUBUTTON_W, MENUBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -58,6 +63,7 @@ void menuUserRecallButton(uint16_t x0, uint16_t y0) {
 }
 
 void menuAboutButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuAboutButton in 008"); // changement
   tft.fillRoundRect(MENUBUTTON_X + x0, MENUBUTTON_Y + y0, MENUBUTTON_W, MENUBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -66,6 +72,7 @@ void menuAboutButton(uint16_t x0, uint16_t y0) {
 }
 
 void menuBackButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuBackButton in 008"); // changement
   tft.fillRoundRect(MENUBUTTON_X + x0, MENUBUTTON_Y + y0, MENUBUTTON_W, MENUBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -79,6 +86,7 @@ void menuBackButton(uint16_t x0, uint16_t y0) {
    returns: nothing
 */
 void menuDisplayAbout() {
+  Serial.println("exec fct menuDisplayAbout in 008"); // changement
 
   tft.fillScreen(ILI9341_BLACK);
   tft.setTextColor(ILI9341_WHITE);

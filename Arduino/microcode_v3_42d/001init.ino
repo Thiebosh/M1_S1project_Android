@@ -4,6 +4,7 @@
    returns: 0 = OK,   1= no DAC responding
 */
 uint8_t initAll(void) {
+  Serial.println("exec fct initAll in 001"); // changement
   tft.begin();
   ts.begin();
   //  Serial.begin(9600);
@@ -47,13 +48,14 @@ uint8_t initAll(void) {
   framMemoryOk = 0;
   tft.println("");
   framMemoryOk = testFramMemory(FRAM_ADDRESS );
+  Serial.println(framMemoryOk); // changement : ligne inexiz
   fram.softPageLock(PAGE0); // helps preventing parameters erase
   fram.softPageLock(PAGE1); // helps preventing parameters erase
 
   /*
      STEP4:  test presence of DACs
   */
-
+  
   testDac(); // block below commented for test purposes
 
   /*
@@ -89,7 +91,9 @@ uint8_t initAll(void) {
   tft.println("");
   if (digitalRead(FACTORY_DEFAULT_SWITCH)) {
     tft.print("** Boot (NOT FACTORY)...");
+    Serial.println("avant dafaultsRestore if"); // changement ligne inexistante, ici marche
     defaultsRestore(NOT_FACTORY);
+    Serial.println("apres dafaultsRestore if"); // changement ligne inexistante, ici ne marche pas
     systemBoot();
     tft.println("done");
   }
@@ -122,6 +126,6 @@ uint8_t initAll(void) {
     STEP10: terminates
   */
 
-  return 0; // everythig is OK
+  return 0; // everything is OK
 
 } // end initAll()

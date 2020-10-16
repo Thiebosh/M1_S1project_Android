@@ -29,6 +29,7 @@
 */
 
 void fullChannelDisplayContext() {
+  Serial.println("exec fct fullChannelDisplayContext in 007"); // changement
   tft.fillScreen(ILI9341_BLACK);
   for (int i = 0; i < 8; i++) {
 
@@ -48,6 +49,7 @@ void fullChannelDisplayContext() {
    returns: nothing
 */
 void displayChannelLabel(uint8_t channelNumber) {
+  Serial.println("exec fct displayChannelLabel in 007"); // changement
   tft.setTextColor(ILI9341_WHITE);
 
   if (boardOnSlotStatus & 0x01 << channelNumber) {
@@ -65,14 +67,17 @@ void displayChannelLabel(uint8_t channelNumber) {
    returns: nothing
 */
 void channelOnButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct channelOnButton in 007"); // changement
   tft.fillRoundRect(CHANNELLABELBUTTON_X + x0, CHANNELLABELBUTTON_Y + y0, CHANNELLABELBUTTON_W, CHANNELLABELBUTTON_H, RADIUS, TFT_GREEN);
 }
 
 void channelOffButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct channelOffButton in 007"); // changement
   tft.fillRoundRect(CHANNELLABELBUTTON_X + x0, CHANNELLABELBUTTON_Y + y0, CHANNELLABELBUTTON_W, CHANNELLABELBUTTON_H, RADIUS, ILI9341_RED);
 }
 
 void channelNonexistentButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct channelNonexistentButton in 007"); // changement
   tft.fillRoundRect(CHANNELLABELBUTTON_X + x0, CHANNELLABELBUTTON_Y + y0, CHANNELLABELBUTTON_W, CHANNELLABELBUTTON_H, RADIUS, ILI9341_BLACK);
   tft.drawRoundRect(CHANNELLABELBUTTON_X + x0, CHANNELLABELBUTTON_Y + y0, CHANNELLABELBUTTON_W, CHANNELLABELBUTTON_H, RADIUS, ILI9341_WHITE);
 }
@@ -84,6 +89,7 @@ void channelNonexistentButton(uint16_t x0, uint16_t y0) {
   returns: nothing
 */
 void addChannelLabel(uint16_t x0, uint16_t y0, uint8_t channel) {
+  Serial.println("exec fct addChannelLabel in 007"); // changement
   tft.setCursor(x0, y0);
   if ((channelModeStatus >> channel) & 0x01) tft.print("I");
   else tft.print("V");
@@ -97,6 +103,7 @@ void addChannelLabel(uint16_t x0, uint16_t y0, uint8_t channel) {
    returns: nothing
 */
 void displayChannelValue(uint8_t channelNumber) {
+  Serial.println("exec fct displayChannelValue in 007"); // changement
 
 
   if (boardOnSlotStatus & 0x01 << channelNumber) {
@@ -138,6 +145,7 @@ void displayChannelValue(uint8_t channelNumber) {
    returns: nothing
 */
 void displayUnselectedChannelValue(uint8_t channelNumber) {
+  Serial.println("exec fct displayUnselectedChannelValue in 007"); // changement
 
 
   if (boardOnSlotStatus & 0x01 << channelNumber) {
@@ -156,14 +164,17 @@ void displayUnselectedChannelValue(uint8_t channelNumber) {
 */
 
 void unSelectedValueZone(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct unSelectedValueZone in 007"); // changement
   tft.fillRect(VALUEZONE_X + x0, VALUEZONE_Y + y0, VALUEZONE_W, VALUEZONE_H, ILI9341_BLACK);
 }
 
 void selectedValueZone(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct selectedValueZone in 007"); // changement
   tft.fillRoundRect(VALUEZONE_X + x0, VALUEZONE_Y + y0, VALUEZONE_W, VALUEZONE_H, RADIUS, ILI9341_YELLOW);
 }
 
 void selectedDigitZone(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct selectedDigitZone in 007"); // changement
   tft.fillRect(DIGITSELECTED_X + x0, DIGITSELECTED_Y + y0, DIGITSELECTED_W, DIGITSELECTED_H, ILI9341_WHITE);
 }
 
@@ -174,6 +185,7 @@ void selectedDigitZone(uint16_t x0, uint16_t y0) {
   returns: nothing
 */
 void addChannelValue(uint16_t x0, uint16_t y0, uint8_t channel) {
+  Serial.println("exec fct addChannelValue in 007"); // changement
 
   float temp;
 
@@ -238,6 +250,7 @@ void addChannelValue(uint16_t x0, uint16_t y0, uint8_t channel) {
    returns: nothing
 */
 void menuButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct menuButton in 007"); // changement
   tft.fillRoundRect(BOTTOMBUTTON_X + x0, BOTTOMBUTTON_Y + y0, BOTTOMBUTTON_W, BOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -246,6 +259,7 @@ void menuButton(uint16_t x0, uint16_t y0) {
 }
 /*****************************************************************/
 void keyboardButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct keyboardButton in 007"); // changement
   tft.fillRoundRect(BOTTOMBUTTON_X + x0, BOTTOMBUTTON_Y + y0, BOTTOMBUTTON_W, BOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -254,11 +268,13 @@ void keyboardButton(uint16_t x0, uint16_t y0) {
 }
 /*****************************************************************/
 void arrowLeftButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct arrowLeftButton in 007"); // changement
   tft.fillRoundRect(BOTTOMBUTTON_X + x0, BOTTOMBUTTON_Y + y0, BOTTOMBUTTON_W, BOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.fillTriangle(15 + x0, 15 + y0, 35 + x0, 5 + y0, 35 + x0, 25 + y0, ILI9341_WHITE);
 }
 /*****************************************************************/
 void arrowRightButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct arrowRightButton in 007"); // changement
   tft.fillRoundRect(BOTTOMBUTTON_X + x0, BOTTOMBUTTON_Y + y0, BOTTOMBUTTON_W, BOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.fillTriangle(15 + x0, 5 + y0, 15 + x0, 25 + y0, 35 + x0, 15 + y0, ILI9341_WHITE);
 }
@@ -270,6 +286,7 @@ void arrowRightButton(uint16_t x0, uint16_t y0) {
 */
 
 void displayBottomButtons() {
+  Serial.println("exec fct displayBottomButtons in 007"); // changement
   menuButton(0, 290);
   keyboardButton(60, 290);
   arrowLeftButton(120, 290);

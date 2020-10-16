@@ -3,6 +3,7 @@
    returns: 0 = outside bounds, 1= inside bounds
 */
 uint8_t isInside(uint16_t x, uint16_t a, uint16_t b) {
+  Serial.println("exec fct isInside in 051"); // changement
   if ((x >= a) and (x <= b)) return 1;
   else return 0;
 } // end isInside()
@@ -12,6 +13,7 @@ uint8_t isInside(uint16_t x, uint16_t a, uint16_t b) {
    returns: nothing,  modifies the global variable digitSelected if necessary
 */
 void checkDigitSelectedLimits(uint8_t channel) {
+  Serial.println("exec fct checkDigitSelectedLimits in 051"); // changement
 
   if (!(channelModeStatus & 0x01 << channel)) { // voltage mode
     if (digitSelected[channel] > 0) digitSelected[channel] = 0;
@@ -45,6 +47,7 @@ void checkDigitSelectedLimits(uint8_t channel) {
    returns: nothing,  modifies x,y,p.x,p.y
 */
 void resetTsInput() {
+  Serial.println("exec fct resetTsInput in 051"); // changement
   p.x = 500; // outside screen
   p.y = 500;
 }

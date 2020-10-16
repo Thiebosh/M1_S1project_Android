@@ -5,7 +5,7 @@
    returns: nothing
 */
 uint8_t parseInputFromConsole(void) {
-
+  Serial.println("exec fct parseInputFromConsole in 003"); // changement : ligne inexistante
   String phrase, temp, temp2;
   int semicolonPos, colonPos[15];
   uint8_t fieldType;

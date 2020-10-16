@@ -9,6 +9,7 @@
    returns: nothing
 */
 void changeSourceTypeMenuDisplay() {
+  Serial.println("exec fct changeSourceTypeMenuDisplay in 009"); // changement
   tft.fillScreen(ILI9341_BLACK);
 
   for (int i = 0; i < 8; i++) {
@@ -20,6 +21,7 @@ void changeSourceTypeMenuDisplay() {
 
 
 void displaySourceTypeMenuLine(uint16_t x0, uint16_t y0, uint8_t channel) {
+  Serial.println("exec fct displaySourceTypeMenuLine in 009"); // changement
   tft.fillRoundRect(SOURCETYPEBUTTON_X + x0, SOURCETYPEBUTTON_Y + y0, SOURCETYPEBUTTON_W, SOURCETYPEBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -32,6 +34,7 @@ void displaySourceTypeMenuLine(uint16_t x0, uint16_t y0, uint8_t channel) {
 }
 
 void displaySourceTypeMenuBack(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct displaySourceTypeMenuBack in 009"); // changement
   tft.fillRoundRect(SOURCETYPEBUTTON_X + x0, SOURCETYPEBUTTON_Y + y0, SOURCETYPEBUTTON_W, SOURCETYPEBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -40,6 +43,7 @@ void displaySourceTypeMenuBack(uint16_t x0, uint16_t y0) {
 }
 
 void displaySourceTypeMenuEmpty(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct displaySourceTypeMenuEmpty in 009"); // changement
   tft.drawRoundRect(SOURCETYPEBUTTON_X + x0, SOURCETYPEBUTTON_Y + y0, SOURCETYPEBUTTON_W, SOURCETYPEBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);

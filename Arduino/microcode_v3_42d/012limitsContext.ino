@@ -14,6 +14,7 @@
    returns: nothing
 */
 void fullLimitsMenuDisplay(uint8_t error) {
+  Serial.println("exec fct fullLimitsMenuDisplay in 012"); // changement
   tft.fillScreen(ILI9341_BLACK);
 
   limitsHeader(24, 5);
@@ -28,6 +29,7 @@ void fullLimitsMenuDisplay(uint8_t error) {
 }// end defineLimitsMenuDisplay();
 
 void limitsHeader(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsHeader in 012"); // changement
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
   tft.setCursor(x0, y0);
@@ -37,6 +39,7 @@ void limitsHeader(uint16_t x0, uint16_t y0) {
 }
 
 void limitsZones(uint16_t x0, uint16_t y0, uint8_t channel) {
+  Serial.println("exec fct limitsZones in 012"); // changement
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
   tft.setCursor(x0, y0 + 5 + 30 * channel);
@@ -47,6 +50,7 @@ void limitsZones(uint16_t x0, uint16_t y0, uint8_t channel) {
 }
 
 void limitsValues(uint16_t x0, uint16_t y0, uint8_t channel) {
+  Serial.println("exec fct limitsValues in 012"); // changement
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
   if (channelModeStatus & 0x01 << channel) { // current
@@ -67,6 +71,7 @@ void limitsValues(uint16_t x0, uint16_t y0, uint8_t channel) {
 }
 
 void limitsFooterOK(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsFooterOK in 012"); // changement
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
   tft.setCursor(x0, y0);
@@ -74,6 +79,7 @@ void limitsFooterOK(uint16_t x0, uint16_t y0) {
 }
 
 void limitsFooterKO(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsFooterKO in 012"); // changement
   tft.setTextColor(ILI9341_RED);
   tft.setTextSize(2);
   tft.setCursor(x0, y0);
@@ -81,6 +87,7 @@ void limitsFooterKO(uint16_t x0, uint16_t y0) {
 }
 
 void limitsDisplayZone(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsDisplayZone in 012"); // changement
   tft.drawRoundRect(LIMITSDISPLAYZONE_X + x0, LIMITSDISPLAYZONE_Y + y0, LIMITSDISPLAYZONE_W, LIMITSDISPLAYZONE_H, RADIUS, ILI9341_BLACK);
   tft.drawRoundRect(LIMITSDISPLAYZONE_X + x0, LIMITSDISPLAYZONE_Y + y0, LIMITSDISPLAYZONE_W, LIMITSDISPLAYZONE_H, RADIUS, ILI9341_WHITE);
 }
@@ -93,12 +100,14 @@ void limitsDisplayZone(uint16_t x0, uint16_t y0) {
 */
 
 void limitsDisplayBottomButtons() {
+  Serial.println("exec fct limitsDisplayBottomButtons in 012"); // changement
   limitsDefaultButton(0, 290);
   //limitsKeyboardButton(120, 290);
   limitsOkButton(180, 290);
 }
 
 void limitsKeyboardButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsKeyboardButton in 012"); // changement
   tft.fillRoundRect(BOTTOMBUTTON_X + x0, BOTTOMBUTTON_Y + y0, BOTTOMBUTTON_W, BOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -107,6 +116,7 @@ void limitsKeyboardButton(uint16_t x0, uint16_t y0) {
 }
 
 void limitsOkButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsOkButton in 012"); // changement
   tft.fillRoundRect(BOTTOMBUTTON_X + x0, BOTTOMBUTTON_Y + y0, BOTTOMBUTTON_W, BOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -115,6 +125,7 @@ void limitsOkButton(uint16_t x0, uint16_t y0) {
 }
 
 void limitsDefaultButton(uint16_t x0, uint16_t y0) {
+  Serial.println("exec fct limitsDefaultButton in 012"); // changement
   tft.fillRoundRect(LARGEBOTTOMBUTTON_X + x0, LARGEBOTTOMBUTTON_Y + y0, LARGEBOTTOMBUTTON_W, LARGEBOTTOMBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);

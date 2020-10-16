@@ -4,6 +4,7 @@
    returns: 0 = OK; 1= channel out of range
 */
 uint8_t updateDisplayedValueWithRotaryKnob(uint8_t channel) {
+  Serial.println("exec fct updateDisplayedValueWithRotaryKnob in 006"); // changement
   float requestedI;
 
   if ((channel < 0) || (channel > 7)) return 1;
@@ -70,6 +71,7 @@ uint8_t updateDisplayedValueWithRotaryKnob(uint8_t channel) {
    returns: channel number or 255 if no channel selected
 */
 uint8_t whichChannelSelectedForValueModification() {
+  Serial.println("exec fct whichChannelSelectedForValueModification in 006"); // changement
   for (uint8_t i = 0; i < 8; i++) {
     if (channelSelectedStatus & 0x01 << i) return i;
   }

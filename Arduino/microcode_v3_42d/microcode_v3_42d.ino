@@ -1,4 +1,5 @@
 /*
+  Les modifications sont commentées par = changement : ce qu'il y avait à l'origine
   Title: microcode V3.x
   Author: BRS 04/2020
   Summary:
@@ -59,16 +60,16 @@
         corrected bug: possible to recall a nonexisting stored config in change user recall  menu     
 */
 
-
-// debug flags
-//#define DEBUG_ROTARY
-//#define DEBUG_SWROT
-//#define DEBUG_ONOFF
-//#define DEBUG_DACTEST
-//#define DEBUG_TS
-//#define DEBUG_NVIC
+/*
+// debug flags changement : block ci dessous commenté
+#define DEBUG_ROTARY
+#define DEBUG_SWROT
+#define DEBUG_ONOFF // changement : ligne commentée
+#define DEBUG_DACTEST
+#define DEBUG_TS
+#define DEBUG_NVIC
 //#define KBD_DEBUG
-
+*/
 
 //Code version to be updated accordingly
 char* code_version = "3.42d";
@@ -110,6 +111,10 @@ char* version_date = "28 may 2020";
 #define TYPE_I 1
 
 #define FRAM_ADDRESS 0x50 // I2C address
+
+#define hc06 Serial1 // changement : define module bluetooth
+int intCmd = 0;
+String strCmd = "";
 
 /* objects definition */
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);  // TFT screen
@@ -203,8 +208,10 @@ uint8_t calculatedRange = 0; // 0..3 in current mode, not applicable in V mode
 
 void setup() {
 
+   
   Serial.begin(9600); // for early debug purposes
-
+  hc06.begin(9600);   // changement : ligne inexistante
+  
   /*
      configures interrupts
   */
@@ -239,11 +246,10 @@ void setup() {
      init process
   */
   if (initAll()) while (1); // if initAll <> 0 -> abort condition, no further execution
-
   /*
      resets parasitic interrupts
   */
-  allOnPressed = 0;
+  allOnPressed = 0; // changement : allOnPressed = 0
   allOffPressed = 0;
   codeWheelIncrement = 0;
   codeWheelSwPressed = 0;
@@ -401,8 +407,9 @@ void loop() {
     255: nothing pressed or only context changed (new context displayed)
     0 to 254:  a button requiring further action is pressed
   */
-
+Serial.println("Before getInputFromTouchScreen"); // changement
 if (!touchscreenLocked) tsPressed = getInputFromTouchScreen();
+Serial.println("ts pressed : "); // changement : ligne inexistante
 
 
   /*

@@ -5,6 +5,7 @@
    Handles action on ALLON switch
 */
 void allOnHandler() {
+  Serial.println("exec fct allOnHandler in 005"); // changement
   allOnPressed = 1;
 }
 
@@ -12,6 +13,7 @@ void allOnHandler() {
    Handles action on ALLOFF switch
 */
 void allOffHandler() {
+  Serial.println("exec fct allOffHandler in 005"); // changement
   allOffPressed = 1;
 }
 
@@ -20,6 +22,7 @@ void allOffHandler() {
    increments/decrements global variable codeWheelIncrement
 */
 void codeWheelHandlerA() {
+  Serial.println("exec fct codeWheelHandlerA in 005"); // changement
   if ((millis() - timestampA) > MIN_DELAY_BETWEEN_EDGES) {
     if (digitalRead(ENCODER_B)) codeWheelIncrement = 1;  // B=1
     else codeWheelIncrement = -1;
@@ -73,6 +76,7 @@ void codeWheelHandlerA() {
    Handles action on code wheel switch
 */
 void codeWheelHandlerSW() {
+  Serial.println("exec fct codeWheelHandlerSW in 005"); // changement
   codeWheelSwPressed = 1;
 }
 
@@ -84,6 +88,7 @@ void codeWheelHandlerSW() {
 */
 
 void allOn() {
+  Serial.println("exec fct allOn in 005"); // changement
 #ifdef DEBUG_IHM
   Serial.println("ALLON");
 #endif
@@ -105,6 +110,7 @@ void allOn() {
    return: nothing
 */
 void allOff() {
+  Serial.println("exec fct allOff in 005"); // changement
 #ifdef DEBUG_IHM
   Serial.println("ALLOFF");
 #endif
