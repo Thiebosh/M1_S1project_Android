@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -93,10 +94,11 @@ public class MainActivity extends AppCompatActivity {
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "not supported", Toast.LENGTH_SHORT).show();
                     }
+                    mReadBuffer.clearComposingText();
                     mReadBuffer.setText(readMessage);
-
-                    Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_SHORT).show();
+                    /* composition / récupération se fait ici */
                 }
 
                 if(msg.what == CONNECTING_STATUS){
@@ -137,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             mBluetoothStatus.setText("Bluetooth enabled");
             Toast.makeText(getApplicationContext(),"Bluetooth turned on",Toast.LENGTH_SHORT).show();
-
         }
         else{
             Toast.makeText(getApplicationContext(),"Bluetooth is already on", Toast.LENGTH_SHORT).show();
@@ -202,10 +203,9 @@ public class MainActivity extends AppCompatActivity {
         mPairedDevices = mBTAdapter.getBondedDevices();
         if(mBTAdapter.isEnabled()) {
             // put it's one to the adapter
+            mBTArrayAdapter.clear();
             for (BluetoothDevice device : mPairedDevices)
                 mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-
-            Toast.makeText(getApplicationContext(), "Show Paired Devices", Toast.LENGTH_SHORT).show();
         }
         else
             Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
@@ -318,10 +318,8 @@ public class MainActivity extends AppCompatActivity {
         public void write(String input) {
             byte[] bytes = input.getBytes();           //converts entered String into bytes
             try {
-                Toast.makeText(getApplicationContext(),"envoie "+bytes,Toast.LENGTH_SHORT).show();
                 mmOutStream.write(bytes);
             } catch (IOException ignored) {
-                Toast.makeText(getApplicationContext(),"échec",Toast.LENGTH_SHORT).show();
             }
         }
 
