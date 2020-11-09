@@ -1,4 +1,4 @@
-package fr.yncrea.m1_s1project_android.activities;
+package fr.yncrea.m1_s1project_android;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -28,13 +28,10 @@ import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
-import fr.yncrea.m1_s1project_android.MIVS_RC_Application;
-import fr.yncrea.m1_s1project_android.R;
-
 /**
  * Activité de connexion bluetooth à un appareil. Une fois connecté, peut accéder à l'activité principale
  */
-public class ConnectActivity extends AppCompatActivity {
+public class bluetooth_exemple_activity extends AppCompatActivity {
 
     private TextView mBluetoothStatus;
 
@@ -66,7 +63,7 @@ public class ConnectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connect);
+        setContentView(R.layout.fragment_connect);
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetoothStatus); //migrer dans la barre supérieure - permet de connaitre état de connexion
 
@@ -178,7 +175,7 @@ public class ConnectActivity extends AppCompatActivity {
                         mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name).sendToTarget();
 
                         // jump on the next activity
-                        startActivity((new Intent(ConnectActivity.this, MainBoardActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity((new Intent(bluetooth_exemple_activity.this, AppActivity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
                         //Toast.makeText(getApplicationContext(),"jump on next activity",Toast.LENGTH_SHORT).show();
                     }
@@ -220,7 +217,7 @@ public class ConnectActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_bluetooth_scan) {
-            Toast.makeText(MIVS_RC_Application.getContext(), "écran connexion bluetooth", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MIVS_RC_Application.getContext(), "écran connexion bluetooth", Toast.LENGTH_SHORT).show();
             return true;
         }
 

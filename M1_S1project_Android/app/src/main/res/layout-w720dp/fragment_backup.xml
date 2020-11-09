@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainBoardActivity">
+    tools:context=".fragments.BackupFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ecran tableau de bord principal"
+        android:text="Ecran tableau de bord sauvegardes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.265"
         app:layout_constraintLeft_toLeftOf="parent"
