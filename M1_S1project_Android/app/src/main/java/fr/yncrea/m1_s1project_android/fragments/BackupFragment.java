@@ -1,22 +1,16 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import fr.yncrea.m1_s1project_android.AppActivity;
 import fr.yncrea.m1_s1project_android.NavigationHost;
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.bluetooth_exemple_activity;
 
 /**
  * Activité secondaire : gestion du module de sauvegarde du MIVS
