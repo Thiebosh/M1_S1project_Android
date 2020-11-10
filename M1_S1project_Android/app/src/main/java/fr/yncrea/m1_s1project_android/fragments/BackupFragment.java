@@ -25,7 +25,7 @@ public class BackupFragment extends Fragment {
         //setHasOptionsMenu(true);//active le onPrepareOptionsMenu
 
         ((Button) view.findViewById(R.id.fra_back_boardButton)).setOnClickListener(v -> {
-            ((NavigationHost) getActivity()).navigateTo(new MainBoardFragment(), false); // Navigate to the next Fragment
+            ((NavigationHost) getActivity()).loadFragment(new MainBoardFragment(), false); // Navigate to the next Fragment
         });
 
         return view;

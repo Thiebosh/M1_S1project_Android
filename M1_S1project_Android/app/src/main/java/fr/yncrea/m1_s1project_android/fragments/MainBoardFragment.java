@@ -2,8 +2,6 @@ package fr.yncrea.m1_s1project_android.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,7 +23,7 @@ public class MainBoardFragment extends Fragment {
 
 
         ((Button) view.findViewById(R.id.fra_main_backupButton)).setOnClickListener(v -> {
-            ((NavigationHost) getActivity()).navigateTo(new BackupFragment(), true); // Navigate to the next Fragment
+            ((NavigationHost) getActivity()).loadFragment(new BackupFragment(), true); // Navigate to the next Fragment
         });
 
         return view;

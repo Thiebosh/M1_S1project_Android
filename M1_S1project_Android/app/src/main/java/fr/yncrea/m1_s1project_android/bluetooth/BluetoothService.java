@@ -46,6 +46,13 @@ public class BluetoothService {
         mHandler = handler;
     }
 
+    /*
+    public void switchHandler(final Handler handler) {
+        mHandler = handler;
+    }
+
+     */
+
     /**
      * Return the current connection state.
      */

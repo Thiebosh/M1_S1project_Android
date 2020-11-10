@@ -1,5 +1,6 @@
 package fr.yncrea.m1_s1project_android;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,12 +14,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
+import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
 
 /**
  * Activité principale : gestion des channels du MIVS
@@ -30,7 +34,7 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
      */
 
     @Override
-    public void navigateTo(Fragment fragment, boolean addToBackstack) {
+    public void loadFragment(Fragment fragment, boolean addToBackstack) {
         FragmentTransaction transaction =
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -51,12 +55,20 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
      * Establish connection with other device
      */
     @Override
-    public void connectDevice(String deviceMacAddress) {
+    public void connectDevice(final String deviceMacAddress) {
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceMacAddress);
         // Attempt to connect to the device
         mBluetoothService.connect(device);
     }
+
+    /*
+    @Override
+    public void updateHandler(final Handler handler) {
+        mBluetoothService.switchHandler(handler);
+    }
+
+     */
 
     /*
      * Section Bluetooth
@@ -99,17 +111,20 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
                 AppCompatActivity activity = AppActivity.this;
                 switch (msg.what) {
                     case BluetoothConstants.MESSAGE_STATE_CHANGE:
+                        // Updates the status on the action bar.
                         switch (msg.arg1) {
                             case BluetoothService.STATE_CONNECTED:
-                                setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                                getSupportActionBar().setSubtitle(getString(R.string.title_connected_to, mConnectedDeviceName));
                                 //mConversationArrayAdapter.clear();
                                 break;
                             case BluetoothService.STATE_CONNECTING:
-                                setStatus(getString(R.string.title_connecting));
+                                getSupportActionBar().setSubtitle(getString(R.string.title_connecting));
                                 break;
-                            case BluetoothService.STATE_LISTEN:
+                            /*case BluetoothService.STATE_LISTEN:
+                                getSupportActionBar().setSubtitle("recherche"); //?
+                                break;*/
                             case BluetoothService.STATE_NONE:
-                                setStatus(getString(R.string.title_not_connected));
+                                getSupportActionBar().setSubtitle(getString(R.string.title_not_connected));
                                 break;
                         }
                         break;
@@ -129,6 +144,8 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
                         // save the connected device's name
                         mConnectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
                         Toast.makeText(activity, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                        //autorise connexion
+                        loadFragment(new MainBoardFragment(), false);
                         break;
                     case BluetoothConstants.MESSAGE_TOAST:
                         Toast.makeText(activity, msg.getData().getString(BluetoothConstants.TOAST), Toast.LENGTH_SHORT).show();
@@ -150,6 +167,8 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
             if (resultCode == Activity.RESULT_OK) {
                 // Bluetooth is now enabled, so set up a chat session
                 setupBluetooth();
+
+                loadFragment(new ConnectFragment(), false);//actualise fragment
             } else {
                 // User did not enable Bluetooth or an error occurred
                 AppCompatActivity activity = AppActivity.this;
@@ -157,20 +176,6 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
                 activity.finish();
             }
         }
-    }
-
-    /**
-     * Updates the status on the action bar.
-     *
-     * @param subTitle status
-     */
-    private void setStatus(CharSequence subTitle) {
-        AppCompatActivity activity = AppActivity.this;
-        final ActionBar actionBar = activity.getActionBar();
-        if (null == actionBar) {
-            return;
-        }
-        actionBar.setSubtitle(subTitle);
     }
 
 
@@ -182,15 +187,13 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_activity);
+        getSupportActionBar().setSubtitle(getString(R.string.title_not_connected));
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.act_app_fragmentContainer, new ConnectFragment())
-                    .commit();
+            loadFragment(new ConnectFragment(), false);//charge fragment
         }
     }
 
@@ -250,7 +253,6 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     /*
      * Section Menu
      */
-/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -261,6 +263,7 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /*
         switch(item.getItemId()) {
             case R.id.menu_toBackupActivity:
                 mFlagChangeActivity = true;
@@ -276,8 +279,11 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+         */
+        return super.onOptionsItemSelected(item);
     }
 
- */
+
 
 }
