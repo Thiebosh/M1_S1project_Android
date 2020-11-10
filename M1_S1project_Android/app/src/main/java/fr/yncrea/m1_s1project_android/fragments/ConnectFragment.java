@@ -49,7 +49,8 @@ public class ConnectFragment extends Fragment {
             String deviceName = info.substring(0, info.length() - 18);//mac adress + space
 
             // Notify user during connexion test
-            ((TextView) view.findViewById(R.id.bluetoothStatus)).setText("Try to connect to " + deviceName);
+            String str = getString(R.string.frag_conn_connecting_device, deviceName);
+            ((TextView) view.findViewById(R.id.frag_conn_textView_title)).setText(str);
 
             // Connexion test : if success, handler will change fragment
             ((BluetoothMethods) Objects.requireNonNull(getActivity())).connectDevice(address);
@@ -57,11 +58,11 @@ public class ConnectFragment extends Fragment {
 
 
         // Initialize array adapter for already paired devices
-        ArrayAdapter<String> pairedDevicesArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.device_name);
+        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), R.layout.device_name);
 
         // Find and set up the ListView for paired devices
-        ListView pairedListView = view.findViewById(R.id.paired_devices);
-        pairedListView.setAdapter(pairedDevicesArrayAdapter);
+        ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
+        pairedListView.setAdapter(devicesAdapter);
         pairedListView.setOnItemClickListener(deviceClickListener);
 
         // Get a set of currently paired devices
@@ -69,15 +70,12 @@ public class ConnectFragment extends Fragment {
 
         // If there are paired devices, add each one to the ArrayAdapter
         if (pairedDevices.size() > 0) {
-            view.findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.frag_conn_textView_paired_devices).setVisibility(View.VISIBLE);
             for (BluetoothDevice device : pairedDevices) {
-                pairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                devicesAdapter.add(device.getName() + "\n" + device.getAddress());
             }
-        } else {
-            String noDevices = getResources().getText(R.string.none_paired).toString();
-            pairedDevicesArrayAdapter.add(noDevices);
         }
-
+        else devicesAdapter.add(getString(R.string.frag_conn_none_paired));
 
         return view;
     }
@@ -86,10 +84,7 @@ public class ConnectFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        // Make sure we're not doing discovery anymore
-        if (mBluetoothAdapter != null) {
-            mBluetoothAdapter.cancelDiscovery();
-        }
+        if (mBluetoothAdapter != null) mBluetoothAdapter.cancelDiscovery();
     }
 
 

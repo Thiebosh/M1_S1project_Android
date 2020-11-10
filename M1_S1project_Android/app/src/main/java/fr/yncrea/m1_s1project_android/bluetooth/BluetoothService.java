@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
+
+import fr.yncrea.m1_s1project_android.R;
 
 public class BluetoothService {
     // Member fields
@@ -45,13 +47,6 @@ public class BluetoothService {
         mState = STATE_NONE;
         mHandler = handler;
     }
-
-    /*
-    public void switchHandler(final Handler handler) {
-        mHandler = handler;
-    }
-
-     */
 
     /**
      * Return the current connection state.
@@ -185,7 +180,8 @@ public class BluetoothService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothConstants.TOAST, "Unable to connect device");
+        String str = "connexion failed";//Resources.getSystem().getString(R.string.blt_connection_failed);
+        bundle.putString(BluetoothConstants.TOAST, str);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -204,7 +200,8 @@ public class BluetoothService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothConstants.TOAST, "Disconnected from the device");
+        String str = "connexion lost";//Resources.getSystem().getString(R.string.blt_disconnected);
+        bundle.putString(BluetoothConstants.TOAST, str);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -255,8 +252,8 @@ public class BluetoothService {
             // Create a new listening server socket
             try {
                 tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME_SECURE, MY_UUID_SECURE);
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
             mmServerSocket = tmp;
             mState = STATE_LISTEN;
         }
@@ -272,7 +269,8 @@ public class BluetoothService {
                     // This is a blocking call and will only return on a
                     // successful connection or an exception
                     socket = mmServerSocket.accept();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     break;
                 }
 
@@ -290,8 +288,8 @@ public class BluetoothService {
                                 // Either not ready or already connected. Terminate new socket.
                                 try {
                                     socket.close();
-                                } catch (IOException ignored) {
                                 }
+                                catch (IOException ignored) {}
                                 break;
                         }
                     }
@@ -302,8 +300,8 @@ public class BluetoothService {
         public void cancel() {
             try {
                 mmServerSocket.close();
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
         }
     }
 
@@ -324,8 +322,8 @@ public class BluetoothService {
             // given BluetoothDevice
             try {
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID_SECURE);
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
             mmSocket = tmp;
             mState = STATE_CONNECTING;
         }
@@ -341,12 +339,13 @@ public class BluetoothService {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
                 mmSocket.connect();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 // Close the socket
                 try {
                     mmSocket.close();
-                } catch (IOException ignored) {
                 }
+                catch (IOException ignored) {}
                 connectionFailed();
                 return;
             }
@@ -363,8 +362,8 @@ public class BluetoothService {
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
         }
     }
 
@@ -386,8 +385,8 @@ public class BluetoothService {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
@@ -407,7 +406,8 @@ public class BluetoothService {
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(BluetoothConstants.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     connectionLost();
                     break;
                 }
@@ -426,15 +426,15 @@ public class BluetoothService {
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(BluetoothConstants.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
         }
 
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException ignored) {
             }
+            catch (IOException ignored) {}
         }
     }
 }

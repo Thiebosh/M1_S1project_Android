@@ -8,23 +8,22 @@
     tools:context=".fragments.ConnectFragment">
 
     <TextView
-        android:id="@+id/bluetoothStatus"
+        android:id="@+id/frag_conn_textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="150dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/select_device"
-        android:textSize="24sp"
+        android:text="@string/frag_conn_select_device"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -35,11 +34,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/title_paired_devices"
+            android:id="@+id/frag_conn_textView_paired_devices"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:background="#666"
-            android:text="@string/connect_bluetooth_paired_devices"
+            android:text="@string/frag_conn_paired_devices"
             android:textAllCaps="false"
             android:textColor="#fff"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,17 +46,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ListView
-            android:id="@+id/paired_devices"
+            android:id="@+id/frag_conn_listView_paired_devices"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:stackFromBottom="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_paired_devices" />
-
+            app:layout_constraintTop_toBottomOf="@+id/frag_conn_textView_paired_devices" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

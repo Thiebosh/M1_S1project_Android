@@ -6,15 +6,15 @@
         android:icon="@drawable/bluetooth_searching"
         app:showAsAction="ifRoom"
         android:orderInCategory="0"
-        android:title="@string/menu_toConnectActivity"/>
+        android:title="@string/menu_disconnect"/>
 
     <item android:id="@+id/menu_toMainBoard"
-        android:title="@string/menu_toMainBoardActivity"
+        android:title="@string/menu_toMainBoard"
         android:orderInCategory="25"
         app:showAsAction="never" />
 
     <item android:id="@+id/menu_toBackup"
-        android:title="@string/menu_toBackupActivity"
+        android:title="@string/menu_toBackup"
         android:orderInCategory="50"
         app:showAsAction="never" />
 
