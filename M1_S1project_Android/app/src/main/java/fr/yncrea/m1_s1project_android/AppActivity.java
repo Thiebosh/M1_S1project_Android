@@ -11,8 +11,11 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.widget.Toast;
 
+import fr.yncrea.m1_s1project_android.bluetooth.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
@@ -41,12 +44,26 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     }
 
     /*
+     * Section BluetoothMethods
+     */
+
+    /**
+     * Establish connection with other device
+     */
+    @Override
+    public void connectDevice(String deviceMacAddress) {
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceMacAddress);
+        // Attempt to connect to the device
+        mBluetoothService.connect(device);
+    }
+
+    /*
      * Section Bluetooth
      */
 
     // Intent request codes
-    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-    private static final int REQUEST_ENABLE_BT = 2;
+    private static final int REQUEST_ENABLE_BT = 1;
 
     /**
      * Local Bluetooth adapter
@@ -74,9 +91,9 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
      */
     private void setupBluetooth() { //anciennement setupChat
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mBluetoothService = new BluetoothService(new Handler() {
+        mBluetoothService = new BluetoothService(new Handler(Looper.myLooper()) {
             // The Handler that gets information back from the BluetoothChatService
-            /*
+
             @Override
             public void handleMessage(Message msg) {
                 AppCompatActivity activity = AppActivity.this;
@@ -85,7 +102,7 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
                         switch (msg.arg1) {
                             case BluetoothService.STATE_CONNECTED:
                                 setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                                mConversationArrayAdapter.clear();
+                                //mConversationArrayAdapter.clear();
                                 break;
                             case BluetoothService.STATE_CONNECTING:
                                 setStatus(getString(R.string.title_connecting));
@@ -100,30 +117,24 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
                         byte[] writeBuf = (byte[]) msg.obj;
                         // construct a string from the buffer
                         String writeMessage = new String(writeBuf);
-                        mConversationArrayAdapter.add("Me:  " + writeMessage);
+                        //mConversationArrayAdapter.add("Me:  " + writeMessage);
                         break;
                     case BluetoothConstants.MESSAGE_READ:
                         byte[] readBuf = (byte[]) msg.obj;
                         // construct a string from the valid bytes in the buffer
                         String readMessage = new String(readBuf, 0, msg.arg1);
-                        mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                        //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                         break;
                     case BluetoothConstants.MESSAGE_DEVICE_NAME:
                         // save the connected device's name
                         mConnectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
-                        if (null != activity) {
-                            Toast.makeText(activity, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(activity, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                         break;
                     case BluetoothConstants.MESSAGE_TOAST:
-                        if (null != activity) {
-                            Toast.makeText(activity, msg.getData().getString(BluetoothConstants.TOAST), Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(activity, msg.getData().getString(BluetoothConstants.TOAST), Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
-
-             */
         });
 
         // Initialize the buffer for outgoing messages
@@ -142,10 +153,8 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
             } else {
                 // User did not enable Bluetooth or an error occurred
                 AppCompatActivity activity = AppActivity.this;
-                if (activity != null) {
-                    Toast.makeText(activity, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-                    activity.finish();
-                }
+                Toast.makeText(activity, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                activity.finish();
             }
         }
     }
@@ -157,26 +166,11 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
      */
     private void setStatus(CharSequence subTitle) {
         AppCompatActivity activity = AppActivity.this;
-        if (null == activity) {
-            return;
-        }
         final ActionBar actionBar = activity.getActionBar();
         if (null == actionBar) {
             return;
         }
         actionBar.setSubtitle(subTitle);
-    }
-
-
-    /**
-     * Establish connection with other device
-     */
-    @Override
-    public void connectDevice(String deviceMacAddress) {
-        // Get the BluetoothDevice object
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceMacAddress);
-        // Attempt to connect to the device
-        mBluetoothService.connect(device);
     }
 
 
@@ -188,6 +182,9 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_activity);
+
+        // Get local Bluetooth adapter
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()

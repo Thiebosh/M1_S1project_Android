@@ -23,6 +23,7 @@ public class MainBoardFragment extends Fragment {
 
         //setHasOptionsMenu(true);//active le onPrepareOptionsMenu
 
+
         ((Button) view.findViewById(R.id.fra_main_backupButton)).setOnClickListener(v -> {
             ((NavigationHost) getActivity()).navigateTo(new BackupFragment(), true); // Navigate to the next Fragment
         });
