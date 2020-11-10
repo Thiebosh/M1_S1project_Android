@@ -1,34 +1,25 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 import java.util.Set;
 
-import fr.yncrea.m1_s1project_android.AppActivity;
-import fr.yncrea.m1_s1project_android.NavigationHost;
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
 
 public class ConnectFragment extends Fragment {
     /**
@@ -39,48 +30,9 @@ public class ConnectFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_connect, container, false);
+        setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        /*
-        // Define the handler for this fragment
-        ((BluetoothMethods) Objects.requireNonNull(getActivity())).updateHandler(new Handler(Looper.myLooper()) {
-            // The Handler that gets information back from the BluetoothChatService
-
-            @Override
-            public void handleMessage(Message msg) {
-                Activity activity = getActivity();
-                switch (msg.what) {
-                    case BluetoothConstants.MESSAGE_STATE_CHANGE:
-                        switch (msg.arg1) {
-                            case BluetoothService.STATE_CONNECTED:
-                                setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                                //mConversationArrayAdapter.clear();
-                                break;
-                            case BluetoothService.STATE_CONNECTING:
-                                setStatus(getString(R.string.title_connecting));
-                                break;
-                            case BluetoothService.STATE_LISTEN:
-                            case BluetoothService.STATE_NONE:
-                                setStatus(getString(R.string.title_not_connected));
-                                break;
-                        }
-                        break;
-                    case BluetoothConstants.MESSAGE_DEVICE_NAME:
-                        // save the connected device's name
-                        String connectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
-                        Toast.makeText(activity, "Connected to " + connectedDeviceName, Toast.LENGTH_SHORT).show();
-                        AppActivity.setConnectedDeviceName(connectedDeviceName);
-                        //autorise connexion
-                        ((NavigationHost) getActivity()).loadFragment(new MainBoardFragment(), false);
-                        break;
-                    case BluetoothConstants.MESSAGE_TOAST:
-                        Toast.makeText(activity, msg.getData().getString(BluetoothConstants.TOAST), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
-         */
 
         // Get the local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -101,7 +53,6 @@ public class ConnectFragment extends Fragment {
 
             // Connexion test : if success, handler will change fragment
             ((BluetoothMethods) Objects.requireNonNull(getActivity())).connectDevice(address);
-
         };
 
 
@@ -127,8 +78,6 @@ public class ConnectFragment extends Fragment {
             pairedDevicesArrayAdapter.add(noDevices);
         }
 
-        //setHasOptionsMenu(true);//active le onPrepareOptionsMenu
-
 
         return view;
     }
@@ -144,27 +93,11 @@ public class ConnectFragment extends Fragment {
     }
 
 
-    /*
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.menu_admin_logout);
-        if (item!=null) item.setVisible(false);
+        //définit éléments visibles du menu pour ce fragment
+        menu.findItem(R.id.menu_disconnect).setVisible(false);
+        menu.findItem(R.id.menu_toMainBoard).setVisible(false);
+        menu.findItem(R.id.menu_toBackup).setVisible(false);
     }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.bluetooth_chat, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.secure_connect_scan) {// Launch the DeviceListActivity to see devices and do scan
-            Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
-            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
-            return true;
-        }
-        return false;
-    }
-
-     */
 }

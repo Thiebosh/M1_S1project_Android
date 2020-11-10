@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
+import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
 import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
 
@@ -63,14 +65,6 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     }
 
     /*
-    @Override
-    public void updateHandler(final Handler handler) {
-        mBluetoothService.switchHandler(handler);
-    }
-
-     */
-
-    /*
      * Section Bluetooth
      */
 
@@ -105,7 +99,6 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
         // Initialize the BluetoothChatService to perform bluetooth connections
         mBluetoothService = new BluetoothService(new Handler(Looper.myLooper()) {
             // The Handler that gets information back from the BluetoothChatService
-
             @Override
             public void handleMessage(Message msg) {
                 AppCompatActivity activity = AppActivity.this;
@@ -114,17 +107,14 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
                         // Updates the status on the action bar.
                         switch (msg.arg1) {
                             case BluetoothService.STATE_CONNECTED:
-                                getSupportActionBar().setSubtitle(getString(R.string.title_connected_to, mConnectedDeviceName));
+                                Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.title_connected_to, mConnectedDeviceName));
                                 //mConversationArrayAdapter.clear();
                                 break;
                             case BluetoothService.STATE_CONNECTING:
-                                getSupportActionBar().setSubtitle(getString(R.string.title_connecting));
+                                Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.title_connecting));
                                 break;
-                            /*case BluetoothService.STATE_LISTEN:
-                                getSupportActionBar().setSubtitle("recherche"); //?
-                                break;*/
                             case BluetoothService.STATE_NONE:
-                                getSupportActionBar().setSubtitle(getString(R.string.title_not_connected));
+                                Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.title_not_connected));
                                 break;
                         }
                         break;
@@ -187,7 +177,7 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_activity);
-        getSupportActionBar().setSubtitle(getString(R.string.title_not_connected));
+        Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.title_not_connected));
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -230,16 +220,15 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
         }
     }
 
-    /*
+
     @Override
-    public void onRestart() {//retour à l'écran principal avant déconnexion
-        super.onRestart();
-        if (!mFlagChangeActivity) {
-            startActivity((new Intent(AppActivity.this, bluetooth_exemple_activity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        }
-        else mFlagChangeActivity = false;
+    public void onPause() {
+        super.onPause();
+
+        mBluetoothService.stop();//déconnexion bluetooth
+        loadFragment(new ConnectFragment(), false);//appel ecran de connexion
     }
-*/
+
 
     @Override
     public void onDestroy() {
@@ -256,34 +245,36 @@ public class AppActivity extends AppCompatActivity implements NavigationHost, Bl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.global_connected, menu);
-        getMenuInflater().inflate(R.menu.main_board, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        /*
+        // define all actions once and show / hide depending of the fragment
+
+        //avoid NonConstantResourceId warning / error
+        final int mainBoard = R.id.menu_toMainBoard;
+        final int backup = R.id.menu_toBackup;
+        final int disconnect = R.id.menu_disconnect;
+
         switch(item.getItemId()) {
-            case R.id.menu_toBackupActivity:
-                mFlagChangeActivity = true;
-                startActivity((new Intent(AppActivity.this, BackupFragment.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                //MainBoardActivity.this.finish(); //peut remplacer le flag mais pas même retour visuel
+            case mainBoard:
+                loadFragment(new MainBoardFragment(), false);//false car "racine"
                 return true;
 
-            case R.id.menu_toConnectActivity:
-                mFlagChangeActivity = true;
-                startActivity((new Intent(AppActivity.this, bluetooth_exemple_activity.class)).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            case backup:
+                loadFragment(new BackupFragment(), true);//true car accessible que de mainBoard et autorise bouton retour
+                return true;
+
+            case disconnect:
+                mBluetoothService.stop();//déconnexion bluetooth
+                loadFragment(new ConnectFragment(), false);
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-         */
-        return super.onOptionsItemSelected(item);
     }
-
-
-
 }
