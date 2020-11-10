@@ -27,21 +27,6 @@ public class ConnectFragment extends Fragment {
      */
     private BluetoothAdapter mBluetoothAdapter = null;
 
-    /*
-     * Newly discovered devices
-     *
-    private ArrayAdapter<String> mNewDevicesArrayAdapter;
-
-    private View mView;
-
-
-    /*
-     * The BroadcastReceiver that listens for discovered devices and changes the title when
-     * discovery is finished
-     *
-    private BroadcastReceiver mReceiver;
-
-     */
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,67 +74,6 @@ public class ConnectFragment extends Fragment {
             pairedDevicesArrayAdapter.add(noDevices);
         }
 
-        /*
-        // Initialize array adapter for newly discovered devices
-        mNewDevicesArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.device_name);
-
-        // Find and set up the ListView for newly discovered devices
-        ListView newDevicesListView = view.findViewById(R.id.new_devices);
-        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
-        newDevicesListView.setOnItemClickListener(deviceClickListener);
-
-        // Initialize the button to perform device discovery with the BluetoothAdapter
-        ((Button) view.findViewById(R.id.button_scan)).setOnClickListener(v -> {
-            if (mBluetoothAdapter.isDiscovering()) {
-                // If we're already discovering, stop it
-                mBluetoothAdapter.cancelDiscovery();
-
-                ((TextView) mView.findViewById(R.id.bluetoothStatus)).setText(R.string.select_device);
-            }
-            else {
-                // Request discover from BluetoothAdapter
-                mBluetoothAdapter.startDiscovery();
-
-                // Turn on sub-title for new devices
-                view.findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
-                ((TextView) mView.findViewById(R.id.bluetoothStatus)).setText(R.string.scanning);
-            }
-        });
-
-        mView = view;
-
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-
-                // When discovery finds a device
-                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                    // Get the BluetoothDevice object from the Intent
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    // If it's already paired, skip it, because it's been listed already
-                    if (device != null && device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                        mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                    }
-                }
-                else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                    ((TextView) mView.findViewById(R.id.bluetoothStatus)).setText(R.string.select_device);
-                    if (mNewDevicesArrayAdapter.getCount() == 0) {
-                        String noDevices = getResources().getText(R.string.none_found).toString();
-                        mNewDevicesArrayAdapter.add(noDevices);
-                    }
-                }
-            }
-        };
-
-        // Register for broadcasts when a device is discovered
-        Objects.requireNonNull(getActivity()).registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-
-        // Register for broadcasts when discovery has finished
-        Objects.requireNonNull(getActivity()).registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-        */
-
-
         //setHasOptionsMenu(true);//active le onPrepareOptionsMenu
 
         /*
@@ -169,9 +93,6 @@ public class ConnectFragment extends Fragment {
         if (mBluetoothAdapter != null) {
             mBluetoothAdapter.cancelDiscovery();
         }
-
-        // Unregister broadcast listeners
-        //Objects.requireNonNull(getActivity()).unregisterReceiver(mReceiver);
     }
 
 
@@ -198,10 +119,4 @@ public class ConnectFragment extends Fragment {
     }
 
      */
-
-    /*
-     * Section Bluetooth
-     */
-
-
 }
