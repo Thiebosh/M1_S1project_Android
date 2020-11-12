@@ -22,11 +22,6 @@ import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
 
 public class ConnectFragment extends Fragment {
-    /**
-     * Local Bluetooth adapter
-     */
-    private BluetoothAdapter mBluetoothAdapter = null;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,15 +29,8 @@ public class ConnectFragment extends Fragment {
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
 
-        // Get the local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-
         //The on-click listener for all devices in the ListViews
         AdapterView.OnItemClickListener deviceClickListener = (av, v, arg2, arg3) -> {
-            // Cancel discovery because it's costly and we're about to connect
-            mBluetoothAdapter.cancelDiscovery();
-
             // Get the device MAC address, which is the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
@@ -65,8 +53,8 @@ public class ConnectFragment extends Fragment {
         pairedListView.setAdapter(devicesAdapter);
         pairedListView.setOnItemClickListener(deviceClickListener);
 
-        // Get a set of currently paired devices
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        // Get a set of currently paired devices from a local Bluetooth adapter
+        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
 
         // If there are paired devices, add each one to the ArrayAdapter
         if (pairedDevices.size() > 0) {
@@ -81,12 +69,10 @@ public class ConnectFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (mBluetoothAdapter != null) mBluetoothAdapter.cancelDiscovery();
+    public void onResume() {
+        super.onResume();
+        ((BluetoothMethods) Objects.requireNonNull(getActivity())).disconnectDevice(); //si était connecté, déconnecte
     }
-
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {

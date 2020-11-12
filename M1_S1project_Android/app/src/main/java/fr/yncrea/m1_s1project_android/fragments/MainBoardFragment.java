@@ -1,6 +1,5 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
-import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,10 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
-
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
 
 public class MainBoardFragment extends Fragment {
 
@@ -23,12 +19,6 @@ public class MainBoardFragment extends Fragment {
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
         return view;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((BluetoothMethods) Objects.requireNonNull(getActivity())).disconnectDevice();
     }
 
     @Override

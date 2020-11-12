@@ -3,7 +3,6 @@ package fr.yncrea.m1_s1project_android;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.Objects;
+import java.util.Stack;
 
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
@@ -36,13 +36,29 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
 
     @Override
-    public void loadFragment(Fragment fragment, boolean addToBackStack) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.act_app_fragmentContainer, fragment);
+    public void loadFragment(Fragment fragment) {
+        String searched = fragment.getClass().getSimpleName();
+        Stack<Fragment> searcher = (Stack<Fragment>) mFragmentStack.clone();
+        int position = searcher.size() - 1;//size -> index
+        while (!searcher.empty()) {
+            if (searcher.pop().getClass().getSimpleName().equals(searched)) break;
+            --position;
+        }
+        if (position != -1) for (int i = mFragmentStack.size(); i > position; --i) mFragmentStack.pop();
 
-        if (addToBackStack) transaction.addToBackStack(null);
+        mFragmentStack.push(fragment);//renouvellement du frament stocké
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.act_app_fragmentContainer, fragment)
+                .commit();
+    }
 
-        transaction.commit();
+    @Override
+    public void onBackPressed() {
+        mFragmentStack.pop();
+
+        if (mFragmentStack.empty()) AppActivity.this.finish();
+        else loadFragment(mFragmentStack.peek());//reason why it's not a String stack
     }
 
     /*
@@ -97,7 +113,9 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
     private void setupBluetooth() {
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mBluetoothService = new BluetoothService(new Handler(Looper.myLooper()) {
+        //getApplicationContext().getString(R.string.app_name);
+        //getResources().getString(R.string.app_name);
+        mBluetoothService = new BluetoothService(getResources(), new Handler(Looper.myLooper()) {
             // The Handler that gets information back from the BluetoothChatService
             @Override
             public void handleMessage(Message msg) {
@@ -130,7 +148,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         str = getString(R.string.blt_connected, mConnectedDeviceName);
                         Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         //autorise connexion
-                        loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
+                        loadFragment(new MainBoardFragment());//peut revenir à l'écran de connexion
                         break;
 
                     case BluetoothConstants.MESSAGE_TOAST:
@@ -169,13 +187,12 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                 // Bluetooth is now enabled, so set up a chat session
                 setupBluetooth();
 
-                loadFragment(new ConnectFragment(), false);//actualise fragment de connexion
+                loadFragment(new ConnectFragment());//actualise fragment de connexion
             } else {
                 // User did not enable Bluetooth or an error occurred
-                AppCompatActivity activity = AppActivity.this;
                 int str = R.string.blt_disabled_exit_app;
-                Toast.makeText(activity, str, Toast.LENGTH_SHORT).show();
-                activity.finish();
+                Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
+                AppActivity.this.finish();
             }
         }
     }
@@ -195,8 +212,9 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+
         if (savedInstanceState == null) {
-            loadFragment(new ConnectFragment(), false);//charge premier fragment
+            loadFragment(new ConnectFragment());//charge premier fragment
         }
     }
 
@@ -238,16 +256,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     public void onPause() {
         super.onPause();
         disconnectDevice();
-        // doit vider la backstack
-        //getSupportFragmentManager().popBackStack(0,0);//supprime tout jusqu'au niveau 0
-        loadFragment(new ConnectFragment(), false);//appel ecran de connexion
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        disconnectDevice();
+        loadFragment(new ConnectFragment());//appel ecran de connexion
     }
 
 
@@ -273,16 +282,15 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
         switch(item.getItemId()) {
             case mainBoard:
-                loadFragment(new MainBoardFragment(), false);//false car "racine"
+                loadFragment(new MainBoardFragment());//false car "racine"
                 return true;
 
             case backup:
-                loadFragment(new BackupFragment(), true);//true car accessible que de mainBoard et autorise bouton retour
+                loadFragment(new BackupFragment());//true car accessible que de mainBoard et autorise bouton retour
                 return true;
 
             case disconnect:
-                disconnectDevice();
-                loadFragment(new ConnectFragment(), false);
+                loadFragment(new ConnectFragment());
                 return true;
 
             default:
