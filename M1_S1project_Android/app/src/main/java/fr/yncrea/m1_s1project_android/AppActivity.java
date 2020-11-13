@@ -13,6 +13,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -297,4 +300,5 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

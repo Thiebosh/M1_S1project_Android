@@ -77,8 +77,8 @@ public class ConnectFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         //définit éléments visibles du menu pour ce fragment
-        menu.findItem(R.id.menu_disconnect).setVisible(false);
-        menu.findItem(R.id.menu_toMainBoard).setVisible(false);
-        menu.findItem(R.id.menu_toBackup).setVisible(false);
+        menu.findItem(R.id.menu_disconnect).setVisible(true);
+        menu.findItem(R.id.menu_toMainBoard).setVisible(true);
+        menu.findItem(R.id.menu_toBackup).setVisible(true);
     }
 }
