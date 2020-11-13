@@ -28,6 +28,9 @@ public class ConnectFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_connect, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
+        //si était connecté, déconnecte
+        ((BluetoothMethods) Objects.requireNonNull(getActivity())).disconnectDevice();
+
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
 
@@ -64,12 +67,6 @@ public class ConnectFragment extends Fragment {
         else devicesAdapter.add(getString(R.string.frag_conn_none_paired));
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((BluetoothMethods) Objects.requireNonNull(getActivity())).disconnectDevice(); //si était connecté, déconnecte
     }
 
     @Override

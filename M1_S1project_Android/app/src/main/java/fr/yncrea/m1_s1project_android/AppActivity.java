@@ -183,12 +183,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
         if (requestCode == REQUEST_ENABLE_BT) {
             // When the request to enable Bluetooth returns
-            if (resultCode == Activity.RESULT_OK) {
-                // Bluetooth is now enabled, so set up a chat session
-                setupBluetooth();
-
-                loadFragment(new ConnectFragment());//actualise fragment de connexion
-            } else {
+            if (resultCode == Activity.RESULT_OK) setupBluetooth();
+            else {
                 // User did not enable Bluetooth or an error occurred
                 int str = R.string.blt_disabled_exit_app;
                 Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
@@ -254,7 +250,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
