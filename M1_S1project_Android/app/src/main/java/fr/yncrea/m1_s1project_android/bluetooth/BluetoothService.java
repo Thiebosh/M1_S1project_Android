@@ -5,10 +5,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,15 +40,18 @@ public class BluetoothService {
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
+    private final Resources mResources;
+
     /**
      * Constructor. Prepares a new BluetoothChat session.
      *
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothService(Handler handler) {
+    public BluetoothService(Resources resources, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+        mResources = resources;
     }
 
     /**
@@ -181,7 +186,7 @@ public class BluetoothService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        String str = "connexion failed";//Resources.getSystem().getString(R.string.blt_connection_failed);
+        String str = mResources.getString(R.string.blt_connection_failed);
         bundle.putString(BluetoothConstants.TOAST, str);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
@@ -201,7 +206,7 @@ public class BluetoothService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        String str = "connexion lost";//Resources.getSystem().getString(R.string.blt_disconnected);
+        String str = mResources.getString(R.string.blt_disconnected);
         bundle.putString(BluetoothConstants.TOAST, str);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
