@@ -211,28 +211,16 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) return;
 
-
-        if (savedInstanceState == null) {
-            loadFragment(new ConnectFragment());//charge premier fragment
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mBluetoothAdapter == null) {
-            return;
-        }
         // If BT is not on, request that it be enabled.
         // setupBluetooth() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT); //réponse dans onActivityResult()
             // Otherwise, setup the bluetooth session
-        } else if (mBluetoothService == null) {
-            setupBluetooth();
         }
+        else if (mBluetoothService == null) setupBluetooth();
     }
 
     @Override
@@ -249,6 +237,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                 mBluetoothService.start();
             }
         }
+
+        loadFragment(new ConnectFragment());//charge premier fragment
     }
 
 
@@ -256,7 +246,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     public void onPause() {
         super.onPause();
         disconnectDevice();
-        loadFragment(new ConnectFragment());//appel ecran de connexion
     }
 
 

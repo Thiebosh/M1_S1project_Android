@@ -28,6 +28,12 @@ public class ConnectFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_connect, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
+        // Find and set up the ListView for paired devices
+        ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
+
+        // Initialize array adapter for already paired devices
+        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), R.layout.device_name);
+        pairedListView.setAdapter(devicesAdapter);
 
         //The on-click listener for all devices in the ListViews
         AdapterView.OnItemClickListener deviceClickListener = (av, v, arg2, arg3) -> {
@@ -43,14 +49,6 @@ public class ConnectFragment extends Fragment {
             // Connexion test : if success, handler will change fragment
             ((BluetoothMethods) Objects.requireNonNull(getActivity())).connectDevice(address);
         };
-
-
-        // Initialize array adapter for already paired devices
-        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), R.layout.device_name);
-
-        // Find and set up the ListView for paired devices
-        ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
-        pairedListView.setAdapter(devicesAdapter);
         pairedListView.setOnItemClickListener(deviceClickListener);
 
         // Get a set of currently paired devices from a local Bluetooth adapter
