@@ -28,9 +28,25 @@
 
     <!-- Fragment MainBoard -->
     <string name="frag_main_tmp">MainBoard screen</string>
+    <string name="allChannel">All Channel</string>
+    <string name="OnOff">On/Off</string>
+    <string name="modeVolt">Volt</string>
+    <string name="modeCurrent">Ampere</string>
+    <string name="noSelection">No Input Selected</string>
+    <string name="input0">Input 0</string>
+    <string name="input1">Input 1</string>
+    <string name="input2">Input 2</string>
+    <string name="input3">Input 3</string>
+    <string name="input4">Input 4</string>
+    <string name="input5">Input 5</string>
+    <string name="input6">Input 6</string>
+    <string name="input7">Input 7</string>
+    <string name="max">Max.</string>
+    <string name="min">Min.</string>
 
 
     <!-- Fragment Backup -->
     <string name="frag_back_tmp">Backup screen</string>
+    <string name="togglebutton">ToggleButton</string>
 
 </resources>
