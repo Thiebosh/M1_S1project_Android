@@ -5,17 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -39,7 +38,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
 
     @Override
-    public void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment, boolean addToBackstack) {
         String searched = fragment.getClass().getSimpleName();
         Stack<Fragment> searcher = (Stack<Fragment>) mFragmentStack.clone();
         int position = searcher.size() - 1;//size -> index
@@ -49,7 +48,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
         }
         if (position != -1) for (int i = mFragmentStack.size(); i > position; --i) mFragmentStack.pop();
 
-        mFragmentStack.push(fragment);//renouvellement du frament stocké
+        if (addToBackstack) mFragmentStack.push(fragment);//renouvellement du frament stocké
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.act_app_fragmentContainer, fragment)
@@ -58,10 +58,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void onBackPressed() {
-        mFragmentStack.pop();
-
-        if (mFragmentStack.empty()) AppActivity.this.finish();
-        else loadFragment(mFragmentStack.peek());//reason why it's not a String stack
+        if (mFragmentStack.size() < 2) {//besoin d'écran actuel et précédent
+            mFragmentStack.clear();
+            AppActivity.this.finish();//revient à l'activité précédente
+        }
+        else {
+            mFragmentStack.pop();//ecran actuel
+            loadFragment(mFragmentStack.peek(), true);//ecran précédent / can't be a String stack
+        }
     }
 
     /*
@@ -73,14 +77,19 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
     @Override
     public void connectDevice(final String deviceMacAddress) {
-        mBluetoothService.connect(mBluetoothAdapter.getRemoteDevice(deviceMacAddress));
+        if (mBluetoothService != null && mBluetoothAdapter != null) {
+            mBluetoothService.connect(mBluetoothAdapter.getRemoteDevice(deviceMacAddress));
+        }
     }
 
     @Override
     public void disconnectDevice() {
-        if (mBluetoothService != null) {
-            mBluetoothService.stop();
-        }
+        if (mBluetoothService != null) mBluetoothService.stop();
+    }
+
+    @Override
+    public void sendData(final String str) {
+        if (mBluetoothService != null) mBluetoothService.write(str);
     }
 
     /*
@@ -151,25 +160,32 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         str = getString(R.string.blt_connected, mConnectedDeviceName);
                         Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         //autorise connexion
-                        loadFragment(new MainBoardFragment());//peut revenir à l'écran de connexion
+                        loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                         break;
 
                     case BluetoothConstants.MESSAGE_TOAST:
                         str = msg.getData().getString(BluetoothConstants.TOAST);
                         Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         break;
+                        //si perd connexion, déconnecter
 
+                    /*
                     case BluetoothConstants.MESSAGE_WRITE:
                         byte[] writeBuf = (byte[]) msg.obj;
-                        // construct a string from the buffer
                         str = new String(writeBuf);
-                        //mConversationArrayAdapter.add("Me:  " + str);
+                        Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         break;
-
+                    */
                     case BluetoothConstants.MESSAGE_READ:
-                        byte[] readBuf = (byte[]) msg.obj;
+                        str = msg.getData().getString(BluetoothConstants.READ);
+                        Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
+                        //byte[] readBuf = (byte[]) msg.obj;
                         // construct a string from the valid bytes in the buffer
-                        str = new String(readBuf, 0, msg.arg1);
+                        //str = new String(readBuf, 0, msg.arg1);
+                        //Log.d("testy"+msg.arg1, msg.toString());
+                        //Log.d("testy reception", str);
+                        //Log.d("testy", ".");
+                        //Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + str);
                         break;
                 }
@@ -237,7 +253,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             }
         }
 
-        loadFragment(new ConnectFragment());//charge premier fragment
+        loadFragment(new ConnectFragment(), true);//charge premier fragment
     }
 
 
@@ -269,15 +285,15 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
         switch(item.getItemId()) {
             case mainBoard:
-                loadFragment(new MainBoardFragment());//false car "racine"
+                loadFragment(new MainBoardFragment(), true);
                 return true;
 
             case backup:
-                loadFragment(new BackupFragment());//true car accessible que de mainBoard et autorise bouton retour
+                loadFragment(new BackupFragment(), true);
                 return true;
 
             case disconnect:
-                loadFragment(new ConnectFragment());
+                loadFragment(new ConnectFragment(), true);
                 return true;
 
             default:

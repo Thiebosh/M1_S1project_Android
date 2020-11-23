@@ -5,12 +5,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
+import android.os.SystemClock;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -165,9 +165,9 @@ public class BluetoothService {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see ConnectedThread#write(byte[])
+     * @see ConnectedThread#write(String)
      */
-    public void write(byte[] out) {
+    public void write(String out) {
         // Create temporary object
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
@@ -400,18 +400,28 @@ public class BluetoothService {
         }
 
         public void run() {
-            byte[] buffer = new byte[1024];
+            byte[] buffer;
             int bytes;
 
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
                 try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
+                    if(mmInStream.available() != 0) {//data arrives in input stream
+                        SystemClock.sleep(80); //wait for the end of the data (~1char/ms + 20ms de secu)
 
-                    // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(BluetoothConstants.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                        // Read from the InputStream
+                        buffer = new byte[mmInStream.available()];//buffer for data complete
+                        bytes = mmInStream.read(buffer);//fill buffer by adress
+
+                        if (bytes == buffer.length) {
+                            // Send the obtained bytes to the UI Activity
+                            Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_READ);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(BluetoothConstants.READ, new String(buffer));
+                            msg.setData(bundle);
+                            mHandler.sendMessage(msg);
+                        }
+                    }
                 }
                 catch (IOException e) {
                     connectionLost();
@@ -425,13 +435,9 @@ public class BluetoothService {
          *
          * @param buffer The bytes to write
          */
-        public void write(byte[] buffer) {
+        public void write(final String buffer) {
             try {
-                mmOutStream.write(buffer);
-
-                // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothConstants.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();
+                mmOutStream.write(buffer.getBytes());
             }
             catch (IOException ignored) {}
         }

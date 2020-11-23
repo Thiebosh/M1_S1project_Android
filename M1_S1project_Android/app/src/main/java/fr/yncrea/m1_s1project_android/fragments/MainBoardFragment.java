@@ -1,18 +1,14 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
 
 public class MainBoardFragment extends Fragment {
 
@@ -59,6 +56,11 @@ public class MainBoardFragment extends Fragment {
                     break;
             }
         });
+
+        view.findViewById(R.id.switch1).setOnClickListener(v -> {
+            ((BluetoothMethods) getActivity()).sendData("get");//"que se passe t'il si j'essaye d'envoyer un texte sacrément long dans le seul but de tester la longueur max de la chaine d'envoi?");
+        });
+
         return view;
     }
 

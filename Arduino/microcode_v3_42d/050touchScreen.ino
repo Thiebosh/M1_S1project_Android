@@ -25,6 +25,7 @@ uint8_t getInputFromTouchScreen() {
         if (strCmd.equals("get")) {
           uint8_t reponse = getChannelValue(0);
           hc06.print(reponse);
+          //hc06.print("hello coco, comment tu prend les longues chaines, toi?");
         }
         if (strCmd.equals("set")) {
           setChannelValue(0,(getChannelValue(0)+1)%2);
