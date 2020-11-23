@@ -1,4 +1,4 @@
-package fr.yncrea.m1_s1project_android.fragments;
+package fr.yncrea.m1_s1project_android.interfaces;
 
 import androidx.fragment.app.Fragment;
 
@@ -16,5 +16,5 @@ public interface FragmentSwitcher {
      * stack to make this navigation reversible.
      */
 
-    void loadFragment(Fragment fragment, boolean addToBackstack);
+    void loadFragment(final Fragment fragment, final boolean addToBackstack);
 }

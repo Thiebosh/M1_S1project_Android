@@ -17,9 +17,39 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsChildren;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsParent;
+import fr.yncrea.m1_s1project_android.services.Interpreter;
 
-public class MainBoardFragment extends Fragment {
+public class MainBoardFragment extends Fragment implements BluetoothMethodsChildren {
+
+    /*
+     * Section BluetoothMethodsChildren
+     */
+
+    @Override
+    public void retrieveData(final String data) {
+        Toast.makeText(getContext(), data+" from mainboard", Toast.LENGTH_SHORT).show();
+        Interpreter.dataInterpreter(data);
+    }
+
+
+    /*
+     * Section Menu
+     */
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        //définit éléments visibles du menu pour ce fragment
+        menu.findItem(R.id.menu_disconnect).setVisible(true);
+        menu.findItem(R.id.menu_toMainBoard).setVisible(false);
+        menu.findItem(R.id.menu_toBackup).setVisible(true);
+    }
+
+
+    /*
+     * Section Cycle de vie
+     */
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,19 +88,13 @@ public class MainBoardFragment extends Fragment {
         });
 
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
-            ((BluetoothMethods) getActivity()).sendData("get");//"que se passe t'il si j'essaye d'envoyer un texte sacrément long dans le seul but de tester la longueur max de la chaine d'envoi?");
+            ((BluetoothMethodsParent) getActivity()).sendData("get");
         });
 
         return view;
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        //définit éléments visibles du menu pour ce fragment
-        menu.findItem(R.id.menu_disconnect).setVisible(true);
-        menu.findItem(R.id.menu_toMainBoard).setVisible(false);
-        menu.findItem(R.id.menu_toBackup).setVisible(true);
-    }
+
 
     /*public void onInputSelected(View view){
         boolean checked = ((RadioButton) view).isChecked();

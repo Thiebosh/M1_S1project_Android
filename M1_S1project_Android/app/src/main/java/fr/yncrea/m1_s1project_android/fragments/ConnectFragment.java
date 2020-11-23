@@ -19,9 +19,26 @@ import java.util.Objects;
 import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsParent;
 
 public class ConnectFragment extends Fragment {
+
+    /*
+     * Section Menu
+     */
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        //définit éléments visibles du menu pour ce fragment
+        menu.findItem(R.id.menu_disconnect).setVisible(true);
+        menu.findItem(R.id.menu_toMainBoard).setVisible(true);
+        menu.findItem(R.id.menu_toBackup).setVisible(true);
+    }
+
+
+    /*
+     * Section Cycle de vie
+     */
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,7 +46,7 @@ public class ConnectFragment extends Fragment {
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
         //si était connecté, déconnecte
-        ((BluetoothMethods) Objects.requireNonNull(getActivity())).disconnectDevice();
+        ((BluetoothMethodsParent) Objects.requireNonNull(getActivity())).disconnectDevice();
 
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
@@ -50,7 +67,7 @@ public class ConnectFragment extends Fragment {
             ((TextView) view.findViewById(R.id.frag_conn_textView_title)).setText(str);
 
             // Connexion test : if success, handler will change fragment
-            ((BluetoothMethods) Objects.requireNonNull(getActivity())).connectDevice(address);
+            ((BluetoothMethodsParent) Objects.requireNonNull(getActivity())).connectDevice(address);
         };
         pairedListView.setOnItemClickListener(deviceClickListener);
 
@@ -67,13 +84,5 @@ public class ConnectFragment extends Fragment {
         else devicesAdapter.add(getString(R.string.frag_conn_none_paired));
 
         return view;
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        //définit éléments visibles du menu pour ce fragment
-        menu.findItem(R.id.menu_disconnect).setVisible(true);
-        menu.findItem(R.id.menu_toMainBoard).setVisible(true);
-        menu.findItem(R.id.menu_toBackup).setVisible(true);
     }
 }

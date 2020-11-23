@@ -1,4 +1,4 @@
-package fr.yncrea.m1_s1project_android.bluetooth;
+package fr.yncrea.m1_s1project_android.interfaces;
 
 public interface BluetoothConstants {
     // Message types sent from the BluetoothChatService Handler

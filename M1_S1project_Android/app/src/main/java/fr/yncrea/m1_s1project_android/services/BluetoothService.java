@@ -1,5 +1,4 @@
-package fr.yncrea.m1_s1project_android.bluetooth;
-
+package fr.yncrea.m1_s1project_android.services;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +16,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
 
 public class BluetoothService {
     // Member fields
@@ -47,7 +46,7 @@ public class BluetoothService {
      *
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothService(Resources resources, Handler handler) {
+    public BluetoothService(final Resources resources, final Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -66,7 +65,7 @@ public class BluetoothService {
      *
      * @param device The BluetoothDevice to connect
      */
-    public synchronized void connect(BluetoothDevice device) {
+    public synchronized void connect(final BluetoothDevice device) {
         // Cancel any thread attempting to make a connection
         if (mState == STATE_CONNECTING) {
             if (mConnectThread != null) {
@@ -102,7 +101,7 @@ public class BluetoothService {
      * @param socket The BluetoothSocket on which the connection was made
      * @param device The BluetoothDevice that has been connected
      */
-    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
+    public synchronized void connected(final BluetoothSocket socket, final BluetoothDevice device) {
         // Cancel the thread that completed the connection
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -126,8 +125,8 @@ public class BluetoothService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_DEVICE_NAME);
-        Bundle bundle = new Bundle();
+        final Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_DEVICE_NAME);
+        final Bundle bundle = new Bundle();
         bundle.putString(BluetoothConstants.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
@@ -167,9 +166,9 @@ public class BluetoothService {
      * @param out The bytes to write
      * @see ConnectedThread#write(String)
      */
-    public void write(String out) {
+    public void write(final String out) {
         // Create temporary object
-        ConnectedThread r;
+        final ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
         synchronized (this) {
             if (mState != STATE_CONNECTED) return;
@@ -180,14 +179,14 @@ public class BluetoothService {
     }
 
     /**
-     * Indicate that the connection attempt failed and notify the UI Activity.
+     * Indicate that the connection attempt failed or the connexion was lost
+     * and notify the UI Activity.
      */
-    private void connectionFailed() {
+    private void connectionClosed(final String reason) {
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        String str = mResources.getString(R.string.blt_connection_failed);
-        bundle.putString(BluetoothConstants.TOAST, str);
+        final Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
+        final Bundle bundle = new Bundle();
+        bundle.putString(BluetoothConstants.TOAST, reason);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -199,25 +198,6 @@ public class BluetoothService {
         BluetoothService.this.start();
     }
 
-    /**
-     * Indicate that the connection was lost and notify the UI Activity.
-     */
-    private void connectionLost() {
-        // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        String str = mResources.getString(R.string.blt_disconnected);
-        bundle.putString(BluetoothConstants.TOAST, str);
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
-
-        mState = STATE_NONE;
-        // Update UI title
-        updateUserInterfaceTitle();
-
-        // Start the service over to restart listening mode
-        BluetoothService.this.start();
-    }
 
     /**
      * Stop all threads
@@ -265,7 +245,7 @@ public class BluetoothService {
         }
 
         public void run() {
-            setName("AcceptThreadSecure");
+            AcceptThread.this.setName("AcceptThreadSecure");
 
             BluetoothSocket socket;
 
@@ -335,7 +315,7 @@ public class BluetoothService {
         }
 
         public void run() {
-            setName("ConnectThreadSecure");
+            ConnectThread.this.setName("ConnectThreadSecure");
 
             // Always cancel discovery because it will slow down a connection
             mAdapter.cancelDiscovery();
@@ -352,7 +332,7 @@ public class BluetoothService {
                     mmSocket.close();
                 }
                 catch (IOException ignored) {}
-                connectionFailed();
+                connectionClosed(mResources.getString(R.string.blt_connection_failed));
                 return;
             }
 
@@ -424,7 +404,7 @@ public class BluetoothService {
                     }
                 }
                 catch (IOException e) {
-                    connectionLost();
+                    connectionClosed(mResources.getString(R.string.blt_disconnected));
                     break;
                 }
             }

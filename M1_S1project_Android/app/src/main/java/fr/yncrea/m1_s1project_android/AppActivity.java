@@ -5,14 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
-import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,25 +18,26 @@ import android.widget.Toast;
 import java.util.Objects;
 import java.util.Stack;
 
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothConstants;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothService;
-import fr.yncrea.m1_s1project_android.bluetooth.BluetoothMethods;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
+import fr.yncrea.m1_s1project_android.services.BluetoothService;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsParent;
 import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
-import fr.yncrea.m1_s1project_android.fragments.FragmentSwitcher;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsChildren;
+import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
 
 /**
  * Activité principale : gestion des channels du MIVS
  */
-public class AppActivity extends AppCompatActivity implements FragmentSwitcher, BluetoothMethods {
+public class AppActivity extends AppCompatActivity implements FragmentSwitcher, BluetoothMethodsParent {
 
     /*
      * Section FragmentSwitcher
      */
 
     @Override
-    public void loadFragment(Fragment fragment, boolean addToBackstack) {
+    public void loadFragment(final Fragment fragment, final boolean addToBackstack) {
         String searched = fragment.getClass().getSimpleName();
         Stack<Fragment> searcher = (Stack<Fragment>) mFragmentStack.clone();
         int position = searcher.size() - 1;//size -> index
@@ -69,7 +68,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     /*
-     * Section BluetoothMethods
+     * Section BluetoothMethodsParent
      */
 
     /**
@@ -114,23 +113,16 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
     private String mConnectedDeviceName = null;
 
-    /*
-     * String buffer for outgoing messages
-     */
-    //private StringBuffer mOutStringBuffer;
-
 
     /**
      * Set up the UI and background operations for chat.
      */
     private void setupBluetooth() {
         // Initialize the BluetoothChatService to perform bluetooth connections
-        //getApplicationContext().getString(R.string.app_name);
-        //getResources().getString(R.string.app_name);
         mBluetoothService = new BluetoothService(getResources(), new Handler(Looper.myLooper()) {
-            // The Handler that gets information back from the BluetoothChatService
             @Override
             public void handleMessage(Message msg) {
+                // The Handler that gets information back from the BluetoothChatService
                 String str;
                 switch (msg.what) {
                     case BluetoothConstants.MESSAGE_STATE_CHANGE:
@@ -169,31 +161,18 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         break;
                         //si perd connexion, déconnecter
 
-                    /*
-                    case BluetoothConstants.MESSAGE_WRITE:
-                        byte[] writeBuf = (byte[]) msg.obj;
-                        str = new String(writeBuf);
-                        Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
-                        break;
-                    */
                     case BluetoothConstants.MESSAGE_READ:
                         str = msg.getData().getString(BluetoothConstants.READ);
-                        Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
-                        //byte[] readBuf = (byte[]) msg.obj;
-                        // construct a string from the valid bytes in the buffer
-                        //str = new String(readBuf, 0, msg.arg1);
-                        //Log.d("testy"+msg.arg1, msg.toString());
-                        //Log.d("testy reception", str);
-                        //Log.d("testy", ".");
-                        //Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
-                        //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + str);
+                        try {
+                            ((BluetoothMethodsChildren) mFragmentStack.peek()).retrieveData(str);
+                        }
+                        catch (Exception ignored) {
+                            disconnectDevice();
+                        }
                         break;
                 }
             }
         });
-
-        // Initialize the buffer for outgoing messages
-        //mOutStringBuffer = new StringBuffer();
     }
 
     @Override
@@ -209,6 +188,44 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                 Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                 AppActivity.this.finish();
             }
+        }
+    }
+
+
+    /*
+     * Section Menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // define all actions once and show / hide depending of the fragment
+
+        //avoid NonConstantResourceId warning / error
+        final int mainBoard = R.id.menu_toMainBoard;
+        final int backup = R.id.menu_toBackup;
+        final int disconnect = R.id.menu_disconnect;
+
+        switch(item.getItemId()) {
+            case mainBoard:
+                loadFragment(new MainBoardFragment(), true);
+                return true;
+
+            case backup:
+                loadFragment(new BackupFragment(), true);
+                return true;
+
+            case disconnect:
+                loadFragment(new ConnectFragment(), true);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -261,44 +278,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     public void onPause() {
         super.onPause();
         disconnectDevice();
-    }
-
-
-    /*
-     * Section Menu
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // define all actions once and show / hide depending of the fragment
-
-        //avoid NonConstantResourceId warning / error
-        final int mainBoard = R.id.menu_toMainBoard;
-        final int backup = R.id.menu_toBackup;
-        final int disconnect = R.id.menu_disconnect;
-
-        switch(item.getItemId()) {
-            case mainBoard:
-                loadFragment(new MainBoardFragment(), true);
-                return true;
-
-            case backup:
-                loadFragment(new BackupFragment(), true);
-                return true;
-
-            case disconnect:
-                loadFragment(new ConnectFragment(), true);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 }
