@@ -19,7 +19,7 @@ public class ConverterService {
     {
         "fragment":"backup/main",
         "backup":"load/save",
-        
+
         "channel":-1(all)/0/.../7,
         "activation":true/false, -> couple avec channel -1 pour (dés)activer toutes les pistes
         "type": "I/V",

@@ -96,6 +96,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
         //reçoit nouveau channel (jamais tout un generator) avec des valeurs que pour ce qui change?
         //comme ça, vérifie les non nulls et les ajoute au json, puis envoie au bluetooth service
         String str = ConverterService.dataToString(data);
+        
         if (mBluetoothService != null) mBluetoothService.write(str);
     }
 
@@ -183,6 +184,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         str = msg.getData().getString(BluetoothConstants.READ);
 
                         //json decode
+                        Object data = ConverterService.stringToData(str);
 
                         if (str.equals("init")) {
                             mGenerator.setChannelList(new ArrayList<>());
@@ -191,7 +193,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             //mGenerator.getChannelList().get(0).coucou();
 
                             try {
-                                Object data = ConverterService.stringToData(str);
                                 ((BluetoothChildren) mFragmentStack.peek()).retrieveData(data);
                             } catch (Exception ignored) {
                                 disconnectDevice();
