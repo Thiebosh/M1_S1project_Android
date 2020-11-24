@@ -3,16 +3,19 @@ package fr.yncrea.m1_s1project_android.models;
 public class Channel {
     private int id;
     private boolean isActive;
-    private double currentValue;
-    private float minValue;
-    private float maxValue;
+    private double currentValue; // par défaut = -10 ?
+    private double minValue;
+    private double maxValue;
     private PowerSupply type;
     private Scale scale;
 
-    public boolean isSetActive;
-    public boolean isSetCurrentValue;
-    public boolean isSetMinValue;
-    public boolean isSetMaxValue;
+    private boolean isSetActive;
+    private boolean isSetCurrentValue;
+    private boolean isSetMinValue;
+    private boolean isSetMaxValue;
+    private boolean isSetType;
+    private boolean isSetScale;
+
 
     public int getId() {
         return id;
@@ -27,7 +30,8 @@ public class Channel {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.isActive = active;
+        this.isSetActive = true;
     }
 
     public double getCurrentValue() {
@@ -39,20 +43,22 @@ public class Channel {
         this.isSetCurrentValue = true;
     }
 
-    public float getMinValue() {
+    public double getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(float minValue) {
+    public void setMinValue(double minValue) {
         this.minValue = minValue;
+        this.isSetMinValue = true;
     }
 
-    public float getMaxValue() {
+    public double getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(float maxValue) {
+    public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
+        this.isSetMaxValue = true;
     }
 
     public PowerSupply getType() {
@@ -61,6 +67,7 @@ public class Channel {
 
     public void setType(PowerSupply type) {
         this.type = type;
+        this.isSetType = true;
     }
 
     public Scale getScale() {
@@ -69,5 +76,30 @@ public class Channel {
 
     public void setScale(Scale scale) {
         this.scale = scale;
+        this.isSetScale = true;
+    }
+
+    public boolean isSetActive() {
+        return isSetActive;
+    }
+
+    public boolean isSetCurrentValue() {
+        return isSetCurrentValue;
+    }
+
+    public boolean isSetMinValue() {
+        return isSetMinValue;
+    }
+
+    public boolean isSetMaxValue() {
+        return isSetMaxValue;
+    }
+
+    public boolean isSetType() {
+        return isSetType;
+    }
+
+    public boolean isSetScale() {
+        return isSetScale;
     }
 }

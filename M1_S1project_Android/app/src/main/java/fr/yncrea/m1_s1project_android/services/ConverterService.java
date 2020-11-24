@@ -21,17 +21,27 @@ public class ConverterService {
         JsonObject json = new JsonObject();
         json.addProperty("channel", data.getId());
 
-        if (data.getType() != null) {
+
+        if (data.isSetActive()) {
+            json.addProperty("activation", data.isActive());
+        }
+        if (data.isSetCurrentValue()) {
+            json.addProperty("currentVal", data.getCurrentValue());
+        }
+        if (data.isSetMinValue()) {
+            json.addProperty("minVal", data.getCurrentValue());
+        }
+        if (data.isSetMaxValue()) {
+            json.addProperty("maxVal", data.getCurrentValue());
+        }
+        if (data.isSetType()) {
             json.addProperty("type", data.getType().toString());
         }
-        if (data.isSetCurrentValue) {
-            json.addProperty("type", data.getCurrentValue());
-        }
-        if (data.isSetActive) {
-            json.addProperty("type", data.isActive());
+        if (data.isSetScale()) {
+            json.addProperty("scale", data.getCurrentValue());
         }
 
-
+        return json.toString();
 
         /*
         JsonArray array = new JsonArray();
@@ -42,8 +52,6 @@ public class ConverterService {
         }
         json.add("array", array);
         */
-
-        return json.toString();
     }
 
 

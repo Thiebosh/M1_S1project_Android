@@ -1,9 +1,5 @@
 package fr.yncrea.m1_s1project_android;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -15,22 +11,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
 
+import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
+import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
+import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
+import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
-import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
-import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
-import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
-import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
 import fr.yncrea.m1_s1project_android.services.ConverterService;
 
 /**
@@ -188,13 +187,28 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         }
                         else {
                             //json decode : en théorie, champs absents du json sont à null -> vérifier
+                            // il faut que le json envoyer depuis l'arduino respecte la casse de la classe Channel :
+                            // {"id":7,"currentValue":-2.5}
                             Channel data = ConverterService.stringToData(str);
 
-                            /*
-                            if (data.getType() != null) {
+                            if(data.isActive()){
                                 mGenerator.getChannelList().get(data.getId()).setActive(data.isActive());
                             }
-                             */
+                            if(data.getCurrentValue() != -10){
+                                mGenerator.getChannelList().get(data.getId()).setCurrentValue(data.getCurrentValue());
+                            }
+                            if(data.getMinValue() != -10){
+                                mGenerator.getChannelList().get(data.getId()).setMinValue(data.getMinValue());
+                            }
+                            if(data.getMaxValue() != -10){
+                                mGenerator.getChannelList().get(data.getId()).setMaxValue(data.getMaxValue());
+                            }
+                            if(data.getType() != null){
+                                mGenerator.getChannelList().get(data.getId()).setType(data.getType());
+                            }
+                            if(data.getScale() != null){
+                                mGenerator.getChannelList().get(data.getId()).setScale(data.getScale());
+                            }
 
                             try {
                                 ((BluetoothChildren) mFragmentStack.peek()).retrieveData(data);

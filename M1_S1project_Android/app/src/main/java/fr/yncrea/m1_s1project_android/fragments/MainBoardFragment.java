@@ -4,11 +4,15 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +107,32 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             tmp.setId(7);
             tmp.setCurrentValue(2.4);
             ((BluetoothParent) Objects.requireNonNull(getActivity())).sendData(tmp);
+        });
+
+        ((EditText) view.findViewById(R.id.value0)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                double edittext = Double.parseDouble(s.toString());
+                Log.d("MainBoardClick", "edit input0 value" + edittext);
+                ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator()
+                        .getChannelList().get(0).setCurrentValue(edittext);
+
+                Channel tmp = new Channel();
+                tmp.setId(0);
+                tmp.setCurrentValue(edittext);
+                ((BluetoothParent) Objects.requireNonNull(getActivity())).sendData(tmp);
+
+            }
         });
 
         return view;
