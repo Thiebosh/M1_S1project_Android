@@ -15,11 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
 
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
+import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
@@ -92,16 +95,12 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     @Override
-    public void sendData(final Object data) {
-        //reçoit nouveau channel (jamais tout un generator) avec des valeurs que pour ce qui change?
-        //comme ça, vérifie les non nulls et les ajoute au json, puis envoie au bluetooth service
-        String str = ConverterService.dataToString(data);
-        
-        if (mBluetoothService != null) mBluetoothService.write(str);
+    public void sendData(final Channel data) {
+        if (mBluetoothService != null) mBluetoothService.write(ConverterService.dataToString(data));
     }
 
     @Override
-    public Object getGenerator() {
+    public Generator getGenerator() {
         return mGenerator;
     }
 
@@ -183,14 +182,19 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                         str = msg.getData().getString(BluetoothConstants.READ);
 
-                        //json decode
-                        Object data = ConverterService.stringToData(str);
-
-                        if (str.equals("init")) {
-                            mGenerator.setChannelList(new ArrayList<>());
+                        if (str.contains("init")) {
+                            Generator storage = (new Gson()).fromJson(str, Generator.class);
+                            mGenerator.setChannelList(storage.getChannelList());
                         }
                         else {
-                            //mGenerator.getChannelList().get(0).coucou();
+                            //json decode : en théorie, champs absents du json sont à null -> vérifier
+                            Channel data = ConverterService.stringToData(str);
+
+                            /*
+                            if (data.getType() != null) {
+                                mGenerator.getChannelList().get(data.getId()).setActive(data.isActive());
+                            }
+                             */
 
                             try {
                                 ((BluetoothChildren) mFragmentStack.peek()).retrieveData(data);

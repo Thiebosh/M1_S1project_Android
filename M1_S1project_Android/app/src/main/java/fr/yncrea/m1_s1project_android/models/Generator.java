@@ -12,4 +12,8 @@ public class Generator {
     public void setChannelList(ArrayList<Channel> channelList) {
         this.channelList = channelList;
     }
+
+    public void setInit(ArrayList<Channel> channelList) {
+        setChannelList(channelList);
+    }
 }

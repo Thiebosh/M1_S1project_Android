@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
+import fr.yncrea.m1_s1project_android.models.Channel;
 
 /**
  * Activité secondaire : gestion du module de sauvegarde du MIVS
@@ -24,9 +27,9 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
      */
 
     @Override
-    public void retrieveData(final Object data) {
+    public void retrieveData(final Channel data) {
         Toast.makeText(getContext(), data+" from backup", Toast.LENGTH_SHORT).show();
-        ((BluetoothParent) getActivity()).getGenerator();
+        ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator();
     }
 
 

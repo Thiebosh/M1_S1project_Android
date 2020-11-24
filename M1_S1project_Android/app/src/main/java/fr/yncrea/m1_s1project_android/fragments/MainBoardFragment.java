@@ -16,9 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.util.Objects;
+
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
+import fr.yncrea.m1_s1project_android.models.Channel;
 
 public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
@@ -27,7 +30,13 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
      */
 
     @Override
-    public void retrieveData(final Object data) {
+    public void retrieveData(final Channel data) {
+        if (data.getType() != null) {
+            //change affichage du type de channel data.getId()
+        }
+
+        //...
+
         Toast.makeText(getContext(), data+" from mainboard", Toast.LENGTH_SHORT).show();
         ((BluetoothParent) getActivity()).getGenerator();
     }
@@ -87,7 +96,13 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         });
 
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
-            ((BluetoothParent) getActivity()).sendData("get");
+            ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator()
+                    .getChannelList().get(7).setCurrentValue(2.4);
+
+            Channel tmp = new Channel();
+            tmp.setId(7);
+            tmp.setCurrentValue(2.4);
+            ((BluetoothParent) Objects.requireNonNull(getActivity())).sendData(tmp);
         });
 
         return view;

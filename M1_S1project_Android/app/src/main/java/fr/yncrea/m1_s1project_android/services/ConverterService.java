@@ -1,21 +1,53 @@
 package fr.yncrea.m1_s1project_android.services;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.util.Objects;
+
+import fr.yncrea.m1_s1project_android.models.Channel;
+
 public class ConverterService {
 
     //String fragment
-    //Enum type (channel, values
+    //Enum type (channel, values)
 
-    public static Object stringToData(final String str) {
-        return str;
+    public static Channel stringToData(final String str) {
+        return (new Gson()).fromJson(str, Channel.class);
     }
 
-    public static String dataToString(final Object obj) {
-        return obj.toString();
+    public static String dataToString(final Channel data) {
+        JsonObject json = new JsonObject();
+        json.addProperty("channel", data.getId());
+
+        if (data.getType() != null) {
+            json.addProperty("type", data.getType().toString());
+        }
+        if (data.isSetCurrentValue) {
+            json.addProperty("type", data.getCurrentValue());
+        }
+        if (data.isSetActive) {
+            json.addProperty("type", data.isActive());
+        }
+
+
+
+        /*
+        JsonArray array = new JsonArray();
+        for (int val = 0; val <= 3; ++val) {
+            JsonObject item = new JsonObject();
+            item.addProperty("type", val);
+            array.add(item);
+        }
+        json.add("array", array);
+        */
+
+        return json.toString();
     }
 
 
     /*
-
     {
         "fragment":"backup/main",
         "backup":"load/save",
