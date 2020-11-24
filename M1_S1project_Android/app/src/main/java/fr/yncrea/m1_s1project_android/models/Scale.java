@@ -1,12 +1,11 @@
 package fr.yncrea.m1_s1project_android.models;
 
-//vf : Intensité (tension), Voltage (courant)
-public enum PowerSupply {
-    I(0), V(1);
+public enum Scale {
+    u(-6), m(-3), _(0), k(3), M(6);
 
     private final int mValue;
 
-    PowerSupply(final int value) {
+    Scale(final int value) {
         mValue = value;
     }
 

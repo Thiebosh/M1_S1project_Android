@@ -15,22 +15,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
 
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
+import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsParent;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsChildren;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
+import fr.yncrea.m1_s1project_android.services.ConverterService;
 
 /**
  * Activité principale : gestion des channels du MIVS
  */
-public class AppActivity extends AppCompatActivity implements FragmentSwitcher, BluetoothMethodsParent {
+public class AppActivity extends AppCompatActivity implements FragmentSwitcher, BluetoothParent {
 
     /*
      * Section FragmentSwitcher
@@ -68,8 +71,10 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     /*
-     * Section BluetoothMethodsParent
+     * Section BluetoothParent
      */
+
+    private final Generator mGenerator = new Generator();
 
     /**
      * Establish connection with other device
@@ -87,8 +92,16 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     @Override
-    public void sendData(final String str) {
+    public void sendData(final Object data) {
+        //reçoit nouveau channel (jamais tout un generator) avec des valeurs que pour ce qui change?
+        //comme ça, vérifie les non nulls et les ajoute au json, puis envoie au bluetooth service
+        String str = ConverterService.dataToString(data);
         if (mBluetoothService != null) mBluetoothService.write(str);
+    }
+
+    @Override
+    public Object getGenerator() {
+        return mGenerator;
     }
 
     /*
@@ -162,12 +175,27 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         //si perd connexion, déconnecter
 
                     case BluetoothConstants.MESSAGE_READ:
+                        //operation generale sur mGenerator puis renvoi pour notification de ce qui a changé?
+                        //ou alors, si / puisque RecyclerView sur adresse de ArrayList de mGenerator,
+                        //modifie mGenerator ici et retrieveData fait juste un recycler.updateAll()
+                        //et du coup, retrieveData se renommerait applyChanges
+
                         str = msg.getData().getString(BluetoothConstants.READ);
-                        try {
-                            ((BluetoothMethodsChildren) mFragmentStack.peek()).retrieveData(str);
+
+                        //json decode
+
+                        if (str.equals("init")) {
+                            mGenerator.setChannelList(new ArrayList<>());
                         }
-                        catch (Exception ignored) {
-                            disconnectDevice();
+                        else {
+                            //mGenerator.getChannelList().get(0).coucou();
+
+                            try {
+                                Object data = ConverterService.stringToData(str);
+                                ((BluetoothChildren) mFragmentStack.peek()).retrieveData(data);
+                            } catch (Exception ignored) {
+                                disconnectDevice();
+                            }
                         }
                         break;
                 }
@@ -237,7 +265,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_activity);
+        setContentView(R.layout.activity_app);
         String str = getString(R.string.blt_not_connected);
         Objects.requireNonNull(getSupportActionBar()).setSubtitle(str);
 

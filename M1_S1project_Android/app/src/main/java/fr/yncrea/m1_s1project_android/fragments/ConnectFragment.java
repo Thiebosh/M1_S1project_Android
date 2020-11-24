@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsParent;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 
 public class ConnectFragment extends Fragment {
 
@@ -46,13 +46,13 @@ public class ConnectFragment extends Fragment {
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
         //si était connecté, déconnecte
-        ((BluetoothMethodsParent) Objects.requireNonNull(getActivity())).disconnectDevice();
+        ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
 
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
 
         // Initialize array adapter for already paired devices
-        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), R.layout.device_name);
+        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), R.layout.item_device_name);
         pairedListView.setAdapter(devicesAdapter);
 
         //The on-click listener for all devices in the ListViews
@@ -67,7 +67,7 @@ public class ConnectFragment extends Fragment {
             ((TextView) view.findViewById(R.id.frag_conn_textView_title)).setText(str);
 
             // Connexion test : if success, handler will change fragment
-            ((BluetoothMethodsParent) Objects.requireNonNull(getActivity())).connectDevice(address);
+            ((BluetoothParent) Objects.requireNonNull(getActivity())).connectDevice(address);
         };
         pairedListView.setOnItemClickListener(deviceClickListener);
 

@@ -17,20 +17,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsChildren;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothMethodsParent;
-import fr.yncrea.m1_s1project_android.services.Interpreter;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 
-public class MainBoardFragment extends Fragment implements BluetoothMethodsChildren {
+public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
     /*
-     * Section BluetoothMethodsChildren
+     * Section BluetoothChildren
      */
 
     @Override
-    public void retrieveData(final String data) {
+    public void retrieveData(final Object data) {
         Toast.makeText(getContext(), data+" from mainboard", Toast.LENGTH_SHORT).show();
-        Interpreter.dataInterpreter(data);
+        ((BluetoothParent) getActivity()).getGenerator();
     }
 
 
@@ -88,7 +87,7 @@ public class MainBoardFragment extends Fragment implements BluetoothMethodsChild
         });
 
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
-            ((BluetoothMethodsParent) getActivity()).sendData("get");
+            ((BluetoothParent) getActivity()).sendData("get");
         });
 
         return view;
