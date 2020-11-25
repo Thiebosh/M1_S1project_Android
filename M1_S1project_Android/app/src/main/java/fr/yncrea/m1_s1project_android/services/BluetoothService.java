@@ -164,9 +164,9 @@ public class BluetoothService {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see ConnectedThread#write(String)
+     * @see ConnectedThread#send(String)
      */
-    public void write(final String out) {
+    public void send(final String out) {
         // Create temporary object
         final ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
@@ -175,7 +175,7 @@ public class BluetoothService {
             r = mConnectedThread;
         }
         // Perform the write unsynchronized
-        r.write(out);
+        r.send(out);
     }
 
     /**
@@ -304,8 +304,7 @@ public class BluetoothService {
             mmDevice = device;
             BluetoothSocket tmp = null;
 
-            // Get a BluetoothSocket for a connection with the
-            // given BluetoothDevice
+            // Get a BluetoothSocket for a connection with the given BluetoothDevice
             try {
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID_SECURE);
             }
@@ -322,8 +321,7 @@ public class BluetoothService {
 
             // Make a connection to the BluetoothSocket
             try {
-                // This is a blocking call and will only return on a
-                // successful connection or an exception
+                // This is a blocking call and will only return on a successful connection or an exception
                 mmSocket.connect();
             }
             catch (IOException e) {
@@ -395,9 +393,9 @@ public class BluetoothService {
 
                         if (bytes == buffer.length) {
                             // Send the obtained bytes to the UI Activity
-                            Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_READ);
+                            Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
                             Bundle bundle = new Bundle();
-                            bundle.putString(BluetoothConstants.READ, new String(buffer));
+                            bundle.putString(BluetoothConstants.RECEIVE, new String(buffer));
                             msg.setData(bundle);
                             mHandler.sendMessage(msg);
                         }
@@ -415,7 +413,7 @@ public class BluetoothService {
          *
          * @param buffer The bytes to write
          */
-        public void write(final String buffer) {
+        public void send(final String buffer) {
             try {
                 mmOutStream.write(buffer.getBytes());
             }

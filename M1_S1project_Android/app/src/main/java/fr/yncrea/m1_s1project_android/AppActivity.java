@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.Objects;
 import java.util.Stack;
@@ -95,7 +95,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final Channel data) {
-        if (mBluetoothService != null) mBluetoothService.write(ConverterService.dataToString(data));
+        if (mBluetoothService != null) mBluetoothService.send(ConverterService.objectToString(data));
     }
 
     @Override
@@ -142,7 +142,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         switch (msg.arg1) {
                             case BluetoothService.STATE_CONNECTED:
                                 str = getString(R.string.blt_connected, mConnectedDeviceName);
-                                //mConversationArrayAdapter.clear();
                                 break;
                             case BluetoothService.STATE_CONNECTING:
                                 str = getString(R.string.blt_connecting);
@@ -173,49 +172,33 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         break;
                         //si perd connexion, déconnecter
 
-                    case BluetoothConstants.MESSAGE_READ:
+                    case BluetoothConstants.MESSAGE_RECEIVE:
                         //operation generale sur mGenerator puis renvoi pour notification de ce qui a changé?
                         //ou alors, si / puisque RecyclerView sur adresse de ArrayList de mGenerator,
                         //modifie mGenerator ici et retrieveData fait juste un recycler.updateAll()
-                        //et du coup, retrieveData se renommerait applyChanges
 
-                        str = msg.getData().getString(BluetoothConstants.READ);
+                        str = msg.getData().getString(BluetoothConstants.RECEIVE);
 
                         if (str.contains("init")) {
-                            Generator storage = (new Gson()).fromJson(str, Generator.class);
+                            Generator storage = ConverterService.stringToObject(str);
                             mGenerator.setChannelList(storage.getChannelList());
+                            break;
                         }
-                        else {
-                            //json decode : en théorie, champs absents du json sont à null -> vérifier
-                            // il faut que le json envoyer depuis l'arduino respecte la casse de la classe Channel :
-                            // {"id":7,"currentValue":-2.5}
-                            Channel data = ConverterService.stringToData(str);
 
-                            if(data.isActive()){
-                                mGenerator.getChannelList().get(data.getId()).setActive(data.isActive());
-                            }
-                            if(data.getCurrentValue() != -10){
-                                mGenerator.getChannelList().get(data.getId()).setCurrentValue(data.getCurrentValue());
-                            }
-                            if(data.getMinValue() != -10){
-                                mGenerator.getChannelList().get(data.getId()).setMinValue(data.getMinValue());
-                            }
-                            if(data.getMaxValue() != -10){
-                                mGenerator.getChannelList().get(data.getId()).setMaxValue(data.getMaxValue());
-                            }
-                            if(data.getType() != null){
-                                mGenerator.getChannelList().get(data.getId()).setType(data.getType());
-                            }
-                            if(data.getScale() != null){
-                                mGenerator.getChannelList().get(data.getId()).setScale(data.getScale());
-                            }
-
-                            try {
-                                ((BluetoothChildren) mFragmentStack.peek()).retrieveData(data);
-                            } catch (Exception ignored) {
-                                disconnectDevice();
-                            }
+                        //else
+                        JsonObject data = ConverterService.stringToJson(mGenerator, str);
+                        if (data == null) {
+                            Toast.makeText(AppActivity.this, "réception de données invalides", Toast.LENGTH_SHORT).show();
                         }
+                        try {
+                            //besoin d'appliquer des changements à l'écran que si est encore sur l'écran concerné par les changements...
+                            //d'un autre côté, le fragment ne vérifie que la présence des champs qui le concerne
+                            //et un ensemble clé valeur de moins, ça peut être une 15-20aine de caractères en moins, soit une 30aine de ms en moins
+                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(data);
+                        } catch (Exception ignored) {
+                            disconnectDevice();
+                        }
+
                         break;
                 }
             }
@@ -253,7 +236,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // define all actions once and show / hide depending of the fragment
 
-        //avoid NonConstantResourceId warning / error
+        //avoid NonConstantResourceId warning
         final int mainBoard = R.id.menu_toMainBoard;
         final int backup = R.id.menu_toBackup;
         final int disconnect = R.id.menu_disconnect;

@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.JsonObject;
+
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
@@ -34,15 +36,15 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
      */
 
     @Override
-    public void retrieveData(final Channel data) {
-        if (data.getType() != null) {
-            //change affichage du type de channel data.getId()
+    public void applyChanges(final JsonObject data) {
+        if (data.has("type")) {
+            //change affichage du type de channel data.get("id") (sur de l'avoir, sinon erreur avant)
         }
 
         //...
 
         Toast.makeText(getContext(), data+" from mainboard", Toast.LENGTH_SHORT).show();
-        ((BluetoothParent) getActivity()).getGenerator();
+        ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator();
     }
 
 
