@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.Objects;
@@ -171,6 +173,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         break;
                         //si perd connexion, déconnecter
+                        //si échec de connexion, remettre titre initial
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         //operation generale sur mGenerator puis renvoi pour notification de ce qui a changé?
@@ -179,7 +182,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
 
-                        if (str.contains("init")) {
+                        if (str.startsWith("channelList", 2)) {
                             Generator storage = ConverterService.stringToObject(str);
                             mGenerator.setChannelList(storage.getChannelList());
                             break;

@@ -9,7 +9,7 @@ public class Generator {
         return channelList;
     }
 
-    public void setChannelList(ArrayList<Channel> channelList) {
+    public void setChannelList(final ArrayList<Channel> channelList) {
         this.channelList = channelList;
     }
 }
