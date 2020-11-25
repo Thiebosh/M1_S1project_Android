@@ -114,7 +114,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
                     break;
             }
         });
-
+        */
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
             ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator()
                     .getChannelList().get(7).setCurrentValue(2.4);
@@ -125,7 +125,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             ((BluetoothParent) Objects.requireNonNull(getActivity())).sendData(tmp);
         });
 
-        ((EditText) view.findViewById(R.id.value)).addTextChangedListener(new TextWatcher() {
+/*        ((EditText) view.findViewById(R.id.value)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -151,7 +151,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             }
         });
 
-         */
+*/
 
         return view;
     }

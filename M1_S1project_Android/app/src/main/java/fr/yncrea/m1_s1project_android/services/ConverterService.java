@@ -18,6 +18,7 @@ public class ConverterService {
     }
 
     public static JsonObject stringToJson(final Generator generator, final String str) {
+        Log.d("testy", str);
         JsonObject data = (new Gson()).fromJson (str, JsonElement.class).getAsJsonObject();
 
         if (data.keySet().size() < 2) {//aucune ou une seule clé
@@ -31,9 +32,10 @@ public class ConverterService {
         attribute = "id";
         try {
             channel = Integer.parseInt(String.valueOf(data.get(attribute)));
+
         }
         catch (Exception ignore) {
-            Log.d("testy", "erreur récup "+attribute);
+            Log.d("testy", "erreur en récup "+attribute);
             return null;
         }
 
@@ -58,11 +60,11 @@ public class ConverterService {
         attribute = "currentValue";
         if(data.has(attribute)){
             try {
-                float tmp = Float.parseFloat(String.valueOf(data.get(attribute)));
+                double tmp = Double.parseDouble(String.valueOf(data.get(attribute)));
                 generator.getChannelList().get(channel).setCurrentValue(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
+                Log.d("testy", "erreur de la récup "+attribute);
                 return null;
             }
         }
@@ -121,20 +123,20 @@ public class ConverterService {
 
     public static String objectToString(final Channel data) {
         JsonObject json = new JsonObject();
-        json.addProperty("channel", data.getId());
+        json.addProperty("id", data.getId());
 
 
         if (data.isSetActive()) {
-            json.addProperty("activation", data.isActive());
+            json.addProperty("isActive", data.isActive());
         }
         if (data.isSetCurrentValue()) {
-            json.addProperty("currentVal", data.getCurrentValue());
+            json.addProperty("currentValue", data.getCurrentValue());
         }
         if (data.isSetMinValue()) {
-            json.addProperty("minVal", data.getCurrentValue());
+            json.addProperty("minValue", data.getCurrentValue());
         }
         if (data.isSetMaxValue()) {
-            json.addProperty("maxVal", data.getCurrentValue());
+            json.addProperty("maxValue", data.getCurrentValue());
         }
         if (data.isSetType()) {
             json.addProperty("type", data.getType().toString());

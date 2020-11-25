@@ -25,7 +25,6 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     @NonNull
     @Override
     public MainBoardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_channel, parent, false);
         return new MainBoardViewHolder(view);
     }
