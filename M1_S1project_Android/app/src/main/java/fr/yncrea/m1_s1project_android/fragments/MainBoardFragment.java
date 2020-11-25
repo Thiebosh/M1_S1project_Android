@@ -19,12 +19,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardAdapterView;
+import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardViewHolder;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
@@ -69,7 +73,17 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_board, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
-        Button input0 = view.findViewById(R.id.input0);
+
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.mainboard_recycler);
+        MainBoardAdapterView adapter =
+                new MainBoardAdapterView(getContext(), ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList());
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
+
+        /*Button input0 = view.findViewById(R.id.activation);
         input0.setOnClickListener(v -> {
             Drawable background = input0.getBackground();
             int color = Color.TRANSPARENT;
@@ -111,7 +125,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             ((BluetoothParent) Objects.requireNonNull(getActivity())).sendData(tmp);
         });
 
-        ((EditText) view.findViewById(R.id.value0)).addTextChangedListener(new TextWatcher() {
+        ((EditText) view.findViewById(R.id.value)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -136,6 +150,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
             }
         });
+
+         */
 
         return view;
     }

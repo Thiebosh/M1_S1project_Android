@@ -33,14 +33,7 @@
     <string name="modeVolt">Volt</string>
     <string name="modeCurrent">Ampere</string>
     <string name="noSelection">Aucune entrée sélectionnée</string>
-    <string name="input0">Entrée 0</string>
-    <string name="input1">Entrée 1</string>
-    <string name="input2">Entrée 2</string>
-    <string name="input3">Entrée 3</string>
-    <string name="input4">Entrée 4</string>
-    <string name="input5">Entrée 5</string>
-    <string name="input6">Entrée 6</string>
-    <string name="input7">Entrée 7</string>
+    <string name="input">Entrée <xliff:g id="id_channel">%1$s</xliff:g></string>
     <string name="max">Max.</string>
     <string name="min">Min.</string>
 

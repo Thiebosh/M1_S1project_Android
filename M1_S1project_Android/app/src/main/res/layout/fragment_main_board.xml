@@ -1,76 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.MainBoardFragment">
-
-    <Button
-        android:id="@+id/input3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input2" />
-
-    <Button
-        android:id="@+id/input4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input3" />
-
-    <Button
-        android:id="@+id/input5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input4" />
-
-    <Button
-        android:id="@+id/input6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input5" />
-
-    <Button
-        android:id="@+id/input7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input7"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input6" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/frag_main_tmp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.464"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView"
@@ -83,6 +17,17 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/frag_main_tmp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
 
     <Switch
         android:id="@+id/switch1"
@@ -97,354 +42,51 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-    <Button
-        android:id="@+id/input1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input0" />
-
-    <Button
-        android:id="@+id/input2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/input2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input1" />
-
-    <ToggleButton
-        android:id="@+id/mode0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="392dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ToggleButton
-        android:id="@+id/mode7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="456dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:checked="false"
-        android:textOff="@string/modeVolt"
-        android:textOn="@string/modeCurrent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <View
-        android:id="@+id/divider"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mainboard_recycler"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="13dp"
-        android:background="?android:attr/listDivider"
+        android:layout_height="match_parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/input0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/input0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <EditText
-        android:id="@+id/value0"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="20dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value1"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="76dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value2"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="148dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value3"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="212dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value4"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="268dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value5"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="336dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value6"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="400dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/value7"
-        android:layout_width="112dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="460dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/input0"
-        android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/input0"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <RadioGroup
-        android:id="@+id/selectInput"
-        android:layout_width="36dp"
-        android:layout_height="515dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider">
-
-        <RadioButton
-            android:id="@+id/selectInput0"
-            android:layout_width="match_parent"
-            android:layout_height="51dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput1"
-            android:layout_width="match_parent"
-            android:layout_height="66dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput2"
-            android:layout_width="match_parent"
-            android:layout_height="61dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput3"
-            android:layout_width="match_parent"
-            android:layout_height="61dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput4"
-            android:layout_width="match_parent"
-            android:layout_height="68dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput5"
-            android:layout_width="match_parent"
-            android:layout_height="68dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput6"
-            android:layout_width="match_parent"
-            android:layout_height="63dp" />
-
-        <RadioButton
-            android:id="@+id/selectInput7"
-            android:layout_width="match_parent"
-            android:layout_height="68dp" />
-    </RadioGroup>
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectInput" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/selectedInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginLeft="160dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="12dp"
         android:text="@string/noSelection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.556"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/mainboard_recycler" />
 
     <EditText
         android:id="@+id/minInputSelected"
         android:layout_width="61dp"
         android:layout_height="40dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/min"
         android:inputType="numberSigned"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/mainboard_recycler" />
 
     <EditText
         android:id="@+id/maxInputSelected"
         android:layout_width="61dp"
         android:layout_height="40dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:autofillHints=""
@@ -452,16 +94,16 @@
         android:hint="@string/max"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/mainboard_recycler" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="246dp"
         android:layout_height="28dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="11dp"
-        app:layout_constraintStart_toEndOf="@+id/minInputSelected"
-        app:layout_constraintTop_toBottomOf="@+id/selectedInput" />
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainboard_recycler" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
