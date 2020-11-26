@@ -1,6 +1,7 @@
 package fr.yncrea.m1_s1project_android.services;
 
 import android.util.Log;
+import java.util.Enumeration;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -11,6 +12,9 @@ import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.models.PowerSupply;
 import fr.yncrea.m1_s1project_android.models.Scale;
 
+import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
+import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
+
 public class ConverterService {
 
     public static Generator stringToObject(final String str) {
@@ -18,7 +22,7 @@ public class ConverterService {
     }
 
     public static JsonObject stringToJson(final Generator generator, final String str) {
-        Log.d("testy", str);
+        Log.d("testyfy", str);
         JsonObject data = (new Gson()).fromJson (str, JsonElement.class).getAsJsonObject();
 
         if (data.keySet().size() < 2) {//aucune ou une seule clé
@@ -96,11 +100,16 @@ public class ConverterService {
         attribute = "type";
         if(data.has(attribute)){
             try {
-                PowerSupply tmp = PowerSupply.valueOf(String.valueOf(data.get(attribute)));
+                String mode = String.valueOf(data.get(attribute));
+                Log.d("testys", mode);
+                PowerSupply tmp = mode.equals("\"V\"") ? V : I;
+
+                Log.d("testym", String.valueOf(tmp));
                 generator.getChannelList().get(channel).setType(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
+                Log.d("testy", data.get(attribute).toString());
                 return null;
             }
         }
@@ -139,12 +148,13 @@ public class ConverterService {
             json.addProperty("maxValue", data.getCurrentValue());
         }
         if (data.isSetType()) {
-            json.addProperty("type", String.valueOf(data.getType()));
+            json.addProperty("type", data.getType().name());
+            Log.d("testype", data.getType().name());
         }
         if (data.isSetScale()) {
             json.addProperty("scale", data.getCurrentValue());
         }
-
+        Log.d("testyJSON", json.toString());
         return json.toString();
 
         /*

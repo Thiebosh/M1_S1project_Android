@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,10 @@ import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardViewHolder;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
+import fr.yncrea.m1_s1project_android.models.PowerSupply;
+
+import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
+import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
@@ -43,6 +48,12 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
     public void applyChanges(final JsonObject data) {
         if (data.has("type")) {
             //change affichage du type de channel data.get("id") (sur de l'avoir, sinon erreur avant)
+            int channel = Integer.parseInt(String.valueOf(data.get("id")));
+            PowerSupply mode = String.valueOf(data.get("type")).equals("\"V\"") ? V : I;
+            ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList().get(channel).setType(mode);
+            ToggleButton modeChannel = Objects.requireNonNull(getView()).findViewById(R.id.mode);
+            //modeChannel.setChecked(String.valueOf(data.get("type")).equals("\"I\""));
+            modeChannel.setChecked(((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList().get(channel).getType()==I);
         }
 
         //...

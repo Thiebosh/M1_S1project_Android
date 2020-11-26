@@ -21,6 +21,7 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.PowerSupply;
 
+import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
 import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class MainBoardViewHolder extends RecyclerView.ViewHolder {
@@ -44,6 +45,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     public void setInitialDisplay(Context context, Channel channel){
 
+        Log.d("testy", channel.getType().toString());
         mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
         //context.getResources().getString(R.string.input);
         mChannelActivation.setText(context.getResources().getString(R.string.input, String.valueOf(channel.getId())));
@@ -67,6 +69,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         });
 
         mChannelType.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            channel.setType(isChecked ? I : V);
 
             ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannelList().get(channel.getId()).setType(channel.getType());
             Channel tmp = new Channel();
