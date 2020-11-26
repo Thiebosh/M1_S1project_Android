@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.models.Channel;
+import fr.yncrea.m1_s1project_android.models.PowerSupply;
+
+import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,6 +42,8 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         //context.getResources().getString(R.string.input);
         mChannelActivation.setText(context.getResources().getString(R.string.input, String.valueOf(channel.getId())));
         mChannelValue.setHint(context.getResources().getString(R.string.input, String.valueOf(channel.getId())));
+        //mChannelValue.setText(context.getResources().getString(R.string.input, String.valueOf(channel.getCurrentValue())));
+        //mChannelType.setChecked(channel.getType() == (PowerSupply) V);
     }
 
     public void setInteractions(Context context, Channel channel){
