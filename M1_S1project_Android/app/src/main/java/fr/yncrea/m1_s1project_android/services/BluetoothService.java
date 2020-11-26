@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,8 +31,8 @@ public class BluetoothService {
     // Name for the SDP record when creating server socket
     private static final String NAME_SECURE = "BluetoothSecure";
     // Unique UUID for this application
-    //private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static final UUID MY_UUID_SECURE = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    //private static final UUID MY_UUID_SECURE = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -403,21 +404,30 @@ public class BluetoothService {
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
                 try {
-                    if(mmInStream.available() != 0) {//data arrives in input stream
-                        SystemClock.sleep(80); //wait for the end of the data (~1char/ms + 20ms de secu)
-
-                        // Read from the InputStream
-                        buffer = new byte[mmInStream.available()];//buffer for data complete
-                        bytes = mmInStream.read(buffer);//fill buffer by adress
-
-                        if (bytes == buffer.length) {
-                            // Send the obtained bytes to the UI Activity
-                            Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
-                            Bundle bundle = new Bundle();
-                            bundle.putString(BluetoothConstants.RECEIVE, new String(buffer));
-                            msg.setData(bundle);
-                            mHandler.sendMessage(msg);
+                    if((bytes = mmInStream.available()) != 0) {//début de transmission
+                        //SystemClock.sleep(15);
+                        try {
+                            ConnectedThread.sleep(40);//laisse le temps de récéptionner les données
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+                        if (bytes == mmInStream.available()) {//fin de transmission
+                            Log.d("testy", "acquisition de l'ensemble");
+                            // Read from the InputStream
+                            buffer = new byte[mmInStream.available()];//buffer for data complete
+                            bytes = mmInStream.read(buffer);//fill buffer by adress
+
+                            if (bytes == buffer.length) {//vérifie bonne réception
+                                // Send the obtained bytes to the UI Activity
+                                Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(BluetoothConstants.RECEIVE, new String(buffer));
+                                msg.setData(bundle);
+                                mHandler.sendMessage(msg);
+                            }
+                            //else error message?
+                        }
+                        else Log.d("testy", "chargement de plus d'information");
                     }
                 }
                 catch (IOException e) {
