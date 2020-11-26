@@ -19,7 +19,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList) {
         this.mContext = mContext;
-        this.channelList = channelList;
+        this.channelList = channelList != null ? channelList : new ArrayList<>();//secu
     }
 
     @NonNull

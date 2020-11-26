@@ -116,6 +116,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         });
         */
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
+
             ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator()
                     .getChannelList().get(7).setCurrentValue(2.4);
 

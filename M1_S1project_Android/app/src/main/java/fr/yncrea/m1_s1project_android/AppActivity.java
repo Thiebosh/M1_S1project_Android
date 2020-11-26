@@ -97,7 +97,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final Channel data) {
-        if (mBluetoothService != null) mBluetoothService.send(ConverterService.objectToString(data));
+        //if (mBluetoothService != null) mBluetoothService.send(ConverterService.objectToString(data));
+        if (mBluetoothService != null) mBluetoothService.send("get");
     }
 
     @Override
@@ -181,13 +182,15 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         //modifie mGenerator ici et retrieveData fait juste un recycler.updateAll()
 
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
+                        Log.d("testy", str);
+
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = ConverterService.stringToObject(str);
                             mGenerator.setChannelList(storage.getChannelList());
                             break;
                         }
-
+                        /*
                         //else
                         JsonObject data = ConverterService.stringToJson(mGenerator, str);
                         if (data == null) {
@@ -201,6 +204,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         } catch (Exception ignored) {
                             disconnectDevice();
                         }
+
+                         */
 
                         break;
                 }
