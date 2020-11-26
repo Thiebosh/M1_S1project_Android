@@ -1,20 +1,12 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.app.Activity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -29,10 +21,10 @@ import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardAdapterView;
-import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardViewHolder;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
+import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.models.PowerSupply;
 
 import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
@@ -40,26 +32,15 @@ import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
+    private MainBoardAdapterView mAdapter;
+
     /*
      * Section BluetoothChildren
      */
 
     @Override
-    public void applyChanges(final JsonObject data) {
-        if (data.has("type")) {
-            //change affichage du type de channel data.get("id") (sur de l'avoir, sinon erreur avant)
-            int channel = Integer.parseInt(String.valueOf(data.get("id")));
-            PowerSupply mode = String.valueOf(data.get("type")).equals("\"V\"") ? V : I;
-            ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList().get(channel).setType(mode);
-            ToggleButton modeChannel = Objects.requireNonNull(getView()).findViewById(R.id.mode);
-            //modeChannel.setChecked(String.valueOf(data.get("type")).equals("\"I\""));
-            modeChannel.setChecked(((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList().get(channel).getType()==I);
-        }
-
-        //...
-
-        Toast.makeText(getContext(), data+" from mainboard", Toast.LENGTH_SHORT).show();
-        ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator();
+    public void applyChanges(Generator generator) {
+        mAdapter.updateChannelList(generator.getChannelList());
     }
 
 
@@ -85,12 +66,14 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         View view = inflater.inflate(R.layout.fragment_main_board, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
+        Activity activity = Objects.requireNonNull(getActivity());
+
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.mainboard_recycler);
-        MainBoardAdapterView adapter =
-                new MainBoardAdapterView(getContext(), ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList());
+        mAdapter = new MainBoardAdapterView(getContext(),
+                ((BluetoothParent) activity).getGenerator().getChannelList());
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        rv.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
 
 
 
@@ -128,13 +111,12 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         */
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
 
-            ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator()
-                    .getChannelList().get(7).setCurrentValue(2.4);
+            ((BluetoothParent) activity).getGenerator().getChannelList().get(7).setCurrentValue(2.4);
 
             Channel tmp = new Channel();
             tmp.setId(7);
             tmp.setCurrentValue(2.4);
-            ((BluetoothParent) Objects.requireNonNull(getActivity())).sendData(tmp);
+            ((BluetoothParent) activity).sendData(tmp);
         });
 
 /*        ((EditText) view.findViewById(R.id.value)).addTextChangedListener(new TextWatcher() {

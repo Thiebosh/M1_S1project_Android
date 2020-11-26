@@ -11,14 +11,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 
 public class ConnectFragment extends Fragment {
@@ -47,6 +52,7 @@ public class ConnectFragment extends Fragment {
 
         //si était connecté, déconnecte
         ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
+        ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().setChannelList(new ArrayList<>());
 
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);

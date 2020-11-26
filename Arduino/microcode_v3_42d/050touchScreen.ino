@@ -22,10 +22,8 @@ uint8_t getInputFromTouchScreen() {
         Serial.println(strCmd);
         //hc06.print(strCmd);
         //hc06.println("\n");
-        if (strCmd.equals("get")) {
-          uint8_t reponse = getChannelValue(0);
-          //hc06.print(reponse);
-
+        if (strCmd.equals("initPlz")) {
+          Serial.println("émission de la réponse");
           String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":2.6,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":m},";
           String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"minValue\":0,\"maxValue\":5,\"type\":I,\"scale\":u},";
           String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"minValue\":5,\"maxValue\":10,\"type\":V,\"scale\":m},";
@@ -34,10 +32,15 @@ uint8_t getInputFromTouchScreen() {
           String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.587,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":_},";
           String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":102,\"minValue\":50,\"maxValue\":150,\"type\":I,\"scale\":_},";
           String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"minValue\":0,\"maxValue\":1,\"type\":V,\"scale\":M}";
-          String init = "{\"channalList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
+          String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
+          Serial.println(init);
           hc06.print(init);
         }
-        if (strCmd.equals("set")) {
+        else if (strCmd.equals("get")) {
+          int reponse = getChannelValue(0);
+          hc06.print(reponse);
+        }
+        else if (strCmd.equals("set")) {
           setChannelValue(0,(getChannelValue(0)+1)%2);
         }
       }

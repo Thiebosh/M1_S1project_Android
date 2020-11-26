@@ -16,9 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import java.util.Objects;
 import java.util.Stack;
 
@@ -97,7 +94,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final Channel data) {
-        if (mBluetoothService != null) mBluetoothService.send(ConverterService.objectToString(data));
+        if (mBluetoothService != null) mBluetoothService.send(ConverterService.extractJsonData(data));
         //if (mBluetoothService != null) mBluetoothService.send("get");
     }
 
@@ -167,6 +164,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         //autorise connexion
                         loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
+                        mBluetoothService.send("initPlz");//requête pour les données
                         break;
 
                     case BluetoothConstants.MESSAGE_TOAST:
@@ -180,24 +178,12 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
 
                         if (str.startsWith("channelList", 2)) {
-                            Generator storage = ConverterService.stringToObject(str);
+                            Generator storage = ConverterService.createJsonObject(str);
                             mGenerator.setChannelList(storage.getChannelList());
-                            break;
                         }
+                        else ConverterService.applyJsonData(mGenerator, str);
 
-                        //else
-                        JsonObject data = ConverterService.stringToJson(mGenerator, str);
-                        if (data == null) {
-                            Toast.makeText(AppActivity.this, "réception de données invalides", Toast.LENGTH_SHORT).show();
-                        }
-                        try {
-                            //besoin d'appliquer des changements à l'écran que si est encore sur l'écran concerné par les changements...
-                            //d'un autre côté, le fragment ne vérifie que la présence des champs qui le concerne
-                            //et un ensemble clé valeur de moins, ça peut être une 15-20aine de caractères en moins, soit une 30aine de ms en moins
-                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(data);
-                        } catch (Exception ignored) {
-                            disconnectDevice();
-                        }
+                        ((BluetoothChildren) mFragmentStack.peek()).applyChanges(mGenerator);
 
                         break;
                 }

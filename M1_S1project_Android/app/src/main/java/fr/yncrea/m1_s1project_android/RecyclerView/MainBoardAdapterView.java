@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 
 import fr.yncrea.m1_s1project_android.R;
@@ -20,6 +22,12 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList) {
         this.mContext = mContext;
         this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
+    }
+
+    public void updateChannelList(ArrayList<Channel> tmp) {
+        mChannelList.clear();
+        mChannelList.addAll(tmp);
+        this.notifyDataSetChanged();
     }
 
     @NonNull

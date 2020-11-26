@@ -133,9 +133,7 @@ public class BluetoothService {
         // Update UI title
         updateUserInterfaceTitle();
 
-
         //TMP : simule envoi des données de l'arduino
-
         String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":2.6,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":m},";
         String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"minValue\":0,\"maxValue\":5,\"type\":I,\"scale\":u},";
         String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"minValue\":5,\"maxValue\":10,\"type\":V,\"scale\":m},";
@@ -187,14 +185,14 @@ public class BluetoothService {
      */
     public void send(final String out) {
         // Create temporary object
-        final ConnectedThread r;
+        final ConnectedThread tmp;
         // Synchronize a copy of the ConnectedThread
         synchronized (this) {
             if (mState != STATE_CONNECTED) return;
-            r = mConnectedThread;
+            tmp = mConnectedThread;
         }
         // Perform the write unsynchronized
-        r.send(out);
+        tmp.send(out);
     }
 
     /**
@@ -405,7 +403,7 @@ public class BluetoothService {
                 try {
                     if((bytes = mmInStream.available()) != 0) {//début de transmission
                         try {//laisse le temps de réceptionner les données
-                            ConnectedThread.sleep(40);//pas d'alternative car pas de notif
+                            ConnectedThread.sleep(60);//pas d'alternative car pas de notif
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                             //error message?

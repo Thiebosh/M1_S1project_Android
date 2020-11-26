@@ -17,12 +17,12 @@ import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class ConverterService {
 
-    public static Generator stringToObject(final String str) {
+    public static Generator createJsonObject(final String str) {
         return (new Gson()).fromJson(str, Generator.class);
     }
 
-    public static JsonObject stringToJson(final Generator generator, final String str) {
-        JsonObject data = (new Gson()).fromJson (str, JsonElement.class).getAsJsonObject();
+    public static JsonObject applyJsonData(final Generator generator, final String json) {
+        JsonObject data = (new Gson()).fromJson (json, JsonElement.class).getAsJsonObject();
 
         if (data.keySet().size() < 2) {//aucune ou une seule clé
             Log.d("testy", "nécessite au moins deux clés : id + quelque chose. a reçu "+data.keySet().size());
@@ -122,7 +122,7 @@ public class ConverterService {
     }
 
 
-    public static String objectToString(final Channel data) {
+    public static String extractJsonData(final Channel data) {
         JsonObject json = new JsonObject();
 
         json.addProperty("id", data.getId());
