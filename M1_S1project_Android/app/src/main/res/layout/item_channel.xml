@@ -25,6 +25,7 @@
         android:layout_marginBottom="25dp"
         android:autofillHints=""
         android:ems="10"
+        android:gravity="center"
         android:hint="@string/input"
         android:inputType="numberSigned|numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"

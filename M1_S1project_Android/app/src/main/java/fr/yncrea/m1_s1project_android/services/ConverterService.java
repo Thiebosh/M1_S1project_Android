@@ -139,7 +139,7 @@ public class ConverterService {
             json.addProperty("maxValue", data.getCurrentValue());
         }
         if (data.isSetType()) {
-            json.addProperty("type", data.getType().toString());
+            json.addProperty("type", String.valueOf(data.getType()));
         }
         if (data.isSetScale()) {
             json.addProperty("scale", data.getCurrentValue());
