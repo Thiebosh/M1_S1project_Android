@@ -36,6 +36,10 @@ uint8_t getInputFromTouchScreen() {
           Serial.println(init);
           hc06.print(init);
         }
+        else if (strCmd.equals("{\"id\":0,\"isActive\":true}")) {
+          Serial.println("désactive bouton de channel 0");
+          hc06.print("{\"id\":0,\"isActive\":false}");
+        }
         else if (strCmd.equals("get")) {
           int reponse = getChannelValue(0);
           hc06.print(reponse);

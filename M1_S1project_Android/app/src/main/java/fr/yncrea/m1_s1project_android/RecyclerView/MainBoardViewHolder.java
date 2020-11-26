@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -36,11 +37,9 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelValue = itemView.findViewById(R.id.value);
         mChannelType = itemView.findViewById(R.id.mode);
 
-        itemView.setOnClickListener(v -> {
-
-            Log.d("itemViewClick", "screen");
+        itemView.findViewById(R.id.item_channel_container).setOnClickListener(v -> {
+            Log.d("itemViewClick", "onClick");
         });
-
     }
 
     public void setInitialDisplay(Context context, Channel channel){

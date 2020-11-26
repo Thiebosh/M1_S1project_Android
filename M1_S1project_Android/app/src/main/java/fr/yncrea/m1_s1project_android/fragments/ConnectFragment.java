@@ -52,7 +52,7 @@ public class ConnectFragment extends Fragment {
 
         //si était connecté, déconnecte
         ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
-        ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().setChannelList(new ArrayList<>());
+        ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList().clear();
 
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);

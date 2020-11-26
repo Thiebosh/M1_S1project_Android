@@ -24,10 +24,16 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
     }
 
-    public void updateChannelList(ArrayList<Channel> tmp) {
-        mChannelList.clear();
-        mChannelList.addAll(tmp);
-        this.notifyDataSetChanged();
+    public void updateChannelList(ArrayList<Channel> tmp, int index) {
+        if (index != -1) {
+            mChannelList.set(index, tmp.get(index));
+            this.notifyItemChanged(index);
+        }
+        else {
+            mChannelList.clear();
+            mChannelList.addAll(tmp);
+            this.notifyDataSetChanged();
+        }
     }
 
     @NonNull

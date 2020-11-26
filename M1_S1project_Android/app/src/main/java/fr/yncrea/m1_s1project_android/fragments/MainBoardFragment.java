@@ -39,8 +39,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
      */
 
     @Override
-    public void applyChanges(Generator generator) {
-        mAdapter.updateChannelList(generator.getChannelList());
+    public void applyChanges(Generator generator, int index) {
+        mAdapter.updateChannelList(generator.getChannelList(), index);
     }
 
 
