@@ -22,7 +22,6 @@ public class ConverterService {
     }
 
     public static JsonObject stringToJson(final Generator generator, final String str) {
-        Log.d("testyfy", str);
         JsonObject data = (new Gson()).fromJson (str, JsonElement.class).getAsJsonObject();
 
         if (data.keySet().size() < 2) {//aucune ou une seule clé
@@ -36,13 +35,11 @@ public class ConverterService {
         attribute = "id";
         try {
             channel = Integer.parseInt(String.valueOf(data.get(attribute)));
-
         }
         catch (Exception ignore) {
             Log.d("testy", "erreur en récup "+attribute);
             return null;
         }
-
         if (channel > generator.getChannelList().size()) {
             Log.d("testy", "index hors tableau");
             return null;
@@ -100,16 +97,11 @@ public class ConverterService {
         attribute = "type";
         if(data.has(attribute)){
             try {
-                String mode = String.valueOf(data.get(attribute));
-                Log.d("testys", mode);
-                PowerSupply tmp = mode.equals("\"V\"") ? V : I;
-
-                Log.d("testym", String.valueOf(tmp));
+                PowerSupply tmp = PowerSupply.valueOf(data.get(attribute).getAsString());
                 generator.getChannelList().get(channel).setType(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
-                Log.d("testy", data.get(attribute).toString());
                 return null;
             }
         }
@@ -117,7 +109,7 @@ public class ConverterService {
         attribute = "scale";
         if(data.has(attribute)){
             try {
-                Scale tmp = Scale.valueOf(String.valueOf(data.get(attribute)));
+                Scale tmp = Scale.valueOf(data.get(attribute).getAsString());
                 generator.getChannelList().get(channel).setScale(tmp);
             }
             catch (Exception ignore) {
@@ -132,80 +124,16 @@ public class ConverterService {
 
     public static String objectToString(final Channel data) {
         JsonObject json = new JsonObject();
+
         json.addProperty("id", data.getId());
+        if (data.isSetActive()) json.addProperty("isActive", data.isActive());
+        if (data.isSetCurrentValue()) json.addProperty("currentValue", data.getCurrentValue());
+        if (data.isSetMinValue()) json.addProperty("minValue", data.getMinValue());
+        if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
+        if (data.isSetType()) json.addProperty("type", data.getType().name());
+        if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
 
-
-        if (data.isSetActive()) {
-            json.addProperty("isActive", data.isActive());
-        }
-        if (data.isSetCurrentValue()) {
-            json.addProperty("currentValue", data.getCurrentValue());
-        }
-        if (data.isSetMinValue()) {
-            json.addProperty("minValue", data.getCurrentValue());
-        }
-        if (data.isSetMaxValue()) {
-            json.addProperty("maxValue", data.getCurrentValue());
-        }
-        if (data.isSetType()) {
-            json.addProperty("type", data.getType().name());
-            Log.d("testype", data.getType().name());
-        }
-        if (data.isSetScale()) {
-            json.addProperty("scale", data.getCurrentValue());
-        }
-        Log.d("testyJSON", json.toString());
         return json.toString();
-
-        /*
-        JsonArray array = new JsonArray();
-        for (int val = 0; val <= 3; ++val) {
-            JsonObject item = new JsonObject();
-            item.addProperty("type", val);
-            array.add(item);
-        }
-        json.add("array", array);
-        */
     }
-
-
-    /*
-    {
-        "fragment":"backup/main",
-        "backup":"load/save",
-
-        "channel":-1(all)/0/.../7,
-        "activation":true/false, -> couple avec channel -1 pour (dés)activer toutes les pistes
-        "type": "I/V",
-        "scale": -6/.../0/.../6, -> puissance de 10
-        "currentVal": 12.5,
-        "minVal": -6,
-        "maxVal": 20,
-
-        "init":
-            [
-                {
-                    "channel":0,
-                    "activation":true/false,
-                    "type": "I/V",
-                    "scale": -6/.../0/.../6, -> puissance de 10
-                    "currentVal": 12.5,
-                    "minVal": -6,
-                    "maxVal": 20
-                },
-                ...,
-                {
-                    "channel":7,
-                    "activation":true/false,
-                    "type": "I/V",
-                    "scale": -6/.../0/.../6, -> puissance de 10
-                    "currentVal": 12.5,
-                    "minVal": -6,
-                    "maxVal": 20
-                },
-            ]
-    }
-
-     */
 }
 

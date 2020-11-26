@@ -3,7 +3,7 @@ package fr.yncrea.m1_s1project_android.models;
 public class Channel {
     private int id;
     private boolean isActive;
-    private double currentValue; // par défaut = -10 ?
+    private double currentValue;
     private double minValue;
     private double maxValue;
     private PowerSupply type;

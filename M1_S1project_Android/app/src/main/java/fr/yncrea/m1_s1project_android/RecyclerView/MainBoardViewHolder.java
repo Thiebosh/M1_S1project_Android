@@ -44,10 +44,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setInitialDisplay(Context context, Channel channel){
-
-        Log.d("testy", channel.getType().toString());
         mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
-        //context.getResources().getString(R.string.input);
         mChannelActivation.setText(context.getResources().getString(R.string.input, String.valueOf(channel.getId())));
         mChannelValue.setHint(context.getResources().getString(R.string.input, String.valueOf(channel.getId())));
         mChannelValue.setText(String.valueOf(channel.getCurrentValue()));

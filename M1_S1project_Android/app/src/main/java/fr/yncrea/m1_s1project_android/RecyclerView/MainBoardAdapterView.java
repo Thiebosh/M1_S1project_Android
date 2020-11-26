@@ -15,11 +15,11 @@ import fr.yncrea.m1_s1project_android.models.Channel;
 
 public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> {
     private final Context mContext;
-    private final ArrayList<Channel> channelList;
+    private final ArrayList<Channel> mChannelList;
 
     public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList) {
         this.mContext = mContext;
-        this.channelList = channelList != null ? channelList : new ArrayList<>();//secu
+        this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
     }
 
     @NonNull
@@ -31,13 +31,13 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
-        holder.setInitialDisplay(mContext, channelList.get(position));
-        holder.setInteractions(mContext, channelList.get(position));
+        holder.setInitialDisplay(mContext, mChannelList.get(position));
+        holder.setInteractions(mContext, mChannelList.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return channelList.size();
+        return mChannelList.size();
     }
 }

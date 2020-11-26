@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
@@ -405,14 +404,14 @@ public class BluetoothService {
             while (mState == STATE_CONNECTED) {
                 try {
                     if((bytes = mmInStream.available()) != 0) {//début de transmission
-                        //SystemClock.sleep(15);
-                        try {
-                            ConnectedThread.sleep(40);//laisse le temps de récéptionner les données
+                        try {//laisse le temps de réceptionner les données
+                            ConnectedThread.sleep(40);//pas d'alternative car pas de notif
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                            //error message?
                         }
+
                         if (bytes == mmInStream.available()) {//fin de transmission
-                            Log.d("testy", "acquisition de l'ensemble");
                             // Read from the InputStream
                             buffer = new byte[mmInStream.available()];//buffer for data complete
                             bytes = mmInStream.read(buffer);//fill buffer by adress
@@ -427,7 +426,6 @@ public class BluetoothService {
                             }
                             //else error message?
                         }
-                        else Log.d("testy", "chargement de plus d'information");
                     }
                 }
                 catch (IOException e) {
