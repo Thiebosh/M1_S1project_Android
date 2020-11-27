@@ -114,11 +114,14 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             //ArrayList<Channel> allChannels = ((BluetoothParent) activity).getGenerator().getChannelList();
             for(int i = 0; i < ((BluetoothParent) activity).getGenerator().getChannelList().size(); i++){
                 ((BluetoothParent) activity).getGenerator().getChannelList().get(i).setActive(true);
-                Channel tmp = new Channel();
-                tmp.setId(i);
-                tmp.setActive(true);
-                ((BluetoothParent) activity).sendData(tmp);
+
             }
+            Channel tmp = new Channel();
+            tmp.setId(-1);
+            tmp.setActive(true);
+            Log.d("testy 1", "switch click listener");
+            ((BluetoothParent) activity).sendData(tmp);
+            //mAdapter.notifyDataSetChanged();
             //((BluetoothParent) activity).getGenerator().getChannelList().get(7).setCurrentValue(2.4);
 
             /*Channel tmp = new Channel();

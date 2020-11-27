@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.models.PowerSupply;
@@ -32,13 +33,13 @@ public class ConverterService {
         if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
         if (data.isSetType()) json.addProperty("type", data.getType().name());
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
-
+        Log.d("testy convert", "extracttojson before send : " + json.toString());
         return json.toString();
     }
 
     public static int applyJsonData(final Generator generator, final String json) {
         JsonObject data;
-        Log.d("testy apply", ""+json);
+        Log.d("testy converter", "applyjsondata after receive : "+json);
         try {
             data = (new Gson()).fromJson(json, JsonElement.class).getAsJsonObject();
         }
@@ -58,10 +59,23 @@ public class ConverterService {
         attribute = "id";
         try {
             channel = Integer.parseInt(String.valueOf(data.get(attribute)));
+
         }
         catch (Exception ignore) {
             Log.d("testy", "erreur en récup "+attribute);
             return -10;
+        }
+        if(channel == -1){
+            boolean switchAll;
+            try {
+                switchAll = Boolean.parseBoolean(String.valueOf(data.get("isActive")));
+            }catch(Exception e){
+                return -10;
+            }
+            for(int i = 0; i < generator.getChannelList().size(); i++) {
+                generator.getChannelList().get(i).setActive(switchAll);
+            }
+            return -1;
         }
         if (channel > generator.getChannelList().size()) {
             Log.d("testy", "index hors tableau");

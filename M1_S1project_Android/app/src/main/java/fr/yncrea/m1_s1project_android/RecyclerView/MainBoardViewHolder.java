@@ -48,6 +48,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelValue.setHint(context.getResources().getString(R.string.input, String.valueOf(channel.getId())));
         mChannelValue.setText(String.valueOf(channel.getCurrentValue()));
         mChannelType.setChecked(channel.getType() != (PowerSupply) V);
+        mChannelType.setChecked(mChannelType.isChecked());
     }
 
     public void setInteractions(Context context, Channel channel){
@@ -60,12 +61,25 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
             Channel tmp = new Channel();
             tmp.setId(channel.getId());
             tmp.setActive(channel.isActive());
+            Log.d("testy 2", "activation");
             ((BluetoothParent) Objects.requireNonNull(context)).sendData(tmp);
 
         });
 
-        mChannelType.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        /*mChannelType.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d("testy 3", ""+channel.getId());
             channel.setType(isChecked ? I : V);
+
+            ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannelList().get(channel.getId()).setType(channel.getType());
+            Channel tmp = new Channel();
+            tmp.setId(channel.getId());
+            tmp.setType(channel.getType());
+            ((BluetoothParent) Objects.requireNonNull(context)).sendData(tmp);
+
+        });*/
+        mChannelType.setOnClickListener(v -> {
+            Log.d("testy click", "mChannelType");
+            channel.setType(mChannelType.isChecked() ? I : V);
 
             ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannelList().get(channel.getId()).setType(channel.getType());
             Channel tmp = new Channel();
