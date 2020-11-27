@@ -38,6 +38,7 @@ public class ConverterService {
 
     public static int applyJsonData(final Generator generator, final String json) {
         JsonObject data;
+        Log.d("testy apply", ""+json);
         try {
             data = (new Gson()).fromJson(json, JsonElement.class).getAsJsonObject();
         }
