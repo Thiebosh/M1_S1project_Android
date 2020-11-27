@@ -116,29 +116,14 @@
 
     <Spinner
         android:id="@+id/scaleSpinner"
-        android:layout_width="40dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginBottom="16dp"
-        android:entries="@array/scale_arrays"
-        android:gravity="start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/selectedInput"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
-
-    <Spinner
-        android:id="@+id/scaleSpinner2"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="16dp"
-        android:entries="@array/type_arrays"
+        android:entries="@array/both_arrays"
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/seekBar"
-        app:layout_constraintStart_toEndOf="@+id/scaleSpinner"
         app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
