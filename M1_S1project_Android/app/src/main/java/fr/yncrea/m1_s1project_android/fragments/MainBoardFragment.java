@@ -1,6 +1,7 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,6 +77,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         mAdapter.notifyDataSetChanged();
 
 
+        view.findViewById(R.id.scaleSpinner).setBackgroundColor(Color.TRANSPARENT);
+        view.findViewById(R.id.scaleSpinner2).setBackgroundColor(Color.TRANSPARENT);
 
         /*Button input0 = view.findViewById(R.id.activation);
         input0.setOnClickListener(v -> {

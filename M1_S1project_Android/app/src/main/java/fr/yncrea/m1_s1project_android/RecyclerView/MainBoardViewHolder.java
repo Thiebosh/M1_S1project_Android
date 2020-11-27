@@ -28,7 +28,6 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     private final ConstraintLayout mContainer;
     private final Button mChannelActivation;
     private final TextView mChannelValue;
-    private final Spinner mChannelScale;
     private final ToggleButton mChannelType;
 
     public MainBoardViewHolder(@NonNull View itemView) {
@@ -36,7 +35,6 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
         mChannelValue = itemView.findViewById(R.id.value);
-        mChannelScale = itemView.findViewById(R.id.scaleSpinner);
         mChannelType = itemView.findViewById(R.id.mode);
 
         itemView.findViewById(R.id.item_channel_container).setOnClickListener(v -> {
@@ -52,20 +50,20 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
         //mContainer.setBackground(context.getResources().getDrawable(R.drawable.item_background));
         //mChannelValue.setBackgroundColor(Color.BLACK);
-        mChannelScale.setBackgroundColor(Color.TRANSPARENT);
+        //mChannelScale.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public void decreaseVisibility() {
         mContainer.setBackgroundColor(Color.TRANSPARENT);
         //mChannelValue.setBackgroundColor(Color.TRANSPARENT);
-        mChannelScale.setBackgroundColor(Color.TRANSPARENT);
+        //mChannelScale.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public void setInitialDisplay(Context context, Channel channel){
         mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
-        mChannelActivation.setText(context.getString(R.string.input, channel.getType().name(), channel.getId()));
+        mChannelActivation.setText(context.getString(R.string.input, channel.getId()));
 
-        mChannelValue.setHint(context.getString(R.string.input, channel.getType().name(), channel.getId()));
+        mChannelValue.setHint(context.getString(R.string.input, channel.getId()));
         mChannelValue.setText(String.valueOf(channel.getCurrentValue()));
 
         mChannelType.setChecked(channel.getType() != V);
@@ -91,7 +89,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelType.setOnCheckedChangeListener((buttonView, isChecked) -> {
             channel.setType(isChecked ? I : V);
 
-            mChannelActivation.setText(context.getString(R.string.input, channel.getType().name(), channel.getId()));
+            //mChannelActivation.setText(context.getString(R.string.input, channel.getType().name(), channel.getId()));
 
             ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannelList().get(channel.getId()).setType(channel.getType());
             Channel tmp = new Channel();
