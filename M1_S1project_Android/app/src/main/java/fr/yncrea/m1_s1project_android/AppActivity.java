@@ -164,6 +164,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         //autorise connexion
                         loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                         mBluetoothService.send("initPlz");//requête pour les données
+                        Toast.makeText(AppActivity.this, "Chargement des données, veuillez patienter", Toast.LENGTH_SHORT).show();
                         break;
 
                     case BluetoothConstants.MESSAGE_TOAST:
@@ -179,6 +180,11 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = ConverterService.createJsonObject(str);
+                            if (storage == null) {
+                                mBluetoothService.send("initPlz");//requête pour les données
+                                Toast.makeText(AppActivity.this, "Erreur de réception : nouvel essai", Toast.LENGTH_SHORT).show();
+                                break;
+                            }
                             mGenerator.setChannelList(storage.getChannelList());
                         }
                         else {

@@ -1,8 +1,6 @@
 package fr.yncrea.m1_s1project_android.services;
 
-import android.util.JsonReader;
 import android.util.Log;
-import java.util.Enumeration;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -13,13 +11,16 @@ import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.models.PowerSupply;
 import fr.yncrea.m1_s1project_android.models.Scale;
 
-import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
-import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class ConverterService {
 
     public static Generator createJsonObject(final String str) {
-        return (new Gson()).fromJson(str, Generator.class);
+        try {
+            return (new Gson()).fromJson(str, Generator.class);
+        }
+        catch (Exception ignore) {
+            return null;
+        }
     }
 
     public static String extractJsonData(final Channel data) {

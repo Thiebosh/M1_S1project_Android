@@ -50,15 +50,12 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         holder.setInitialDisplay(mContext, mChannelList.get(position));
         holder.setInteractions(mContext, mChannelList.get(position));
 
-        holder.getContainer().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mFocusedIndex != position) {
-                    if (mFocusedIndex != -1) MainBoardAdapterView.this.notifyItemChanged(mFocusedIndex);//to decrease visibility
-                    MainBoardAdapterView.this.notifyItemChanged(position);//to increase visibility
-                    mFocusedIndex = position;
-                    //...
-                }
+        holder.getContainer().setOnClickListener(view -> {
+            if (mFocusedIndex != position) {
+                if (mFocusedIndex != -1) MainBoardAdapterView.this.notifyItemChanged(mFocusedIndex);//to decrease visibility
+                MainBoardAdapterView.this.notifyItemChanged(position);//to increase visibility
+                mFocusedIndex = position;
+                //...
             }
         });
         if (position == mFocusedIndex) holder.increaseVisibility(mContext);

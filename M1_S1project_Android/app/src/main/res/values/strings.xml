@@ -30,10 +30,10 @@
     <string name="frag_main_tmp">MainBoard screen</string>
     <string name="allChannel">All Channel</string>
     <string name="OnOff">On/Off</string>
-    <string name="modeVolt">Volt</string>
-    <string name="modeCurrent">Ampere</string>
+    <string name="modeVolt"><xliff:g id="scale_channel1">%s</xliff:g>V</string>
+    <string name="modeCurrent"><xliff:g id="scale_channel2">%s</xliff:g>A</string>
     <string name="noSelection">No Input Selected</string>
-    <string name="input">Channel <xliff:g id="id_channel">%1$s</xliff:g></string>
+    <string name="input"><xliff:g id="type_channel">%1$s</xliff:g><xliff:g id="id_channel">%2$d</xliff:g></string>
     <string name="max">Max.</string>
     <string name="min">Min.</string>
 
