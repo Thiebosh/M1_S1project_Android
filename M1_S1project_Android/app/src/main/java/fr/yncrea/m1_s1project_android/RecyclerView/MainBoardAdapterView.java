@@ -1,6 +1,7 @@
 package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import fr.yncrea.m1_s1project_android.models.Channel;
 public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> {
     private final Context mContext;
     private final ArrayList<Channel> mChannelList;
+    private int mFocusedIndex = -1;//initial
 
     public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList) {
         this.mContext = mContext;
@@ -48,6 +50,19 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         holder.setInitialDisplay(mContext, mChannelList.get(position));
         holder.setInteractions(mContext, mChannelList.get(position));
 
+        holder.getContainer().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mFocusedIndex != position) {
+                    if (mFocusedIndex != -1) MainBoardAdapterView.this.notifyItemChanged(mFocusedIndex);//to decrease visibility
+                    MainBoardAdapterView.this.notifyItemChanged(position);//to increase visibility
+                    mFocusedIndex = position;
+                    //...
+                }
+            }
+        });
+        if (position == mFocusedIndex) holder.increaseVisibility(mContext);
+        else holder.decreaseVisibility();
     }
 
     @Override
