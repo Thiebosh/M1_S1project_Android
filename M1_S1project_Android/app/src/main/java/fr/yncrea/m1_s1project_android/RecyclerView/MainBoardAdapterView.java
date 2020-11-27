@@ -20,7 +20,6 @@ import fr.yncrea.m1_s1project_android.models.Channel;
 public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> {
     private final Context mContext;
     private final ArrayList<Channel> mChannelList;
-    public SwitchCompat switch1;
 
     public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList) {
         this.mContext = mContext;
