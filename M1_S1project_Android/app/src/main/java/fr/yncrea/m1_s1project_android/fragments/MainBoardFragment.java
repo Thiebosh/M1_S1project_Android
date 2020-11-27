@@ -77,7 +77,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         mAdapter.notifyDataSetChanged();
 
 
-        view.findViewById(R.id.scaleSpinner).setBackgroundColor(Color.TRANSPARENT);
+        //view.findViewById(R.id.scaleSpinner).setBackgroundColor(Color.TRANSPARENT);
 
         /*Button input0 = view.findViewById(R.id.activation);
         input0.setOnClickListener(v -> {

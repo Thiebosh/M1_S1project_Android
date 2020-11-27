@@ -28,14 +28,17 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     private final ConstraintLayout mContainer;
     private final Button mChannelActivation;
     private final TextView mChannelValue;
-    private final ToggleButton mChannelType;
+    //private final ToggleButton mChannelType;
 
     public MainBoardViewHolder(@NonNull View itemView) {
         super(itemView);
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
         mChannelValue = itemView.findViewById(R.id.value);
-        mChannelType = itemView.findViewById(R.id.mode);
+        //mChannelType = itemView.findViewById(R.id.mode);
+
+        itemView.findViewById(R.id.scaleSpinner).setBackgroundColor(Color.TRANSPARENT);
+        itemView.findViewById(R.id.typeSpinner).setBackgroundColor(Color.TRANSPARENT);
 
         itemView.findViewById(R.id.item_channel_container).setOnClickListener(v -> {
             Log.d("itemViewClick", "onClick");
@@ -66,10 +69,13 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelValue.setHint(context.getString(R.string.input, channel.getId()));
         mChannelValue.setText(String.valueOf(channel.getCurrentValue()));
 
+        /*
         mChannelType.setChecked(channel.getType() != V);
         mChannelType.setTextOn(context.getString(R.string.modeCurrent, channel.getScale().toString()));
         mChannelType.setTextOff(context.getString(R.string.modeVolt, channel.getScale().toString()));
         mChannelType.setChecked(mChannelType.isChecked());
+
+         */
     }
 
     public void setInteractions(Context context, Channel channel){
@@ -86,6 +92,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
         });
 
+        /*
         mChannelType.setOnCheckedChangeListener((buttonView, isChecked) -> {
             channel.setType(isChecked ? I : V);
 
@@ -98,6 +105,8 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
             ((BluetoothParent) Objects.requireNonNull(context)).sendData(tmp);
 
         });
+
+         */
 
     }
 }

@@ -66,6 +66,7 @@
         android:hint="@string/noSelection"
         android:inputType="numberSigned|numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar"
         app:layout_constraintStart_toStartOf="@+id/seekBar"
         app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
@@ -112,18 +113,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainboard_recycler" />
-
-
-    <Spinner
-        android:id="@+id/scaleSpinner"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:entries="@array/both_arrays"
-        android:gravity="start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
