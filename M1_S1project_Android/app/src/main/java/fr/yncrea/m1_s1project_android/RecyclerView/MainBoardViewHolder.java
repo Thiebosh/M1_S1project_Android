@@ -49,15 +49,15 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void increaseVisibility(Context context) {
-        //mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
-        mContainer.setBackground(context.getResources().getDrawable(R.drawable.item_background));
-        mChannelValue.setBackgroundColor(Color.BLACK);
-        mChannelScale.setBackgroundColor(Color.BLACK);
+        mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+        //mContainer.setBackground(context.getResources().getDrawable(R.drawable.item_background));
+        //mChannelValue.setBackgroundColor(Color.BLACK);
+        mChannelScale.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public void decreaseVisibility() {
         mContainer.setBackgroundColor(Color.TRANSPARENT);
-        mChannelValue.setBackgroundColor(Color.TRANSPARENT);
+        //mChannelValue.setBackgroundColor(Color.TRANSPARENT);
         mChannelScale.setBackgroundColor(Color.TRANSPARENT);
     }
 
