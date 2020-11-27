@@ -75,6 +75,7 @@ public class ConverterService {
             for(int i = 0; i < generator.getChannelList().size(); i++) {
                 generator.getChannelList().get(i).setActive(switchAll);
             }
+
             return -1;
         }
         if (channel > generator.getChannelList().size()) {
