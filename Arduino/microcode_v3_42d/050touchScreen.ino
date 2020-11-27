@@ -29,7 +29,7 @@ uint8_t getInputFromTouchScreen() {
           String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"minValue\":5,\"maxValue\":10,\"type\":V,\"scale\":m},";
           String c4 = "{\"id\":3,\"isActive\":false,\"currentValue\":1.4,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":m},";
           String c5 = "{\"id\":4,\"isActive\":false,\"currentValue\":6.7,\"minValue\":2,\"maxValue\":7,\"type\":I,\"scale\":_},";
-          String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.587,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":_},";
+          String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.58,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":_},";
           String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":102,\"minValue\":50,\"maxValue\":150,\"type\":I,\"scale\":_},";
           String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"minValue\":0,\"maxValue\":1,\"type\":V,\"scale\":u}";
           String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";

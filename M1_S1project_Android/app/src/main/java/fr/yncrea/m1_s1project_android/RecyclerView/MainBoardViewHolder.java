@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -25,7 +27,8 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     private final ConstraintLayout mContainer;
     private final Button mChannelActivation;
-    private final EditText mChannelValue;
+    private final TextView mChannelValue;
+    private final Spinner mChannelScale;
     private final ToggleButton mChannelType;
 
     public MainBoardViewHolder(@NonNull View itemView) {
@@ -33,6 +36,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
         mChannelValue = itemView.findViewById(R.id.value);
+        mChannelScale = itemView.findViewById(R.id.scaleSpinner);
         mChannelType = itemView.findViewById(R.id.mode);
 
         itemView.findViewById(R.id.item_channel_container).setOnClickListener(v -> {
@@ -47,10 +51,14 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     public void increaseVisibility(Context context) {
         //mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
         mContainer.setBackground(context.getResources().getDrawable(R.drawable.item_background));
+        mChannelValue.setBackgroundColor(Color.BLACK);
+        mChannelScale.setBackgroundColor(Color.BLACK);
     }
 
     public void decreaseVisibility() {
         mContainer.setBackgroundColor(Color.TRANSPARENT);
+        mChannelValue.setBackgroundColor(Color.TRANSPARENT);
+        mChannelScale.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public void setInitialDisplay(Context context, Channel channel){
