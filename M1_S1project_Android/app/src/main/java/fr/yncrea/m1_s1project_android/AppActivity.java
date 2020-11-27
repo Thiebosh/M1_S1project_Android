@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -175,9 +176,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
+                        Log.d("testy str", " in setup bluetooth of AppActivity "+str);
                         int index = -1;
 
                         if (str.startsWith("channelList", 2)) {
+                            Generator storage = ConverterService.createJsonObject(str);
+                            mGenerator.setChannelList(storage.getChannelList());
+                        } else if (str.equals("initPlz")) {
+
                             Generator storage = ConverterService.createJsonObject(str);
                             mGenerator.setChannelList(storage.getChannelList());
                         }
