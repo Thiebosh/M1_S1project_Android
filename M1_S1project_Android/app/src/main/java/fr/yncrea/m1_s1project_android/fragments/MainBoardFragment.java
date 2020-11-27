@@ -7,12 +7,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +34,6 @@ import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
     private MainBoardAdapterView mAdapter;
-    public SwitchCompat switch1;
 
     /*
      * Section BluetoothChildren
@@ -45,11 +42,6 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
     @Override
     public void applyChanges(Generator generator, int index) {
         mAdapter.updateChannelList(generator.getChannelList(), index);
-        if(index == -1){
-            switch1 = getView().findViewById(R.id.switch1);
-            switch1.setChecked(!switch1.isChecked());
-        }
-
     }
 
 
@@ -118,35 +110,25 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             }
         });
         */
-        switch1 = view.findViewById(R.id.switch1);
-        switch1.setOnClickListener(v -> {
+        view.findViewById(R.id.switch1).setOnClickListener(v -> {
             //ArrayList<Channel> allChannels = ((BluetoothParent) activity).getGenerator().getChannelList();
             for(int i = 0; i < ((BluetoothParent) activity).getGenerator().getChannelList().size(); i++){
-                ((BluetoothParent) activity).getGenerator().getChannelList().get(i).setActive(switch1.isChecked());
+                ((BluetoothParent) activity).getGenerator().getChannelList().get(i).setActive(true);
 
             }
             Channel tmp = new Channel();
             tmp.setId(-1);
-            tmp.setActive(switch1.isChecked());
+            tmp.setActive(true);
             Log.d("testy 1", "switch click listener");
             ((BluetoothParent) activity).sendData(tmp);
-            mAdapter.notifyDataSetChanged();
+            //mAdapter.notifyDataSetChanged();
+            //((BluetoothParent) activity).getGenerator().getChannelList().get(7).setCurrentValue(2.4);
+
+            /*Channel tmp = new Channel();
+            tmp.setId(7);
+            tmp.setCurrentValue(2.4);
+            ((BluetoothParent) activity).sendData(tmp);*/
         });
-        /*
-
-        SwitchCompat switch1 = view.findViewById(R.id.switch1);
-        switch1.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-            for(int i = 0; i < ((BluetoothParent) activity).getGenerator().getChannelList().size(); i++){
-                ((BluetoothParent) activity).getGenerator().getChannelList().get(i).setActive(isChecked);
-
-            }
-            Channel tmp = new Channel();
-            tmp.setId(-1);
-            tmp.setActive(isChecked);
-            Log.d("testy 1", "switch click listener");
-            ((BluetoothParent) activity).sendData(tmp);
-            mAdapter.notifyDataSetChanged();
-        }));*/
 
 /*        ((EditText) view.findViewById(R.id.value)).addTextChangedListener(new TextWatcher() {
             @Override

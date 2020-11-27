@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
@@ -27,25 +26,16 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     }
 
     public void updateChannelList(ArrayList<Channel> tmp, int index) {
-        if (index == -1) {
-            Log.d("testy update -1", " "+index+" "+tmp.get(7).getCurrentValue());
-            for(int i = 0; i < tmp.size(); i++){
-                mChannelList.get(i).setActive(tmp.get(i).isActive());
-            }
-
-            this.notifyDataSetChanged();
-        }
-        else if(index == -2){
-            Log.d("testy update -2", " "+index+" "+tmp.get(7).getCurrentValue());
-            mChannelList.clear();
-            mChannelList.addAll(tmp);
-            this.notifyDataSetChanged();
-        }
-        else {
+        if (index != -1) {
             Log.d("not testy", ""+tmp.get(index).getId());
             mChannelList.set(index, tmp.get(index));
             this.notifyItemChanged(index);
-
+        }
+        else {
+            Log.d("testy update -1", " "+index+" "+tmp.get(7).getCurrentValue());
+            mChannelList.clear();
+            mChannelList.addAll(tmp);
+            this.notifyDataSetChanged();
         }
     }
 

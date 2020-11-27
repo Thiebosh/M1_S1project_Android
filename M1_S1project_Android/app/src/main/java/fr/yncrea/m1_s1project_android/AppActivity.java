@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
@@ -181,7 +180,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
                         Log.d("testy pur received", " "+str);
-                        int index = -2;
+                        int index = -1;
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = ConverterService.createJsonObject(str);
@@ -205,10 +204,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         }
                         else {
                             index = ConverterService.applyJsonData(mGenerator, str);
-                            /*if(index == -1) {
-                                SwitchCompat switch1 = findViewById(R.id.switch1);
-                                switch1.setChecked(!switch1.isChecked());
-                            }*/
                             if (index == -10) break;//error
                         }
 
