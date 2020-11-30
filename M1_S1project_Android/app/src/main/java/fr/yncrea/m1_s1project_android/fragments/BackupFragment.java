@@ -29,7 +29,7 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
      */
 
     @Override
-    public void applyChanges(Generator generator) {
+    public void applyChanges(Generator generator, int index) {
 
     }
 

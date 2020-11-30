@@ -30,13 +30,23 @@
     <string name="frag_main_tmp">Écran principal</string>
     <string name="allChannel">Tous les canaux</string>
     <string name="OnOff">On/Off</string>
-    <string name="modeVolt">Volt</string>
-    <string name="modeCurrent">Ampere</string>
-    <string name="noSelection">Aucune entrée sélectionnée</string>
-    <string name="input">Entrée <xliff:g id="id_channel">%1$s</xliff:g></string>
+    <string name="modeVolt"><xliff:g id="scale_channel1">%s</xliff:g>V</string>
+    <string name="modeCurrent"><xliff:g id="scale_channel2">%s</xliff:g>I</string>
+    <string name="noSelection">Pas de sélection</string>
+    <string name="input">Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="max">Max.</string>
     <string name="min">Min.</string>
 
+    <string-array name="scale_arrays">
+        <item>_</item>
+        <item>m</item>
+        <item>u</item>
+    </string-array>
+
+    <string-array name="type_arrays">
+        <item>V</item>
+        <item>I</item>
+    </string-array>
 
     <!-- Fragment Backup -->
     <string name="frag_back_tmp">Écran des sauvegardes</string>

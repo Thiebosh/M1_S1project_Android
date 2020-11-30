@@ -1,126 +1,28 @@
 package fr.yncrea.m1_s1project_android.services;
 
 import android.util.Log;
-import java.util.Enumeration;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.models.PowerSupply;
 import fr.yncrea.m1_s1project_android.models.Scale;
 
-import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
-import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class ConverterService {
 
     public static Generator createJsonObject(final String str) {
-        return (new Gson()).fromJson(str, Generator.class);
-    }
-
-    public static JsonObject applyJsonData(final Generator generator, final String json) {
-        JsonObject data = (new Gson()).fromJson (json, JsonElement.class).getAsJsonObject();
-
-        if (data.keySet().size() < 2) {//aucune ou une seule clé
-            Log.d("testy", "nécessite au moins deux clés : id + quelque chose. a reçu "+data.keySet().size());
-            return null;//retourner string unique dans le json?
-        }
-
-        String attribute;
-        int channel = 0;
-
-        attribute = "id";
         try {
-            channel = Integer.parseInt(String.valueOf(data.get(attribute)));
+            return (new Gson()).fromJson(str, Generator.class);
         }
         catch (Exception ignore) {
-            Log.d("testy", "erreur en récup "+attribute);
             return null;
         }
-        if (channel > generator.getChannelList().size()) {
-            Log.d("testy", "index hors tableau");
-            return null;
-        }
-
-
-        attribute = "isActive";
-        if(data.has(attribute)){
-            try {
-                boolean tmp = Boolean.parseBoolean(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setActive(tmp);
-            }
-            catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
-                return null;
-            }
-        }
-
-        attribute = "currentValue";
-        if(data.has(attribute)){
-            try {
-                double tmp = Double.parseDouble(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setCurrentValue(tmp);
-            }
-            catch (Exception ignore) {
-                Log.d("testy", "erreur de la récup "+attribute);
-                return null;
-            }
-        }
-
-        attribute = "minValue";
-        if(data.has(attribute)){
-            try {
-                float tmp = Float.parseFloat(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setMinValue(tmp);
-            }
-            catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
-                return null;
-            }
-        }
-
-        attribute = "maxValue";
-        if(data.has(attribute)){
-            try {
-                float tmp = Float.parseFloat(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setMaxValue(tmp);
-            }
-            catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
-                return null;
-            }
-        }
-
-        attribute = "type";
-        if(data.has(attribute)){
-            try {
-                PowerSupply tmp = PowerSupply.valueOf(data.get(attribute).getAsString());
-                generator.getChannelList().get(channel).setType(tmp);
-            }
-            catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
-                return null;
-            }
-        }
-
-        attribute = "scale";
-        if(data.has(attribute)){
-            try {
-                Scale tmp = Scale.valueOf(data.get(attribute).getAsString());
-                generator.getChannelList().get(channel).setScale(tmp);
-            }
-            catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
-                return null;
-            }
-        }
-
-        return data;
     }
-
 
     public static String extractJsonData(final Channel data) {
         JsonObject json = new JsonObject();
@@ -134,6 +36,125 @@ public class ConverterService {
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
 
         return json.toString();
+    }
+
+    public static int applyJsonData(final Generator generator, final String json) {
+        JsonObject data;
+        try {
+            data = (new Gson()).fromJson(json, JsonElement.class).getAsJsonObject();
+        }
+        catch (Exception ignore) {
+            Log.d("testy", "invalid Json string");
+            return -10;
+        }
+
+        if (data.keySet().size() < 2) {//aucune ou une seule clé
+            Log.d("testy", "nécessite au moins deux clés : id + quelque chose. a reçu "+data.keySet().size());
+            return -10;
+        }
+
+        String attribute;
+        int channel;
+
+        attribute = "id";
+        try {
+            channel = data.get(attribute).getAsInt();
+        }
+        catch (Exception ignore) {
+            Log.d("testy", "erreur en récup "+attribute);
+            return -10;
+        }
+        if(channel == -1){
+            boolean switchAll;
+            try {
+                switchAll = data.get("isActive").getAsBoolean();
+            }catch(Exception e){
+                return -10;
+            }
+            for(int i = 0; i < generator.getChannelList().size(); i++) {
+                generator.setAllChannelActive(switchAll);
+            }
+            return -1;
+        }
+        if (channel > generator.getChannelList().size()) {
+            Log.d("testy", "index hors tableau");
+            return -10;
+        }
+
+
+        attribute = "isActive";
+        if(data.has(attribute)){
+            try {
+                boolean tmp = data.get(attribute).getAsBoolean();
+                generator.getChannel(channel).setActive(tmp);
+            }
+            catch (Exception ignore) {
+                Log.d("testy", "erreur récup "+attribute);
+                return -10;
+            }
+        }
+
+        attribute = "currentValue";
+        if(data.has(attribute)){
+            try {
+                double tmp = data.get(attribute).getAsDouble();
+                generator.getChannel(channel).setCurrentValue(tmp);
+            }
+            catch (Exception ignore) {
+                Log.d("testy", "erreur de la récup "+attribute);
+                return -10;
+            }
+        }
+
+        attribute = "minValue";
+        if(data.has(attribute)){
+            try {
+                float tmp = data.get(attribute).getAsFloat();
+                generator.getChannel(channel).setMinValue(tmp);
+            }
+            catch (Exception ignore) {
+                Log.d("testy", "erreur récup "+attribute);
+                return -10;
+            }
+        }
+
+        attribute = "maxValue";
+        if(data.has(attribute)){
+            try {
+                float tmp = data.get(attribute).getAsFloat();
+                generator.getChannel(channel).setMaxValue(tmp);
+            }
+            catch (Exception ignore) {
+                Log.d("testy", "erreur récup "+attribute);
+                return -10;
+            }
+        }
+
+        attribute = "type";
+        if(data.has(attribute)){
+            try {
+                PowerSupply tmp = PowerSupply.valueOf(data.get(attribute).getAsString());
+                generator.getChannel(channel).setType(tmp);
+            }
+            catch (Exception ignore) {
+                Log.d("testy", "erreur récup "+attribute);
+                return -10;
+            }
+        }
+
+        attribute = "scale";
+        if(data.has(attribute)){
+            try {
+                Scale tmp = Scale.valueOf(data.get(attribute).getAsString());
+                generator.getChannel(channel).setScale(tmp);
+            }
+            catch (Exception ignore) {
+                Log.d("testy", "erreur récup "+attribute);
+                return -10;
+            }
+        }
+
+        return channel;
     }
 }
 

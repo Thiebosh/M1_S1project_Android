@@ -21,62 +21,69 @@ public class Channel {
         return id;
     }
 
-    public void setId(int id) {
+    public Channel setId(int id) {
         this.id = id;
+        return this;
     }
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public Channel setActive(boolean active) {
         this.isActive = active;
         this.isSetActive = true;
+        return this;
     }
 
     public double getCurrentValue() {
         return currentValue;
     }
 
-    public void setCurrentValue(double currentValue) {
+    public Channel setCurrentValue(double currentValue) {
         this.currentValue = currentValue;
         this.isSetCurrentValue = true;
+        return this;
     }
 
     public double getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(double minValue) {
+    public Channel setMinValue(double minValue) {
         this.minValue = minValue;
         this.isSetMinValue = true;
+        return this;
     }
 
     public double getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(double maxValue) {
+    public Channel setMaxValue(double maxValue) {
         this.maxValue = maxValue;
         this.isSetMaxValue = true;
+        return this;
     }
 
     public PowerSupply getType() {
         return type;
     }
 
-    public void setType(PowerSupply type) {
+    public Channel setType(PowerSupply type) {
         this.type = type;
         this.isSetType = true;
+        return this;
     }
 
     public Scale getScale() {
         return scale;
     }
 
-    public void setScale(Scale scale) {
+    public Channel setScale(Scale scale) {
         this.scale = scale;
         this.isSetScale = true;
+        return this;
     }
 
     public boolean isSetActive() {
