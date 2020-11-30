@@ -5,10 +5,6 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,20 +16,26 @@ import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 
-import static fr.yncrea.m1_s1project_android.models.PowerSupply.I;
-import static fr.yncrea.m1_s1project_android.models.PowerSupply.V;
 
 public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     private final ConstraintLayout mContainer;
     private final Button mChannelActivation;
-    private final TextView mChannelValue;
+    private final Button mDigit1;
+    private final Button mDigit2;
+    private final Button mDigit3;
+    private final Button mDigit4;
+    //private final TextView mChannelValue;
 
     public MainBoardViewHolder(@NonNull View itemView) {
         super(itemView);
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
-        mChannelValue = itemView.findViewById(R.id.value);
+        mDigit1 = itemView.findViewById(R.id.digit1);
+        mDigit2 = itemView.findViewById(R.id.digit2);
+        mDigit3 = itemView.findViewById(R.id.digit3);
+        mDigit4 = itemView.findViewById(R.id.digit4);
+        //mChannelValue = itemView.findViewById(R.id.value);
     }
 
     public ConstraintLayout getContainer() {
@@ -53,8 +55,13 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
         mChannelActivation.setText(context.getString(R.string.input, channel.getId()));
 
-        mChannelValue.setHint(context.getString(R.string.input, channel.getId()));
-        mChannelValue.setText(String.valueOf(channel.getCurrentValue()));
+        StringBuilder tmp = new StringBuilder(String.valueOf(channel.getCurrentValue()));
+        while (tmp.length() < 5) tmp.append('0');
+        char[] digits = tmp.toString().toCharArray();
+        mDigit1.setText(String.valueOf(digits[0]));
+        mDigit2.setText(String.valueOf(digits[2]));
+        mDigit3.setText(String.valueOf(digits[3]));
+        mDigit4.setText(String.valueOf(digits[4]));
     }
 
     public void setInteractions(Context context, Channel channel){

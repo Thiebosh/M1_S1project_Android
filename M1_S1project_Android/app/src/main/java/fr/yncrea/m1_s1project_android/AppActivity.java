@@ -205,7 +205,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
 
                             Generator storage = ConverterService.createJsonObject(init);
-                            mGenerator.setChannelList(storage.getChannelList());
+                            mGenerator.setChannelList(Objects.requireNonNull(storage).getChannelList());
                         }
                         else {
                             index = ConverterService.applyJsonData(mGenerator, str);
