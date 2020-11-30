@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
@@ -384,13 +385,28 @@ public class BluetoothService {
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
                 try {
-                    if((bytes = mmInStream.available()) != 0) {//début de transmission
+                    //if((bytes = mmInStream.available()) != 0) {//début de transmission
                         try {//laisse le temps de réceptionner les données
-                            ConnectedThread.sleep(60);//pas d'alternative car pas de notif
+                            ConnectedThread.sleep(4000);//pas d'alternative car pas de notif
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                             //error message?
                         }
+                        buffer = new byte[1000];
+                        int tmp = mmInStream.read(buffer);
+
+                        Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(BluetoothConstants.RECEIVE, new String(buffer, 0, tmp));
+                        msg.setData(bundle);
+                        mHandler.sendMessage(msg);
+                        /*try {//laisse le temps de réceptionner les données
+                            ConnectedThread.sleep(10000);//pas d'alternative car pas de notif
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            //error message?
+                        }
+                        Log.d("testy", "à la fin : "+mmInStream.available());
 
                         if (bytes == mmInStream.available()) {//fin de transmission
                             // Read from the InputStream
@@ -407,7 +423,8 @@ public class BluetoothService {
                             }
                             //else error message?
                         }
-                    }
+                         */
+                    //}
                 }
                 catch (IOException e) {
                     connectionClosed(mResources.getString(R.string.blt_disconnected));

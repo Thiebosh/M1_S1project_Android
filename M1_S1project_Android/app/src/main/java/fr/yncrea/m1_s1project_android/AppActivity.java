@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -176,6 +177,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
+                        Log.d("testy", str);
                         int index = -1;
 
                         if (str.startsWith("channelList", 2)) {
