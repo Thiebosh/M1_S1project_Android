@@ -180,8 +180,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        Log.d("testy pur received", " "+str);
-                        int index = -1;
+                        int index = -2;
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = ConverterService.createJsonObject(str);

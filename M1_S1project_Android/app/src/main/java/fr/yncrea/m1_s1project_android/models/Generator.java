@@ -12,4 +12,12 @@ public class Generator {
     public void setChannelList(final ArrayList<Channel> channelList) {
         this.channelList = channelList;
     }
+
+    public void setAllChannelActive(final boolean active) {
+        for (Channel channel : channelList) channel.setActive(active);
+    }
+
+    public Channel getChannel(final int id) {
+        return channelList.get(id);
+    }
 }

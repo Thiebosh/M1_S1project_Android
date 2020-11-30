@@ -33,7 +33,7 @@
     <string name="modeVolt"><xliff:g id="scale_channel1">%s</xliff:g>V</string>
     <string name="modeCurrent"><xliff:g id="scale_channel2">%s</xliff:g>I</string>
     <string name="noSelection">Pas de sélection</string>
-    <string name="input">Entrée <xliff:g id="id_channel">%1$d</xliff:g></string>
+    <string name="input">Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="max">Max.</string>
     <string name="min">Min.</string>
 

@@ -27,16 +27,20 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     }
 
     public void updateChannelList(ArrayList<Channel> tmp, int index) {
-        if (index != -1) {
-            Log.d("not testy", ""+tmp.get(index).getId());
+        if (index == -1) {
             mChannelList.set(index, tmp.get(index));
-            this.notifyItemChanged(index);
+            boolean active = tmp.get(0).isActive();
+            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
+            this.notifyDataSetChanged();
         }
-        else {
-            Log.d("testy update -1", " "+index+" "+tmp.get(7).getCurrentValue());
+        else if (index == -2) {
             mChannelList.clear();
             mChannelList.addAll(tmp);
             this.notifyDataSetChanged();
+        }
+        else {
+            mChannelList.set(index, tmp.get(index));
+            this.notifyItemChanged(index);
         }
     }
 

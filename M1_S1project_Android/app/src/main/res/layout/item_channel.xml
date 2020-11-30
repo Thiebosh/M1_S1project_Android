@@ -41,6 +41,8 @@
         android:layout_marginRight="8dp"
         android:entries="@array/scale_arrays"
         android:gravity="start"
+        android:background="@android:color/transparent"
+        android:popupBackground="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/value"
         app:layout_constraintEnd_toStartOf="@+id/typeSpinner"
         app:layout_constraintTop_toTopOf="@+id/value" />
@@ -53,6 +55,8 @@
         android:layout_marginRight="8dp"
         android:entries="@array/type_arrays"
         android:gravity="start"
+        android:background="@android:color/transparent"
+        android:popupBackground="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/scaleSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/scaleSpinner" />

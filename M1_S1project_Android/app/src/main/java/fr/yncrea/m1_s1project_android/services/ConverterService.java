@@ -34,13 +34,12 @@ public class ConverterService {
         if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
         if (data.isSetType()) json.addProperty("type", data.getType().name());
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
-        Log.d("testy convert", "extracttojson before send : " + json.toString());
+
         return json.toString();
     }
 
     public static int applyJsonData(final Generator generator, final String json) {
         JsonObject data;
-        Log.d("testy converter", "applyjsondata after receive : "+json);
         try {
             data = (new Gson()).fromJson(json, JsonElement.class).getAsJsonObject();
         }
@@ -59,8 +58,7 @@ public class ConverterService {
 
         attribute = "id";
         try {
-            channel = Integer.parseInt(String.valueOf(data.get(attribute)));
-
+            channel = data.get(attribute).getAsInt();
         }
         catch (Exception ignore) {
             Log.d("testy", "erreur en récup "+attribute);
@@ -69,12 +67,12 @@ public class ConverterService {
         if(channel == -1){
             boolean switchAll;
             try {
-                switchAll = Boolean.parseBoolean(String.valueOf(data.get("isActive")));
+                switchAll = data.get("isActive").getAsBoolean();
             }catch(Exception e){
                 return -10;
             }
             for(int i = 0; i < generator.getChannelList().size(); i++) {
-                generator.getChannelList().get(i).setActive(switchAll);
+                generator.setAllChannelActive(switchAll);
             }
             return -1;
         }
@@ -87,8 +85,8 @@ public class ConverterService {
         attribute = "isActive";
         if(data.has(attribute)){
             try {
-                boolean tmp = Boolean.parseBoolean(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setActive(tmp);
+                boolean tmp = data.get(attribute).getAsBoolean();
+                generator.getChannel(channel).setActive(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
@@ -99,8 +97,8 @@ public class ConverterService {
         attribute = "currentValue";
         if(data.has(attribute)){
             try {
-                double tmp = Double.parseDouble(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setCurrentValue(tmp);
+                double tmp = data.get(attribute).getAsDouble();
+                generator.getChannel(channel).setCurrentValue(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur de la récup "+attribute);
@@ -111,8 +109,8 @@ public class ConverterService {
         attribute = "minValue";
         if(data.has(attribute)){
             try {
-                float tmp = Float.parseFloat(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setMinValue(tmp);
+                float tmp = data.get(attribute).getAsFloat();
+                generator.getChannel(channel).setMinValue(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
@@ -123,8 +121,8 @@ public class ConverterService {
         attribute = "maxValue";
         if(data.has(attribute)){
             try {
-                float tmp = Float.parseFloat(String.valueOf(data.get(attribute)));
-                generator.getChannelList().get(channel).setMaxValue(tmp);
+                float tmp = data.get(attribute).getAsFloat();
+                generator.getChannel(channel).setMaxValue(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
@@ -136,7 +134,7 @@ public class ConverterService {
         if(data.has(attribute)){
             try {
                 PowerSupply tmp = PowerSupply.valueOf(data.get(attribute).getAsString());
-                generator.getChannelList().get(channel).setType(tmp);
+                generator.getChannel(channel).setType(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
@@ -148,7 +146,7 @@ public class ConverterService {
         if(data.has(attribute)){
             try {
                 Scale tmp = Scale.valueOf(data.get(attribute).getAsString());
-                generator.getChannelList().get(channel).setScale(tmp);
+                generator.getChannel(channel).setScale(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
