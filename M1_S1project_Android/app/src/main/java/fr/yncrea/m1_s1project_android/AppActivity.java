@@ -177,7 +177,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        Log.d("testy", str);
                         int index = -1;
 
                         if (str.startsWith("channelList", 2)) {
