@@ -30,18 +30,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch1"
+    <ToggleButton
+        android:id="@+id/AllOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginRight="34dp"
-        android:switchTextAppearance="@style/TextAppearance.AppCompat.Large"
-        android:text="@string/OnOff"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:text="ON"
+        android:textOff="ON"
+        android:textOn="ON"
+        app:layout_constraintEnd_toStartOf="@+id/AllOff"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/AllOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="OFF"
+        android:textOff="OFF"
+        android:textOn="OFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainboard_recycler"
