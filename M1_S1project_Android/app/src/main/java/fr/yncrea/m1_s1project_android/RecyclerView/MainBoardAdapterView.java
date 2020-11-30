@@ -28,10 +28,12 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     public void updateChannelList(ArrayList<Channel> tmp, int index) {
         if (index != -1) {
+            Log.d("not testy", ""+tmp.get(index).getId());
             mChannelList.set(index, tmp.get(index));
             this.notifyItemChanged(index);
         }
         else {
+            Log.d("testy update -1", " "+index+" "+tmp.get(7).getCurrentValue());
             mChannelList.clear();
             mChannelList.addAll(tmp);
             this.notifyDataSetChanged();

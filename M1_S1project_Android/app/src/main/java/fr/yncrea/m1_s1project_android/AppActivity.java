@@ -94,7 +94,10 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final Channel data) {
-        if (mBluetoothService != null) mBluetoothService.send(ConverterService.extractJsonData(data));
+        String temp = ConverterService.extractJsonData(data);
+        Log.d("testy send", ""+temp);
+        if (mBluetoothService != null) mBluetoothService.send(temp);
+
         //if (mBluetoothService != null) mBluetoothService.send("get");
     }
 
@@ -177,6 +180,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
+                        Log.d("testy pur received", " "+str);
                         int index = -1;
 
                         if (str.startsWith("channelList", 2)) {
@@ -186,6 +190,22 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 Toast.makeText(AppActivity.this, "Erreur de réception : nouvel essai", Toast.LENGTH_SHORT).show();
                                 break;
                             }
+                            mGenerator.setChannelList(storage.getChannelList());
+                        }
+                        // le else if qui suit ne sert que pour l'utilisation entre 2 android
+                        else if (str.equals("initPlz")) {
+                            //TMP : simule envoi des données de l'arduino
+                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":2.6,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":m},";
+                            String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"minValue\":0,\"maxValue\":5,\"type\":I,\"scale\":u},";
+                            String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"minValue\":5,\"maxValue\":10,\"type\":V,\"scale\":m},";
+                            String c4 = "{\"id\":3,\"isActive\":false,\"currentValue\":1.4,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":m},";
+                            String c5 = "{\"id\":4,\"isActive\":false,\"currentValue\":6.7,\"minValue\":2,\"maxValue\":7,\"type\":I,\"scale\":k},";
+                            String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.587,\"minValue\":0,\"maxValue\":5,\"type\":V,\"scale\":_},";
+                            String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":102,\"minValue\":50,\"maxValue\":150,\"type\":I,\"scale\":_},";
+                            String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"minValue\":0,\"maxValue\":1,\"type\":V,\"scale\":M}";
+                            String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
+
+                            Generator storage = ConverterService.createJsonObject(init);
                             mGenerator.setChannelList(storage.getChannelList());
                         }
                         else {

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
@@ -113,10 +114,20 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         });
         */
         view.findViewById(R.id.switch1).setOnClickListener(v -> {
+            //ArrayList<Channel> allChannels = ((BluetoothParent) activity).getGenerator().getChannelList();
+            for(int i = 0; i < ((BluetoothParent) activity).getGenerator().getChannelList().size(); i++){
+                ((BluetoothParent) activity).getGenerator().getChannelList().get(i).setActive(true);
 
-            /*((BluetoothParent) activity).getGenerator().getChannelList().get(7).setCurrentValue(2.4);
-
+            }
             Channel tmp = new Channel();
+            tmp.setId(-1);
+            tmp.setActive(true);
+            Log.d("testy 1", "switch click listener");
+            ((BluetoothParent) activity).sendData(tmp);
+            //mAdapter.notifyDataSetChanged();
+            //((BluetoothParent) activity).getGenerator().getChannelList().get(7).setCurrentValue(2.4);
+
+            /*Channel tmp = new Channel();
             tmp.setId(7);
             tmp.setCurrentValue(2.4);
             ((BluetoothParent) activity).sendData(tmp);*/

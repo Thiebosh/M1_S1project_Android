@@ -88,6 +88,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
             Channel tmp = new Channel();
             tmp.setId(channel.getId());
             tmp.setActive(channel.isActive());
+            Log.d("testy 2", "activation");
             ((BluetoothParent) Objects.requireNonNull(context)).sendData(tmp);
 
         });
@@ -97,6 +98,17 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
             channel.setType(isChecked ? I : V);
 
             //mChannelActivation.setText(context.getString(R.string.input, channel.getType().name(), channel.getId()));
+
+            ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannelList().get(channel.getId()).setType(channel.getType());
+            Channel tmp = new Channel();
+            tmp.setId(channel.getId());
+            tmp.setType(channel.getType());
+            ((BluetoothParent) Objects.requireNonNull(context)).sendData(tmp);
+
+        });*/
+        mChannelType.setOnClickListener(v -> {
+            Log.d("testy click", "mChannelType");
+            channel.setType(mChannelType.isChecked() ? I : V);
 
             ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannelList().get(channel.getId()).setType(channel.getType());
             Channel tmp = new Channel();
