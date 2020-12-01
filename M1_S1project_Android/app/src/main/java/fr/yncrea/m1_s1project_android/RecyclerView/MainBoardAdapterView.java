@@ -30,7 +30,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     public void updateChannelList(ArrayList<Channel> tmp, int index) {
         if (index == -1) {
-            mChannelList.set(index, tmp.get(index));
+            //mChannelList.set(index, tmp.get(index));
             boolean active = tmp.get(0).isActive();
             for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
             this.notifyDataSetChanged();

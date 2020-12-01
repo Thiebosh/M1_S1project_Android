@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
@@ -25,7 +26,8 @@ import fr.yncrea.m1_s1project_android.models.Generator;
 public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
     private MainBoardAdapterView mAdapter;
-    private SwitchCompat mSwitchAll;
+    private ToggleButton mAllOnBtn;
+    private ToggleButton mAllOffBtn;
 
     /*
      * Section BluetoothChildren
@@ -34,7 +36,15 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
     @Override
     public void applyChanges(Generator generator, int index) {
         mAdapter.updateChannelList(generator.getChannelList(), index);
-        if (index == -1) mSwitchAll.setChecked(!mSwitchAll.isChecked());
+        if (index == -1) {
+            if (generator.getChannel(0).isActive()) {
+                mAllOnBtn.setChecked(true);
+                mAllOffBtn.setChecked(false);
+            } else {
+                mAllOffBtn.setChecked(true);
+                mAllOnBtn.setChecked(false);
+            }
+        }
     }
 
 
@@ -70,14 +80,26 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         mAdapter.notifyDataSetChanged();
 
 
-        mSwitchAll = view.findViewById(R.id.switch1);
-        mSwitchAll.setOnClickListener(v -> {
-            boolean isChecked = mSwitchAll.isChecked();
+        mAllOnBtn = view.findViewById(R.id.AllOn);
+        mAllOnBtn.setOnClickListener(v -> {
+            if(mAllOnBtn.isChecked()){
+                mAllOffBtn.setChecked(false);
+                ((BluetoothParent) activity).getGenerator().setAllChannelActive(true);
+                ((BluetoothParent) activity).sendData((new Channel()).setId(-1).setActive(true));
+                mAdapter.notifyDataSetChanged();
+            }
 
-            ((BluetoothParent) activity).getGenerator().setAllChannelActive(isChecked);
-            mAdapter.notifyDataSetChanged();
+        });
 
-            ((BluetoothParent) activity).sendData((new Channel()).setId(-1).setActive(isChecked));
+        mAllOffBtn = view.findViewById(R.id.AllOff);
+        mAllOffBtn.setOnClickListener(v -> {
+            if(mAllOffBtn.isChecked()){
+                mAllOnBtn.setChecked(false);
+                ((BluetoothParent) activity).getGenerator().setAllChannelActive(false);
+                ((BluetoothParent) activity).sendData((new Channel()).setId(-1).setActive(false));
+                mAdapter.notifyDataSetChanged();
+            }
+
         });
 
         return view;
