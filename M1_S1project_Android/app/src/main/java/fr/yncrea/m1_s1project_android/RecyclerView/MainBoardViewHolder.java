@@ -98,12 +98,20 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
                 Log.d("testy", "désactive digit "+checkedId+" du canal "+position);
                 adapter.setDigitSelected(-1);
             }
+
             //if (adapter.getDigitSelected() != -1) adapter.notifyItemChanged(adapter.getFocusedIndex());//uncheck last checked?
 
             //adapter.setFocusedIndex(position);
             //adapter.setDigitSelected(isChecked ? checkedId : -1);
 
             //if (group.getCheckedButtonId() == -1) group.check(checkedId);
+        });
+
+
+
+        mainView.findViewById(R.id.plus).setOnClickListener(v ->{
+            Log.d("testy", "getDigitSelected : "+adapter.getDigitSelected());
+
         });
         //mDigitGroup.getChildAt(1).setOnClickListener();
         /*

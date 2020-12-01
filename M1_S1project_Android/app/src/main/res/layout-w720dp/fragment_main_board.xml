@@ -89,8 +89,8 @@
 
     <EditText
         android:id="@+id/selectedInput"
-        android:layout_width="130dp"
-        android:layout_height="51dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:autofillHints=""
         android:gravity="center"
         android:hint="@string/noSelection"

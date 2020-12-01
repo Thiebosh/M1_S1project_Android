@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
     private MainBoardAdapterView mAdapter;
     private ToggleButton mAllOnBtn;
     private ToggleButton mAllOffBtn;
+    private EditText mMininmum;
+    private EditText mMaximum;
 
     /*
      * Section BluetoothChildren
@@ -47,7 +50,6 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
             }
         }
     }
-
 
     /*
      * Section Menu
@@ -79,6 +81,10 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         rv.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
+        ((EditText) view.findViewById(R.id.selectedInput)).setEnabled(false);
+        ((EditText) view.findViewById(R.id.minInputSelected)).setEnabled(false);
+        ((EditText) view.findViewById(R.id.maxInputSelected)).setEnabled(false);
+
         // Listeners
         mAllOnBtn = view.findViewById(R.id.AllOn);
         mAllOnBtn.setOnClickListener(v -> {
@@ -102,6 +108,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
 
         });
+
 
         return view;
     }
