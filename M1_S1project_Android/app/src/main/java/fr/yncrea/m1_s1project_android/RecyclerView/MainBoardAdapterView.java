@@ -59,7 +59,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     @Override
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
         holder.setInitialDisplay(mContext, mChannelList.get(position));
-        holder.setInteractions(mContext, mChannelList.get(position), mView);
+        holder.setInteractions(this, mContext, mView, mChannelList.get(position), position);
         mView.findViewById(R.id.plus).setOnClickListener(v -> {
             Log.d("testy", "adapterview click on plus " + position);
             mDigitSelected = 1;

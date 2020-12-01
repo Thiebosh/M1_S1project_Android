@@ -71,9 +71,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mDigit4.setText(String.valueOf(digits[4]));
     }
 
-    public void setInteractions(MainBoardAdapterView adapter, Context context, Channel channel, int position){
-    public void setInteractions(Context context, Channel channel, View mainView){
-
+    public void setInteractions(MainBoardAdapterView adapter, Context context, View mainView, Channel channel, int position){
         mChannelActivation.setOnClickListener(v -> {
             channel.setActive(!channel.isActive());
 
