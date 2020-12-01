@@ -106,29 +106,6 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         mMaximum.setOnKeyListener(this);
         mMinimum.setOnKeyListener(this);
         mSelection.setOnKeyListener(this);
-        /*mMinimum.setOnKeyListener((View vi, int keyCode, KeyEvent event) -> {
-            if(mFocusedIndex != -1 && keyCode == 66) {
-                double minInput = Double.parseDouble(mMinimum.getText().toString());
-                if(minInput != mChannelList.get(mFocusedIndex).getMinValue()){
-                    mChannelList.get(mFocusedIndex).setMinValue(minInput);
-                    Log.d("testy", "min changed");
-                    notifyItemChanged(mFocusedIndex);
-                }
-            }
-            return false;
-        });
-
-        mMaximum.setOnKeyListener((View vi, int keyCode, KeyEvent event) -> {
-            if(mFocusedIndex != -1 && keyCode == 66) {
-                double maxInput = Double.parseDouble(mMaximum.getText().toString());
-                if(maxInput != mChannelList.get(mFocusedIndex).getMaxValue()){
-                    mChannelList.get(mFocusedIndex).setMaxValue(maxInput);
-                    Log.d("testy", "max changed");
-                    notifyItemChanged(mFocusedIndex);
-                }
-            }
-            return false;
-        });*/
 
     }
 
@@ -158,23 +135,19 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         //Log.d("testy", "enter override onKey");
         if(mFocusedIndex != -1 && keyCode == 66) {
             double input = Double.parseDouble(((EditText) mView.findViewById(v.getId())).getText().toString());
-            switch (v.getId()) {
-                case R.id.minInputSelected:
-                    if(input != mChannelList.get(mFocusedIndex).getMinValue()) mChannelList.get(mFocusedIndex).setMinValue(input);
-                    break;
-
-                case R.id.maxInputSelected:
-                    if(input != mChannelList.get(mFocusedIndex).getMaxValue()) mChannelList.get(mFocusedIndex).setMaxValue(input);
-                    break;
-
-                case R.id.selectedInput:
-                    if(input != mChannelList.get(mFocusedIndex).getCurrentValue()){
-                        mChannelList.get(mFocusedIndex).setCurrentValue(input);
-                        Log.d("testy", "current changed");
-                    }
-                    break;
+            int id = v.getId();
+            if (id == R.id.minInputSelected && input != mChannelList.get(mFocusedIndex).getMinValue()) {
+                mChannelList.get(mFocusedIndex).setMinValue(input);
+                notifyItemChanged(mFocusedIndex);
+            } else if (id == R.id.maxInputSelected && input != mChannelList.get(mFocusedIndex).getMaxValue()) {
+                mChannelList.get(mFocusedIndex).setMaxValue(input);
+                notifyItemChanged(mFocusedIndex);
+            } else if (id == R.id.selectedInput && input != mChannelList.get(mFocusedIndex).getCurrentValue()) {
+                mChannelList.get(mFocusedIndex).setCurrentValue(input);
+                notifyItemChanged(mFocusedIndex);
+                Log.d("testy", "current changed");
             }
-            notifyItemChanged(mFocusedIndex);
+
         }
         return false;
     }
