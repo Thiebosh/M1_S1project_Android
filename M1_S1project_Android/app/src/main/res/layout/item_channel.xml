@@ -1,94 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_channel_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="6dp"
     tools:context=".fragments.MainBoardFragment">
 
-    <Button
-        android:id="@+id/activation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:height="55dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/scaleSpinner"
-        app:layout_constraintStart_toEndOf="@+id/activation"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_channel_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/digit1"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content" />
-
-        <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="20dp"
+            android:id="@+id/activation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="." />
+            android:layout_marginTop="16dp"
+            android:height="55dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/digit2"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/scaleSpinner"
+            android:layout_width="@dimen/spinner_width"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/background_spinner"
+            android:entries="@array/scale_arrays"
+            android:gravity="start"
+            android:popupBackground="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/typeSpinner"
+            app:layout_constraintTop_toBottomOf="@+id/activation" />
 
-        <Button
-            android:id="@+id/digit3"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/typeSpinner"
+            android:layout_width="@dimen/spinner_width"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/background_spinner"
+            android:entries="@array/type_arrays"
+            android:gravity="start"
+            android:popupBackground="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/scaleSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scaleSpinner" />
 
-        <Button
-            android:id="@+id/digit4"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/scaleSpinner"
+            app:layout_constraintEnd_toStartOf="@+id/scaleSpinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scaleSpinner"
+            app:selectionRequired="true"
+            app:singleSelection="true">
 
-    <Spinner
-        android:id="@+id/scaleSpinner"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/background_spinner"
-        android:entries="@array/scale_arrays"
-        android:gravity="start"
-        android:popupBackground="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/typeSpinner"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/digit1"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/digit"
+                android:layout_height="wrap_content" />
 
-    <Spinner
-        android:id="@+id/typeSpinner"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:background="@drawable/background_spinner"
-        android:entries="@array/type_arrays"
-        android:gravity="start"
-        android:popupBackground="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="." />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/digit2"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/digit"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/digit3"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/digit"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/digit4"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/digit"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

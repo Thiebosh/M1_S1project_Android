@@ -73,9 +73,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
         Activity activity = Objects.requireNonNull(getActivity());
 
         RecyclerView rv = view.findViewById(R.id.mainboard_recycler);
-        mAdapter = new MainBoardAdapterView(getContext(),
+        mAdapter = new MainBoardAdapterView(getContext(), view,
                 ((BluetoothParent) activity).getGenerator().getChannelList());
-        rv.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
         rv.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 

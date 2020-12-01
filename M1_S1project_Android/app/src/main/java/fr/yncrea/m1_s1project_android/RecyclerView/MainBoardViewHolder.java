@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Objects;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
@@ -21,6 +21,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     private final ConstraintLayout mContainer;
     private final Button mChannelActivation;
+    private final MaterialButtonToggleGroup mDigitGroup;
     private final Button mDigit1;
     private final Button mDigit2;
     private final Button mDigit3;
@@ -31,10 +32,13 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
+
+        mDigitGroup = itemView.findViewById(R.id.toggleButton);
         mDigit1 = itemView.findViewById(R.id.digit1);
         mDigit2 = itemView.findViewById(R.id.digit2);
         mDigit3 = itemView.findViewById(R.id.digit3);
         mDigit4 = itemView.findViewById(R.id.digit4);
+
         //mChannelValue = itemView.findViewById(R.id.value);
     }
 
@@ -44,7 +48,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     public void increaseVisibility(Context context) {
         mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
-        //mContainer.setBackground(context.getResources().getDrawable(R.drawable.item_background));
+        //mContainer.setBackground(context.getResources().getDrawable(R.drawable.background_item));
     }
 
     public void decreaseVisibility() {
@@ -64,15 +68,60 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mDigit4.setText(String.valueOf(digits[4]));
     }
 
-    public void setInteractions(Context context, Channel channel){
+    public void setInteractions(MainBoardAdapterView adapter, Context context, Channel channel, int position){
 
         mChannelActivation.setOnClickListener(v -> {
             channel.setActive(!channel.isActive());
+
             mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
 
-            ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannel(channel.getId()).setActive(channel.isActive());
+            ((BluetoothParent) context).getGenerator().getChannel(channel.getId()).setActive(channel.isActive());
 
-            ((BluetoothParent) Objects.requireNonNull(context)).sendData((new Channel()).setId(channel.getId()).setActive(channel.isActive()));
+            ((BluetoothParent) context).sendData((new Channel()).setId(channel.getId()).setActive(channel.isActive()));
         });
+
+        mDigitGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                Log.d("testy", "active digit "+checkedId+" du canal "+position);
+
+                if (adapter.getDigitSelected() != -1) {//décoche précédent
+                    group.uncheck(adapter.getDigitSelected());
+                }
+                adapter.setDigitSelected(checkedId);
+            }
+            else {
+                Log.d("testy", "désactive digit "+checkedId+" du canal "+position);
+                adapter.setDigitSelected(-1);
+            }
+            //if (adapter.getDigitSelected() != -1) adapter.notifyItemChanged(adapter.getFocusedIndex());//uncheck last checked?
+
+            //adapter.setFocusedIndex(position);
+            //adapter.setDigitSelected(isChecked ? checkedId : -1);
+
+            //if (group.getCheckedButtonId() == -1) group.check(checkedId);
+        });
+        //mDigitGroup.getChildAt(1).setOnClickListener();
+        /*
+        mDigit1.setOnClickListener(v -> {
+            mDigitGroup.clearChecked();
+            mDigitGroup.check(0);
+        });
+
+        mDigit2.setOnClickListener(v -> {
+            mDigitGroup.clearChecked();
+            mDigitGroup.
+        });
+
+        mDigit3.setOnClickListener(v -> {
+            mDigitGroup.clearChecked();
+            mDigitGroup.check(2);
+        });
+
+        mDigit4.setOnClickListener(v -> {
+            mDigitGroup.clearChecked();
+            mDigitGroup.check(3);
+        });
+
+         */
     }
 }
