@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,12 +26,15 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     private final Button mDigit2;
     private final Button mDigit3;
     private final Button mDigit4;
+    private Button mPlus;
+    private Button mMoins;
     //private final TextView mChannelValue;
 
     public MainBoardViewHolder(@NonNull View itemView) {
         super(itemView);
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
+        //mAllOn = itemView.findViewById(R.id.AllOn);
         mDigit1 = itemView.findViewById(R.id.digit1);
         mDigit2 = itemView.findViewById(R.id.digit2);
         mDigit3 = itemView.findViewById(R.id.digit3);
@@ -64,15 +68,23 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mDigit4.setText(String.valueOf(digits[4]));
     }
 
-    public void setInteractions(Context context, Channel channel){
+    public void setInteractions(Context context, Channel channel, View mainView){
 
         mChannelActivation.setOnClickListener(v -> {
             channel.setActive(!channel.isActive());
             mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
+            //Log.d("testy",((ToggleButton) v.findViewById(R.id.AllOff)).isChecked()+"");
+            ((ToggleButton) mainView.findViewById(R.id.AllOn)).setChecked(false);
+            ((ToggleButton) mainView.findViewById(R.id.AllOff)).setChecked(false);
 
             ((BluetoothParent) Objects.requireNonNull(context)).getGenerator().getChannel(channel.getId()).setActive(channel.isActive());
 
             ((BluetoothParent) Objects.requireNonNull(context)).sendData((new Channel()).setId(channel.getId()).setActive(channel.isActive()));
         });
+
+        /*mPlus = mainView.findViewById(R.id.plus);
+        mPlus.setOnClickListener(v -> {
+            Log.d("testy", "viewholder click on plus");
+        });*/
     }
 }

@@ -18,13 +18,15 @@ import fr.yncrea.m1_s1project_android.models.Channel;
 
 public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> {
     private final Context mContext;
+    private final View mView;
     private final ArrayList<Channel> mChannelList;
 
     private int mFocusedIndex = -1;//initial
     private int mDigitSelected = -1;
 
-    public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList) {
+    public MainBoardAdapterView(Context mContext, ArrayList<Channel> channelList, View view) {
         this.mContext = mContext;
+        this.mView = view;
         this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
     }
 
@@ -56,7 +58,15 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     @Override
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
         holder.setInitialDisplay(mContext, mChannelList.get(position));
-        holder.setInteractions(mContext, mChannelList.get(position));
+        holder.setInteractions(mContext, mChannelList.get(position), mView);
+        mView.findViewById(R.id.plus).setOnClickListener(v -> {
+            Log.d("testy", "adapterview click on plus " + position);
+            mDigitSelected = 1;
+        });
+        mView.findViewById(R.id.moins).setOnClickListener(v -> {
+            Log.d("testy", "adapterview click on moins " + position);
+            mDigitSelected = 1;
+        });
 
         holder.getContainer().setOnClickListener(view -> {
             if (mFocusedIndex != position) {

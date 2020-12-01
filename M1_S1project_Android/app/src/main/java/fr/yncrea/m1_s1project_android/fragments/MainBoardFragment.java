@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -74,12 +75,12 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
 
         RecyclerView rv = view.findViewById(R.id.mainboard_recycler);
         mAdapter = new MainBoardAdapterView(getContext(),
-                ((BluetoothParent) activity).getGenerator().getChannelList());
+                ((BluetoothParent) activity).getGenerator().getChannelList(), view);
         rv.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
         rv.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-
+        // Listeners
         mAllOnBtn = view.findViewById(R.id.AllOn);
         mAllOnBtn.setOnClickListener(v -> {
             if(mAllOnBtn.isChecked()){
@@ -99,6 +100,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren {
                 ((BluetoothParent) activity).sendData((new Channel()).setId(-1).setActive(false));
                 mAdapter.notifyDataSetChanged();
             }
+
 
         });
 
