@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -62,13 +64,16 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        String[] slotArray = {"Android","IPhone","WindowsMobile","Blackberry",
-                "WebOS","Ubuntu","Windows7","Max OS X"};
+        String[] slotArray = {"Slot 0","Slot 1","Slot 2","Slot 3", "Slot 4","Slot 5","Slot 6","Slot 7", "Slot 0","Slot 1","Slot 2","Slot 3", "Slot 4","Slot 5","Slot 6","Slot 7", "Slot 0","Slot 1","Slot 2","Slot 3", "Slot 4","Slot 5","Slot 6","Slot 7"};
 
-        ArrayAdapter bAdapter = new ArrayAdapter<String>(getContext(), R.layout.slot_item, slotArray);
+        ArrayAdapter bAdapter = new ArrayAdapter<>(getContext(), R.layout.slot_item, slotArray);
 
         ListView slotList = (ListView) view.findViewById(R.id.defaultTextview);
         slotList.setAdapter(bAdapter);
+        bAdapter.notifyDataSetChanged();
+        slotList.setOnItemClickListener((AdapterView<?> parent, View view1, int position, long id) -> {
+            Log.d("testy", ""+id);
+        });
 
         /*Activity activity = Objects.requireNonNull(getActivity());
         RecyclerView slotRecycler = view.findViewById(R.id.slotRecycler);

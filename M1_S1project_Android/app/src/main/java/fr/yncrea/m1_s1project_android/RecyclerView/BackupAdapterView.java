@@ -29,6 +29,6 @@ public class BackupAdapterView extends RecyclerView.Adapter<BackupViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 0;
     }
 }
