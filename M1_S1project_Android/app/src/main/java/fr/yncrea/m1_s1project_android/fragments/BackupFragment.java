@@ -2,7 +2,10 @@ package fr.yncrea.m1_s1project_android.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import com.google.gson.JsonObject;
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.RecyclerView.BackupAdapterView;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Generator;
@@ -55,6 +59,14 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
+
+        Activity activity = Objects.requireNonNull(getActivity());
+
+        RecyclerView slotRecycler = view.findViewById(R.id.slotRecycler);
+        BackupAdapterView backupAdapter = new BackupAdapterView();
+        slotRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        slotRecycler.setAdapter(backupAdapter);
+        backupAdapter.notifyDataSetChanged();
 
         return view;
     }
