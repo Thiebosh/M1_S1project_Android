@@ -45,10 +45,19 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         digitsIds = new ArrayList<>(Arrays.asList(mDigit1.getId(), mDigit2.getId(), mDigit3.getId(), mDigit4.getId()));
     }
 
-    public void setInitialDisplay(Context context, Channel channel) {
+    public void setInitialDisplay(MainBoardAdapterView adapter, Context context, Channel channel) {
         mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
         mChannelActivation.setText(context.getString(R.string.input, channel.getId()));
         setDigitsDisplay(channel.getCurrentValue());
+
+        /*
+        if (getAdapterPosition() == adapter.getFocusedIndex()) {
+            //increaseVisibility(context);
+            if (adapter.getDigitSelected() != -1) {
+                mDigitGroup.check(adapter.getDigitSelected());
+            }
+        }
+         */
     }
 
     public void setInteractions(MainBoardAdapterView adapter, Context context, View mainView, Channel channel, int position) {

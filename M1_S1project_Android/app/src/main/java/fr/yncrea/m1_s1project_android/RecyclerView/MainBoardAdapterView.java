@@ -13,13 +13,15 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButtonToggleGroup;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
+
+import static java.lang.Math.pow;
 
 public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> implements View.OnKeyListener {
     private final Context mContext;
@@ -65,7 +67,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
-        holder.setInitialDisplay(mContext, mChannelList.get(position));
+        holder.setInitialDisplay(this, mContext, mChannelList.get(position));
         holder.setInteractions(this, mContext, mView, mChannelList.get(position), position);
 
         mMinimum = mView.findViewById(R.id.minInputSelected);
@@ -75,22 +77,63 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         mMaximum.setOnKeyListener(this);
         mMinimum.setOnKeyListener(this);
         mSelection.setOnKeyListener(this);
+        /* //peut remplacer les this
+        new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                return false;
+            }
+        };
+        */
 
-        mView.findViewById(R.id.moins).setOnClickListener(v -> {
-            Log.d("testy", "adapterview click on moins " + position);
-            //mDigitSelected = 1;
-            /*if(mFocusedIndex != -1){
-                switch (mDigitSelected){
-                    case 2131296395:
-                        mChannelList.get(mFocusedIndex).setCurrentValue(mChannelList.get(mFocusedIndex).getCurrentValue()-0.001);
-                        Log.d("testy", "moins 0,001");
-                        notifyDataSetChanged();
-                        break;
+        mView.findViewById(R.id.moins).setOnClickListener(v -> crement(holder, -1));
+        mView.findViewById(R.id.plus).setOnClickListener(v -> crement(holder, +1));
+    }
 
+    private void crement(final MainBoardViewHolder holder, final int step) {
+        if (mFocusedIndex != -1) {
+            StringBuilder tmp = new StringBuilder(String.valueOf(mChannelList.get(mFocusedIndex).getCurrentValue()));
+            while (tmp.length() < 5) tmp.append('0');
+            char[] digits = tmp.toString().toCharArray();
+
+            //cause approx issues
+            //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -mDigitSelected))).setScale(3, RoundingMode.CEILING).toString());
+
+            int digit = mDigitSelected + (mDigitSelected == 0 ? 0 : 1);
+
+            int number = Character.getNumericValue(digits[digit]) + step;
+
+            if (number > 9) {
+                while (number > 9 && digit > 0) {//tant que retenue
+                    number -= 10;
+                    digits[digit] = Character.forDigit(number, 10);//base 10
+
+                    if (digit == 2) --digit;//saute le point
+                    number = Character.getNumericValue(digits[--digit]) + 1;//prend digit précédent
                 }
-            }*/
+                if (number < 10) digits[digit] = Character.forDigit(number, 10);//protège digit 0
+            }
+            else if (number < 0) {
+                //prend un au parent le plus proche
+                //met des neuf aux enfants du parent
+            }
+            else {
+                digits[digit] = Character.forDigit(number, 10);
+            }
 
-        });
+            double numerical = Double.parseDouble(new String(digits));
+
+            Log.d("testy", numerical+"");
+            mChannelList.get(mFocusedIndex).setCurrentValue(numerical);
+
+
+/*            holder.setDigitsDisplay(value);
+            //notifyItemChanged(mFocusedIndex);
+            mChannelList.get(mFocusedIndex).setCurrentValue(value);
+            ((BluetoothParent) mContext).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));
+
+ */
+        }
     }
 
     @Override
@@ -99,8 +142,9 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     }
 
     public MainBoardViewHolder getFocusedViewHolder() {
-        //quand scroll, décale indices
+        //quand scroll, décale indices ?
         RecyclerView recycler = mView.findViewById(R.id.mainboard_recycler);
+        //recycler.getChildCount();
         return (MainBoardViewHolder) recycler.getChildViewHolder(recycler.getChildAt(mFocusedIndex));
     }
 
