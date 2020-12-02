@@ -47,12 +47,13 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     public void increaseVisibility(Context context) {
         mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
         //mContainer.setBackground(context.getResources().getDrawable(R.drawable.background_item));
-        //mDigitGroup.setSelectionRequired(true);
+        mDigitGroup.setSelectionRequired(true);
     }
 
     public void decreaseVisibility() {
         mContainer.setBackgroundColor(Color.TRANSPARENT);
-        //mDigitGroup.setSelectionRequired(false);
+        mDigitGroup.setSelectionRequired(false);
+        mDigitGroup.clearChecked();
     }
 
     public void setInitialDisplay(Context context, Channel channel) {

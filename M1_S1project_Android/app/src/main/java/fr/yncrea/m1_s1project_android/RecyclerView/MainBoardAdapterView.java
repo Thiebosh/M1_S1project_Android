@@ -112,12 +112,6 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     public void setFocusedIndex(final int index) {
         mFocusedIndex = index;
 
-        /*
-        ((EditText) mView.findViewById(R.id.selectedInput)).setHint("value for channel "+index);
-        ((EditText) mView.findViewById(R.id.minInputSelected)).setHint(String.valueOf(mChannelList.get(index).getMinValue()));
-        ((EditText) mView.findViewById(R.id.maxInputSelected)).setHint(String.valueOf(mChannelList.get(index).getMaxValue()));
-        */
-
         mSelection.setEnabled(true);
         mSelection.setText(String.valueOf(mChannelList.get(mFocusedIndex).getCurrentValue()));
         mMinimum.setEnabled(true);
