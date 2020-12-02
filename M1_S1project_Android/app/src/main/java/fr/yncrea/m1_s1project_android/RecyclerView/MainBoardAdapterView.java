@@ -99,8 +99,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     }
 
     public MainBoardViewHolder getFocusedViewHolder() {
-        //if pas à l'écran, modifie pas à la main mais avec un update
-
+        //quand scroll, décale indices
         RecyclerView recycler = mView.findViewById(R.id.mainboard_recycler);
         return (MainBoardViewHolder) recycler.getChildViewHolder(recycler.getChildAt(mFocusedIndex));
     }
