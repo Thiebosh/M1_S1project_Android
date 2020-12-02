@@ -386,6 +386,7 @@ public class BluetoothService {
 
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
+                Log.d("bluetoothReception", "ready");
                 try {
                     buffer = new byte[100];
                     bytes = mmInStream.read(buffer);
@@ -393,7 +394,7 @@ public class BluetoothService {
                     if (bytes != 0) {
                         String tmp = new String(buffer, 0, bytes);
                         str += tmp;
-                        Log.d("testy", tmp);
+                        Log.d("bluetoothReception", tmp);
 
                         for (char c : tmp.toCharArray()) {
                             if (c == '{') brackets++;

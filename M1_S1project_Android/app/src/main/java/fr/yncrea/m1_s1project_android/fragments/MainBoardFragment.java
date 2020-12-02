@@ -6,14 +6,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Objects;
@@ -37,7 +33,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren, Vi
 
     @Override
     public void applyChanges(Generator generator, int index) {
-        mAdapter.updateChannelList(generator.getChannelList(), index);
+        mAdapter.updateChannelListData(generator.getChannelList(), index);
         if (index == -1) {
             if (generator.getChannel(0).isActive()) {
                 mAllOnBtn.setChecked(true);
