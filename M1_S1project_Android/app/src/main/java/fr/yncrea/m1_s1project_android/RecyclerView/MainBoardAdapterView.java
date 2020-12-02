@@ -6,12 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.JsonObject;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.ArrayList;
 
@@ -23,11 +22,11 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     private final View mView;
     private final ArrayList<Channel> mChannelList;
 
-    private int mFocusedIndex = -1;//initial
+    private int mFocusedIndex = -1;
     private int mDigitSelected = -1;
 
-    public MainBoardAdapterView(Context mContext, View view, ArrayList<Channel> channelList) {
-        this.mContext = mContext;
+    public MainBoardAdapterView(Context context, View view, ArrayList<Channel> channelList) {
+        this.mContext = context;
         this.mView = view;
         this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
     }
@@ -60,33 +59,27 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
         holder.setInitialDisplay(mContext, mChannelList.get(position));
         holder.setInteractions(this, mContext, mView, mChannelList.get(position), position);
+
         mView.findViewById(R.id.plus).setOnClickListener(v -> {
             Log.d("testy", "adapterview click on plus " + position);
-            mDigitSelected = 1;
+            //mDigitSelected = 1;
         });
         mView.findViewById(R.id.moins).setOnClickListener(v -> {
             Log.d("testy", "adapterview click on moins " + position);
-            mDigitSelected = 1;
+            //mDigitSelected = 1;
         });
-
-        holder.getContainer().setOnClickListener(view -> {
-            if (mFocusedIndex != position) {
-                if (mFocusedIndex != -1) MainBoardAdapterView.this.notifyItemChanged(mFocusedIndex);//to decrease visibility
-                MainBoardAdapterView.this.notifyItemChanged(position);//to increase visibility
-                mFocusedIndex = position;
-
-                ((EditText) mView.findViewById(R.id.selectedInput)).setHint("value for channel "+mFocusedIndex);
-                ((EditText) mView.findViewById(R.id.minInputSelected)).setHint(String.valueOf(mChannelList.get(mFocusedIndex).getMinValue()));
-                ((EditText) mView.findViewById(R.id.maxInputSelected)).setHint(String.valueOf(mChannelList.get(mFocusedIndex).getMaxValue()));
-            }
-        });
-        if (position == mFocusedIndex) holder.increaseVisibility(mContext);
-        else holder.decreaseVisibility();
     }
 
     @Override
     public int getItemCount() {
         return mChannelList.size();
+    }
+
+    public MainBoardViewHolder getFocusedViewHolder() {
+        //if pas à l'écran, modifie pas à la main mais avec un update
+
+        RecyclerView recycler = mView.findViewById(R.id.mainboard_recycler);
+        return (MainBoardViewHolder) recycler.getChildViewHolder(recycler.getChildAt(mFocusedIndex));
     }
 
     public int getFocusedIndex() {
@@ -95,6 +88,10 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     public void setFocusedIndex(final int index) {
         mFocusedIndex = index;
+
+        ((EditText) mView.findViewById(R.id.selectedInput)).setHint("value for channel "+index);
+        ((EditText) mView.findViewById(R.id.minInputSelected)).setHint(String.valueOf(mChannelList.get(index).getMinValue()));
+        ((EditText) mView.findViewById(R.id.maxInputSelected)).setHint(String.valueOf(mChannelList.get(index).getMaxValue()));
     }
 
     public int getDigitSelected() {

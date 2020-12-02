@@ -69,7 +69,7 @@
             app:layout_constraintEnd_toStartOf="@+id/scaleSpinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/scaleSpinner"
-            app:selectionRequired="true"
+            app:selectionRequired="false"
             app:singleSelection="true">
 
             <Button
