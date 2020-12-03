@@ -12,16 +12,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.google.gson.JsonObject;
 
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
-import fr.yncrea.m1_s1project_android.RecyclerView.BackupAdapterView;
+import fr.yncrea.m1_s1project_android.RecyclerView.SlotListView;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Generator;
 
 /**
@@ -64,7 +60,7 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         Activity activity = Objects.requireNonNull(getActivity());
 
         RecyclerView slotRecycler = view.findViewById(R.id.slotRecycler);
-        BackupAdapterView backupAdapter = new BackupAdapterView();
+        SlotListView backupAdapter = new SlotListView();
         slotRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         slotRecycler.setAdapter(backupAdapter);
         slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));
