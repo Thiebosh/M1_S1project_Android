@@ -61,7 +61,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
-        holder.setInitialDisplay(this, mContext, mChannelList.get(position), position);
+        holder.setInitialDisplay(this, mContext, mChannelList.get(position));
         holder.setInteractions(this, mContext, mChannelList.get(position), position);
 
         View.OnKeyListener keyListener = (view, keyCode, event) -> {
