@@ -2,19 +2,16 @@ package fr.yncrea.m1_s1project_android.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
@@ -64,23 +61,14 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        String[] slotArray = {"Slot 0","Slot 1","Slot 2","Slot 3", "Slot 4","Slot 5","Slot 6","Slot 7", "Slot 0","Slot 1","Slot 2","Slot 3", "Slot 4","Slot 5","Slot 6","Slot 7", "Slot 0","Slot 1","Slot 2","Slot 3", "Slot 4","Slot 5","Slot 6","Slot 7"};
+        Activity activity = Objects.requireNonNull(getActivity());
 
-        ArrayAdapter bAdapter = new ArrayAdapter<>(getContext(), R.layout.slot_item, slotArray);
-
-        ListView slotList = (ListView) view.findViewById(R.id.defaultTextview);
-        slotList.setAdapter(bAdapter);
-        bAdapter.notifyDataSetChanged();
-        slotList.setOnItemClickListener((AdapterView<?> parent, View view1, int position, long id) -> {
-            Log.d("testy", ""+id);
-        });
-
-        /*Activity activity = Objects.requireNonNull(getActivity());
         RecyclerView slotRecycler = view.findViewById(R.id.slotRecycler);
         BackupAdapterView backupAdapter = new BackupAdapterView();
         slotRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         slotRecycler.setAdapter(backupAdapter);
-        backupAdapter.notifyDataSetChanged();*/
+        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));
+        backupAdapter.notifyDataSetChanged();
 
         return view;
     }
