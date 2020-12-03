@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +24,13 @@ public class BackupAdapterView extends RecyclerView.Adapter<BackupViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BackupViewHolder holder, int position) {
-        holder.setBackupDisplay();
+        holder.setBackupDisplay(holder.itemView.getContext(), position);
+        //((TextView)holder.itemView.findViewById(R.id.slot_textview)).setText(R.string.app_name);
 
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 8;
     }
 }

@@ -2,6 +2,7 @@ package fr.yncrea.m1_s1project_android.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,6 +67,7 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         BackupAdapterView backupAdapter = new BackupAdapterView();
         slotRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         slotRecycler.setAdapter(backupAdapter);
+        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));
         backupAdapter.notifyDataSetChanged();
 
         return view;

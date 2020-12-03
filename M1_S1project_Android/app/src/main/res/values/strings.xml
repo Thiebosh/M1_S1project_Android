@@ -59,5 +59,6 @@
     <!-- Fragment Backup -->
     <string name="frag_back_tmp">Backup screen</string>
     <string name="togglebutton">ToggleButton</string>
+    <string name="slot">Slot <xliff:g id="id_channel">%1$d</xliff:g></string>
 
 </resources>

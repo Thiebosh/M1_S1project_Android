@@ -1,5 +1,6 @@
 package fr.yncrea.m1_s1project_android.RecyclerView;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,8 +17,8 @@ public class BackupViewHolder extends RecyclerView.ViewHolder {
         slotText = itemView.findViewById(R.id.slot_textview);
     }
 
-    public void setBackupDisplay(){
-        slotText.setText(R.string.app_name);
+    public void setBackupDisplay(Context context, int pos){
+        slotText.setText(context.getString(R.string.slot, pos));
 
     }
 }
