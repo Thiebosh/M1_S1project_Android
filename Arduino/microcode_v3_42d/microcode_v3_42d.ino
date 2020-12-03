@@ -283,6 +283,7 @@ void setup() {
 
 
   //Deserialisation
+  /*
   {
     const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3) + 30;
     DynamicJsonDocument doc(capacity);
@@ -322,6 +323,7 @@ void setup() {
     
     serializeJson(doc, Serial);
   }
+  */
   // alternative à serialisation : 
   // Convert the document to an object
   //JsonObject obj = doc.to<JsonObject>();
