@@ -2,6 +2,7 @@ package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ToggleButton;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.ArrayList;
@@ -23,14 +25,14 @@ import fr.yncrea.m1_s1project_android.models.Channel;
 public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     private final ConstraintLayout mContainer;
-    private final Button mChannelActivation;
+    private final MaterialButton mChannelActivation;
 
     private final MaterialButtonToggleGroup mDigitGroup;
     private final ArrayList<Integer> digitsIds;
-    private final Button mDigit1;
-    private final Button mDigit2;
-    private final Button mDigit3;
-    private final Button mDigit4;
+    private final MaterialButton mDigit1;
+    private final MaterialButton mDigit2;
+    private final MaterialButton mDigit3;
+    private final MaterialButton mDigit4;
 
     public MainBoardViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -106,9 +108,11 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setDigitsDisplay(final double value) {
+        Log.d("testy", "update display with "+value);
         StringBuilder tmp = new StringBuilder(String.valueOf(value));
         while (tmp.length() < 5) tmp.append('0');
         char[] digits = tmp.toString().toCharArray();
+
         mDigit1.setText(String.valueOf(digits[0]));
         mDigit2.setText(String.valueOf(digits[2]));
         mDigit3.setText(String.valueOf(digits[3]));

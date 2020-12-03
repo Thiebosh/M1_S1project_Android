@@ -2,8 +2,6 @@ package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
 import android.os.Vibrator;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,15 +13,12 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 
-import static java.lang.Math.pow;
 
 public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> implements View.OnKeyListener {
     private final Context mContext;
@@ -154,13 +149,12 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
             else digits[digit] = Character.forDigit(number, 10);
 
             double value = Double.parseDouble(new String(digits));
-            Log.d("testy", value+"");
 
+            mSelection.setText(String.valueOf(value));
             holder.setDigitsDisplay(value);
             //notifyItemChanged(mFocusedIndex);
             mChannelList.get(mFocusedIndex).setCurrentValue(value);
             ((BluetoothParent) mContext).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));
-
         }
     }
 
