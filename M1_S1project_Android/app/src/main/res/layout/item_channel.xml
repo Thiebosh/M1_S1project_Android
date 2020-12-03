@@ -72,32 +72,32 @@
             app:selectionRequired="false"
             app:singleSelection="true">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/digit1"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="." />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/digit2"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/digit3"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/digit4"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"

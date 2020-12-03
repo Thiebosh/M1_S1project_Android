@@ -2,10 +2,8 @@ package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -29,13 +27,14 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
 
     private final MaterialButtonToggleGroup mDigitGroup;
     private final ArrayList<Integer> digitsIds;
-    private final MaterialButton mDigit1;
-    private final MaterialButton mDigit2;
-    private final MaterialButton mDigit3;
-    private final MaterialButton mDigit4;
+    private final Button mDigit1;
+    private final Button mDigit2;
+    private final Button mDigit3;
+    private final Button mDigit4;
 
     public MainBoardViewHolder(@NonNull View itemView) {
         super(itemView);
+
         mContainer = itemView.findViewById(R.id.item_channel_container);
         mChannelActivation = itemView.findViewById(R.id.activation);
 
@@ -52,21 +51,20 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelActivation.setText(context.getString(R.string.input, channel.getId()));
         setDigitsDisplay(channel.getCurrentValue());
 
-
-        if (getAdapterPosition() == adapter.getFocusedIndex()) {
-            if (adapter.getDigitSelected() == -1) increaseVisibility(context);
-            else mDigitGroup.check(adapter.getDigitSelected());
+        if (adapter.getLastHolderSelected() == this) {
+            if (adapter.getDigitSelected() == -1) mContainer.callOnClick();
+            else mDigitGroup.check(adapter.getDigitSelected());//englobe
         }
     }
 
-    public void setInteractions(MainBoardAdapterView adapter, Context context, View mainView, Channel channel, int position) {
+    public void setInteractions(MainBoardAdapterView adapter, Context context, Channel channel, int position) {
         mChannelActivation.setOnClickListener(v -> {
             channel.setActive(!channel.isActive());
 
-            mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
+            adapter.getAllOn().setChecked(false);
+            adapter.getAllOff().setChecked(false);
 
-            ((ToggleButton) mainView.findViewById(R.id.AllOn)).setChecked(false);
-            ((ToggleButton) mainView.findViewById(R.id.AllOff)).setChecked(false);
+            mChannelActivation.setBackgroundColor(context.getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
 
             ((BluetoothParent) context).getGenerator().getChannel(channel.getId()).setActive(channel.isActive());
 
@@ -74,38 +72,35 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         });
 
         mContainer.setOnClickListener(v -> {
-            if (adapter.getFocusedIndex() != -1) adapter.getFocusedViewHolder().decreaseVisibility();
-            increaseVisibility(context);
-            adapter.setFocusedIndex(position);
+            //if (this != adapter.getLastHolderSelected()) {//pour empecher deselection de digit
+            if (adapter.getLastHolderSelected() != null)
+                adapter.getLastHolderSelected().decreaseVisibility();
+
+            mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+            //mContainer.setBackground(context.getResources().getDrawable(R.drawable.background_item));
+
+            mDigitGroup.setSelectionRequired(true);
+
+            adapter.setLastHolderSelected(this, channel, position);
+            //}
         });
 
         mDigitGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
-                if (position != adapter.getFocusedIndex()) {
-                    if (adapter.getFocusedIndex() != -1) {
-                        adapter.getFocusedViewHolder().mDigitGroup.uncheck(digitsIds.get(adapter.getDigitSelected()));
-                    }
-                    mContainer.callOnClick();//update focused index
-                }
+                if (this != adapter.getLastHolderSelected()) mContainer.callOnClick();
                 adapter.setDigitSelected(digitsIds.indexOf(checkedId));
             }
         });
     }
 
-    public void increaseVisibility(Context context) {
-        mContainer.setBackgroundColor(context.getResources().getColor(R.color.yellow));
-        //mContainer.setBackground(context.getResources().getDrawable(R.drawable.background_item));
-        mDigitGroup.setSelectionRequired(true);
-    }
-
-    public void decreaseVisibility() {
+    public void decreaseVisibility() {//appel par un autre holder
         mContainer.setBackgroundColor(Color.TRANSPARENT);
+
         mDigitGroup.setSelectionRequired(false);
         mDigitGroup.clearChecked();
     }
 
     public void setDigitsDisplay(final double value) {
-        Log.d("testy", "update display with "+value);
         StringBuilder tmp = new StringBuilder(String.valueOf(value));
         while (tmp.length() < 5) tmp.append('0');
         char[] digits = tmp.toString().toCharArray();
