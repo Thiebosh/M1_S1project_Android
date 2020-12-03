@@ -1,6 +1,7 @@
 package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -98,7 +99,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     private void crement(final MainBoardViewHolder holder, final int step) {
         if (mFocusedIndex != -1) {
-            (step > 0 ? mMoins : mPlus).setActivated(true);
+            (step > 0 ? mMoins : mPlus).setEnabled(true);
 
             //cause approx issues
             //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -mDigitSelected))).setScale(3, RoundingMode.CEILING).toString());
@@ -120,11 +121,15 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                     if (digit == 2) --digit;//saute le point
                     number = Character.getNumericValue(digits[--digit]) + 1;//prend digit précédent
                 }
-                if (number < 10) {
-                    digits[digit] = Character.forDigit(number, 10);//protège digit 0
-                    //bloquer bouton
-                    mPlus.setActivated(false);
-                    //vibration?
+                if (number < 10) digits[digit] = Character.forDigit(number, 10);//protège digit 0
+                else if (number == 10) {
+                    digits[0] = '9';
+                    digits[2] = '9';
+                    digits[3] = '9';
+                    digits[4] = '9';
+
+                    mPlus.setEnabled(false);
+                    ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
                 }
             }
             else if (number < 0) {
@@ -141,23 +146,21 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                     digits[2] = '0';
                     digits[3] = '0';
                     digits[4] = '0';
-                    //bloquer bouton
-                    mMoins.setActivated(false);
-                    //vibration?
+
+                    mMoins.setEnabled(false);
+                    ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
                 }
             }
             else digits[digit] = Character.forDigit(number, 10);
 
-            mChannelList.get(mFocusedIndex).setCurrentValue(Double.parseDouble(new String(digits)));
-            Log.d("testy", mChannelList.get(mFocusedIndex).getCurrentValue()+"");
+            double value = Double.parseDouble(new String(digits));
+            Log.d("testy", value+"");
 
-
-/*            holder.setDigitsDisplay(value);
+            holder.setDigitsDisplay(value);
             //notifyItemChanged(mFocusedIndex);
             mChannelList.get(mFocusedIndex).setCurrentValue(value);
             ((BluetoothParent) mContext).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));
 
- */
         }
     }
 
