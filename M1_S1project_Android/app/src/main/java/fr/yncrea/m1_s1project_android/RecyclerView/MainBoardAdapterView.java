@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,9 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     private EditText mMinimum;
     private EditText mMaximum;
     private EditText mSelection;
+
+    private Button mPlus;
+    private Button mMoins;
 
     public MainBoardAdapterView(Context context, View view, ArrayList<Channel> channelList) {
         this.mContext = context;
@@ -86,18 +90,23 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         };
         */
 
-        mView.findViewById(R.id.moins).setOnClickListener(v -> crement(holder, -1));
-        mView.findViewById(R.id.plus).setOnClickListener(v -> crement(holder, +1));
+        mPlus = mView.findViewById(R.id.plus);
+        mPlus.setOnClickListener(v -> crement(holder, +1));
+        mMoins = mView.findViewById(R.id.moins);
+        mMoins.setOnClickListener(v -> crement(holder, -1));
     }
 
     private void crement(final MainBoardViewHolder holder, final int step) {
         if (mFocusedIndex != -1) {
+            (step > 0 ? mMoins : mPlus).setActivated(true);
+
+            //cause approx issues
+            //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -mDigitSelected))).setScale(3, RoundingMode.CEILING).toString());
+
             StringBuilder tmp = new StringBuilder(String.valueOf(mChannelList.get(mFocusedIndex).getCurrentValue()));
             while (tmp.length() < 5) tmp.append('0');
             char[] digits = tmp.toString().toCharArray();
 
-            //cause approx issues
-            //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -mDigitSelected))).setScale(3, RoundingMode.CEILING).toString());
 
             int digit = mDigitSelected + (mDigitSelected == 0 ? 0 : 1);
 
@@ -111,20 +120,36 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                     if (digit == 2) --digit;//saute le point
                     number = Character.getNumericValue(digits[--digit]) + 1;//prend digit précédent
                 }
-                if (number < 10) digits[digit] = Character.forDigit(number, 10);//protège digit 0
+                if (number < 10) {
+                    digits[digit] = Character.forDigit(number, 10);//protège digit 0
+                    //bloquer bouton
+                    mPlus.setActivated(false);
+                    //vibration?
+                }
             }
             else if (number < 0) {
-                //prend un au parent le plus proche
-                //met des neuf aux enfants du parent
-            }
-            else {
-                digits[digit] = Character.forDigit(number, 10);
-            }
+                while (number < 0 && digit > 0) {//tant que retenue
+                    number += 10;
+                    digits[digit] = Character.forDigit(number, 10);//base 10
 
-            double numerical = Double.parseDouble(new String(digits));
+                    if (digit == 2) --digit;//saute le point
+                    number = Character.getNumericValue(digits[--digit]) - 1;//prend digit précédent
+                }
+                if (number > -1) digits[digit] = Character.forDigit(number, 10);//protège digit 0
+                else if (number == -1) {
+                    digits[0] = '0';
+                    digits[2] = '0';
+                    digits[3] = '0';
+                    digits[4] = '0';
+                    //bloquer bouton
+                    mMoins.setActivated(false);
+                    //vibration?
+                }
+            }
+            else digits[digit] = Character.forDigit(number, 10);
 
-            Log.d("testy", numerical+"");
-            mChannelList.get(mFocusedIndex).setCurrentValue(numerical);
+            mChannelList.get(mFocusedIndex).setCurrentValue(Double.parseDouble(new String(digits)));
+            Log.d("testy", mChannelList.get(mFocusedIndex).getCurrentValue()+"");
 
 
 /*            holder.setDigitsDisplay(value);
