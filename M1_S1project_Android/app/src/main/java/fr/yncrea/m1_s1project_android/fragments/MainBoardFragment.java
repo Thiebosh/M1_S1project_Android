@@ -11,6 +11,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import java.util.Objects;
 
@@ -72,7 +73,9 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren, Vi
         RecyclerView rv = view.findViewById(R.id.mainboard_recycler);
         mAdapter = new MainBoardAdapterView(getContext(), view, ((BluetoothParent) activity).getGenerator().getChannelList());
         rv.setAdapter(mAdapter);
+        ((SimpleItemAnimator) Objects.requireNonNull(rv.getItemAnimator())).setSupportsChangeAnimations(false);
         mAdapter.notifyDataSetChanged();
+
 
 
         // Listeners
