@@ -152,7 +152,6 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
             mSelection.setText(String.valueOf(value));
             holder.setDigitsDisplay(value);
-            //notifyItemChanged(mFocusedIndex);
             mChannelList.get(mFocusedIndex).setCurrentValue(value);
             ((BluetoothParent) mContext).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));
         }

@@ -52,14 +52,11 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelActivation.setText(context.getString(R.string.input, channel.getId()));
         setDigitsDisplay(channel.getCurrentValue());
 
-        /*
+
         if (getAdapterPosition() == adapter.getFocusedIndex()) {
-            //increaseVisibility(context);
-            if (adapter.getDigitSelected() != -1) {
-                mDigitGroup.check(adapter.getDigitSelected());
-            }
+            if (adapter.getDigitSelected() == -1) increaseVisibility(context);
+            else mDigitGroup.check(adapter.getDigitSelected());
         }
-         */
     }
 
     public void setInteractions(MainBoardAdapterView adapter, Context context, View mainView, Channel channel, int position) {
