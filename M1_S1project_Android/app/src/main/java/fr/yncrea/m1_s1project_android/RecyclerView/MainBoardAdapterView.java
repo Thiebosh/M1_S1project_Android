@@ -1,5 +1,6 @@
 package fr.yncrea.m1_s1project_android.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -61,22 +62,51 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
-        holder.setInitialDisplay(this, mContext, mChannelList.get(position), position);
+        holder.setInitialDisplay(this, mContext, mChannelList.get(position));
         holder.setInteractions(this, mContext, mChannelList.get(position), position);
 
-        View.OnKeyListener keyListener = (view, keyCode, event) -> {
+        @SuppressLint("NonConstantResourceId") View.OnKeyListener keyListener = (view, keyCode, event) -> {
             if(mFocusedIndex != -1 && keyCode == 66) {
-                double input = Double.parseDouble((mSelection.getText().toString()));
                 int id = view.getId();
-                if (id == R.id.minInputSelected && input != mChannelList.get(mFocusedIndex).getMinValue()) {
-                    mChannelList.get(mFocusedIndex).setMinValue(input);
-                    notifyItemChanged(mFocusedIndex);
-                } else if (id == R.id.maxInputSelected && input != mChannelList.get(mFocusedIndex).getMaxValue()) {
-                    mChannelList.get(mFocusedIndex).setMaxValue(input);
-                    notifyItemChanged(mFocusedIndex);
-                } else if (id == R.id.selectedInput && input != mChannelList.get(mFocusedIndex).getCurrentValue()) {
-                    mChannelList.get(mFocusedIndex).setCurrentValue(input);
-                    notifyItemChanged(mFocusedIndex);
+
+                double min = mChannelList.get(mFocusedIndex).getMinValue();
+                double max = mChannelList.get(mFocusedIndex).getMaxValue();
+                double current = mChannelList.get(mFocusedIndex).getCurrentValue();
+
+                double input = -1;
+                try {
+                    input = Double.parseDouble((((EditText) view).getText().toString()));
+                }
+                catch (Exception ignore) {
+                    switch(id) {
+                        case R.id.minInputSelected:
+                            input = min;
+                            break;
+                        case R.id.maxInputSelected:
+                            input = max;
+                            break;
+                        case R.id.selectedInput:
+                            input = current;
+                            break;
+                    }
+                    ((EditText) view).setText(String.valueOf(input));
+                    return false;
+                }
+
+                if (id == R.id.minInputSelected && input != min) {
+                    if (input < max) mChannelList.get(mFocusedIndex).setMinValue(input);
+                    else ((EditText) view).setText(String.valueOf(min));
+                }
+                else if (id == R.id.maxInputSelected && input != max) {
+                    if (input > min) mChannelList.get(mFocusedIndex).setMinValue(input);
+                    else ((EditText) view).setText(String.valueOf(max));
+                }
+                else if (id == R.id.selectedInput && input != current) {
+                    if (input >= min && input <= max) {
+                        mChannelList.get(mFocusedIndex).setCurrentValue(input);
+                        mLastHolderSelected.setDigitsDisplay(input);
+                    }
+                    else ((EditText) view).setText(String.valueOf(current));
                 }
             }
             return false;
@@ -178,6 +208,8 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
 
         int number = Character.getNumericValue(digits[digit]) + step;
 
+        boolean isMax = false;
+        boolean isMin = false;
         if (number > 9) {
             while (number > 9 && digit > 0) {//tant que retenue
                 number -= 10;
@@ -193,8 +225,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                 digits[3] = '9';
                 digits[4] = '9';
 
-                mPlus.setEnabled(false);
-                ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+                isMax = true;
             }
         } else if (number < 0) {
             while (number < 0 && digit > 0) {//tant que retenue
@@ -211,16 +242,25 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                 digits[3] = '0';
                 digits[4] = '0';
 
-                mMoins.setEnabled(false);
-                ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+                isMin = true;
             }
         } else digits[digit] = Character.forDigit(number, 10);
 
         double value = Double.parseDouble(new String(digits));
 
+        if (isMax || value >= mChannelList.get(mFocusedIndex).getMaxValue()) {
+            mPlus.setEnabled(false);
+            value = mChannelList.get(mFocusedIndex).getMaxValue();
+            ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+        }
+        else if (isMin || value <= mChannelList.get(mFocusedIndex).getMinValue()) {
+            mMoins.setEnabled(false);
+            value = mChannelList.get(mFocusedIndex).getMinValue();
+            ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+        }
+
         mSelection.setText(String.valueOf(value));
         mLastHolderSelected.setDigitsDisplay(value);
-
         mChannelList.get(mFocusedIndex).setCurrentValue(value);
 
         ((BluetoothParent) mContext).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));

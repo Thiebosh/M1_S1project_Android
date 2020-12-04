@@ -76,8 +76,6 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren, Vi
         ((SimpleItemAnimator) Objects.requireNonNull(rv.getItemAnimator())).setSupportsChangeAnimations(false);
         mAdapter.notifyDataSetChanged();
 
-
-
         // Listeners
         mAllOnBtn = view.findViewById(R.id.AllOn);
         mAllOnBtn.setOnClickListener(this);
@@ -91,9 +89,9 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren, Vi
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if(((ToggleButton) getView().findViewById(id)).isChecked()) {
+        if(((ToggleButton) Objects.requireNonNull(getView()).findViewById(id)).isChecked()) {
             ((ToggleButton) getView().findViewById(id == R.id.AllOn ? R.id.AllOff : R.id.AllOn)).setChecked(false);
-            ((BluetoothParent) getActivity()).getGenerator().setAllChannelActive(id == R.id.AllOn);
+            ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().setAllChannelActive(id == R.id.AllOn);
             ((BluetoothParent) getActivity()).sendData((new Channel()).setId(-1).setActive(id == R.id.AllOn));
             mAdapter.notifyDataSetChanged();
         }
