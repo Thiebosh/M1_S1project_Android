@@ -379,67 +379,35 @@ public class BluetoothService {
         }
 
         public void run() {
-            String str = "";
+            StringBuilder str = new StringBuilder();
             byte[] buffer;
             int bytes;
             int brackets = 0;
 
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
-                Log.d("bluetoothReception", "ready");
                 try {
                     buffer = new byte[100];
                     bytes = mmInStream.read(buffer);
 
                     if (bytes != 0) {
                         String tmp = new String(buffer, 0, bytes);
-                        str += tmp;
-                        Log.d("bluetoothReception", tmp);
+                        str.append(tmp);
 
                         for (char c : tmp.toCharArray()) {
                             if (c == '{') brackets++;
                             else if (c == '}') brackets--;
                         }
 
-
                         if (brackets == 0) {
                             Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
                             Bundle bundle = new Bundle();
-                            bundle.putString(BluetoothConstants.RECEIVE, str);
+                            bundle.putString(BluetoothConstants.RECEIVE, str.toString());
                             msg.setData(bundle);
                             mHandler.sendMessage(msg);
-                            str = "";
+                            str = new StringBuilder();
                         }
                     }
-
-
-                    /*
-                    //methode avec tel récent : attendre réception des données
-                    if((bytes = mmInStream.available()) != 0) {//début de transmission
-                        try {//laisse le temps de réceptionner les données
-                            ConnectedThread.sleep(10000);//pas d'alternative car pas de notif
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            //error message?
-                        }
-
-                        if (bytes == mmInStream.available()) {//fin de transmission
-                            // Read from the InputStream
-                            buffer = new byte[mmInStream.available()];//buffer for data complete
-                            bytes = mmInStream.read(buffer);//fill buffer by adress
-
-                            if (bytes == buffer.length) {//vérifie bonne réception
-                                // Send the obtained bytes to the UI Activity
-                                Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
-                                Bundle bundle = new Bundle();
-                                bundle.putString(BluetoothConstants.RECEIVE, new String(buffer));
-                                msg.setData(bundle);
-                                mHandler.sendMessage(msg);
-                            }
-                            //else error message?
-                        }
-                    }
-                    */
                 }
                 catch (IOException e) {
                     connectionClosed(mResources.getString(R.string.blt_disconnected));

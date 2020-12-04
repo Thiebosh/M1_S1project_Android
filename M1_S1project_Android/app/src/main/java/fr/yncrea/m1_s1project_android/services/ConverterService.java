@@ -6,10 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
-import fr.yncrea.m1_s1project_android.models.PowerSupply;
+import fr.yncrea.m1_s1project_android.models.Unit;
 import fr.yncrea.m1_s1project_android.models.Scale;
 
 
@@ -32,7 +31,7 @@ public class ConverterService {
         if (data.isSetCurrentValue()) json.addProperty("currentValue", data.getCurrentValue());
         if (data.isSetMinValue()) json.addProperty("minValue", data.getMinValue());
         if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
-        if (data.isSetType()) json.addProperty("type", data.getType().name());
+        if (data.isSetUnit()) json.addProperty("type", data.getUnit().name());
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
 
         return json.toString();
@@ -133,8 +132,8 @@ public class ConverterService {
         attribute = "type";
         if(data.has(attribute)){
             try {
-                PowerSupply tmp = PowerSupply.valueOf(data.get(attribute).getAsString());
-                generator.getChannel(channel).setType(tmp);
+                Unit tmp = Unit.valueOf(data.get(attribute).getAsString());
+                generator.getChannel(channel).setUnit(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);
