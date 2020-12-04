@@ -116,7 +116,9 @@ char* version_date = "28 may 2020";
 
 #define hc06 Serial1 // changement : define module bluetooth
 int intCmd = 0;
+int rep = 9;
 String strCmd = "";
+String str = "";
 
 /* objects definition */
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);  // TFT screen

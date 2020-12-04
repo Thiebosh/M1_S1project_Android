@@ -1,5 +1,7 @@
 package fr.yncrea.m1_s1project_android.interfaces;
 
+import android.content.res.Configuration;
+
 import androidx.fragment.app.Fragment;
 
 import java.util.Stack;
@@ -17,4 +19,5 @@ public interface FragmentSwitcher {
      */
 
     void loadFragment(final Fragment fragment, final boolean addToBackstack);
+
 }

@@ -174,6 +174,7 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         mPlus.setEnabled(false);
         mMoins.setEnabled(false);
 
+
         mSelection.setEnabled(true);
         mSelection.setText(String.valueOf(channel.getCurrentValue()));
         mMinimum.setEnabled(true);

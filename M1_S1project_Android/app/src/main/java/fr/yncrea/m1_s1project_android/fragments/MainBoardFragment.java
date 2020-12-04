@@ -1,6 +1,7 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +11,8 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
@@ -17,6 +20,7 @@ import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardAdapterView;
+import fr.yncrea.m1_s1project_android.RecyclerView.MainBoardViewHolder;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
@@ -25,6 +29,7 @@ import fr.yncrea.m1_s1project_android.models.Generator;
 public class MainBoardFragment extends Fragment implements BluetoothChildren, View.OnClickListener {
 
     private MainBoardAdapterView mAdapter;
+    private RecyclerView rv;
     private ToggleButton mAllOnBtn;
     private ToggleButton mAllOffBtn;
 
@@ -70,7 +75,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren, Vi
 
         Activity activity = Objects.requireNonNull(getActivity());
 
-        RecyclerView rv = view.findViewById(R.id.mainboard_recycler);
+        rv = view.findViewById(R.id.mainboard_recycler);
         mAdapter = new MainBoardAdapterView(getContext(), view, ((BluetoothParent) activity).getGenerator().getChannelList());
         rv.setAdapter(mAdapter);
         ((SimpleItemAnimator) Objects.requireNonNull(rv.getItemAnimator())).setSupportsChangeAnimations(false);
@@ -82,6 +87,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren, Vi
 
         mAllOffBtn = view.findViewById(R.id.AllOff);
         mAllOffBtn.setOnClickListener(this);
+
+        view.findViewById(R.id.minInputSelected);
 
         return view;
     }
