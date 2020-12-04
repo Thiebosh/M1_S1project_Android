@@ -3,18 +3,25 @@ package fr.yncrea.m1_s1project_android;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Objects;
 import java.util.Stack;
@@ -69,6 +76,45 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             mFragmentStack.pop();//ecran actuel
             loadFragment(mFragmentStack.peek(), true);//ecran précédent / can't be a String stack
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int i = 0;
+        Stack<Fragment> copy = new Stack<>();//(Stack<Fragment>) mFragmentStack.clone();
+
+        Fragment holder;
+        while (!mFragmentStack.empty()) {
+            holder = mFragmentStack.pop();
+            String simpleName = holder.getClass().getSimpleName();
+            if (MainBoardFragment.class.getSimpleName().equals(simpleName)) {
+                copy.push(new MainBoardFragment());
+            } else if (BackupFragment.class.getSimpleName().equals(simpleName)) {
+                copy.push(new BackupFragment());
+            } else {
+                copy.push(holder);
+            }
+            i++;
+        }
+        
+        //mFragmentStack.addAll(copy);
+        for(int j = 0; j < i; j++){
+            mFragmentStack.push(copy.pop());
+        }
+
+        loadFragment(mFragmentStack.peek(), true);
+
+/*
+        if (mFragmentStack.peek().getClass().getSimpleName().equals(MainBoardFragment.class.getSimpleName())) {
+            loadFragment(new MainBoardFragment(), true);
+        }
+        else{
+
+            loadFragment(mFragmentStack.peek(), true);
+        }
+*/
+
     }
 
     /*
@@ -282,6 +328,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
+
         String str = getString(R.string.blt_not_connected);
         Objects.requireNonNull(getSupportActionBar()).setSubtitle(str);
 
@@ -297,6 +344,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             // Otherwise, setup the bluetooth session
         }
         else if (mBluetoothService == null) setupBluetooth();
+        savedInstanceState = new Bundle();
     }
 
     @Override
@@ -323,5 +371,4 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
         super.onPause();
         disconnectDevice();
     }
-
 }

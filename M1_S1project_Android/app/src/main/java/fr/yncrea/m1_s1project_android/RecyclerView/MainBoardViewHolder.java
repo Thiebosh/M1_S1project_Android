@@ -2,6 +2,7 @@ package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
