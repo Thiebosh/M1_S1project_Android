@@ -36,7 +36,7 @@
         <Button
             android:id="@+id/digit1"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="@dimen/digit_720"
+            android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
 
         <Button
@@ -49,19 +49,19 @@
         <Button
             android:id="@+id/digit2"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="@dimen/digit_720"
+            android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/digit3"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="@dimen/digit_720"
+            android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/digit4"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="@dimen/digit_720"
+            android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
