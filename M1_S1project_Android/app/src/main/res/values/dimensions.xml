@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="digit">45dp</dimen>
-    <dimen name="digit_720">40dp</dimen>
+    <dimen name="digit_500">50dp</dimen>
 
     <dimen name="spinner_width">50dp</dimen>
     <dimen name="spinner_height">35dp</dimen>

@@ -393,6 +393,7 @@ public class BluetoothService {
                     if (bytes != 0) {
                         String tmp = new String(buffer, 0, bytes);
                         str.append(tmp);
+                        Log.d("testy", tmp);
 
                         for (char c : tmp.toCharArray()) {
                             if (c == '{') brackets++;
