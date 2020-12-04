@@ -28,6 +28,7 @@ public class SlotListView extends RecyclerView.Adapter<SlotListView.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.slot_item, parent, false);
+        //View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
         return new ViewHolder(view);
     }
 
@@ -35,6 +36,7 @@ public class SlotListView extends RecyclerView.Adapter<SlotListView.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //setBackupDisplay(holder.itemView.getContext(), position);
         holder.slotText.setText(holder.itemView.getContext().getString(R.string.slot, position));
+        //((TextView)holder.itemView).setText(holder.itemView.getContext().getString(R.string.slot, position));
         //((TextView)holder.itemView.findViewById(R.id.slot_textview)).setText(R.string.app_name);
     }
 
