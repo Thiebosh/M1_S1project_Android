@@ -6,10 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
-import fr.yncrea.m1_s1project_android.models.PowerSupply;
+import fr.yncrea.m1_s1project_android.models.Unit;
 import fr.yncrea.m1_s1project_android.models.Scale;
 
 
@@ -133,7 +132,7 @@ public class ConverterService {
         attribute = "type";
         if(data.has(attribute)){
             try {
-                PowerSupply tmp = PowerSupply.valueOf(data.get(attribute).getAsString());
+                Unit tmp = Unit.valueOf(data.get(attribute).getAsString());
                 generator.getChannel(channel).setType(tmp);
             }
             catch (Exception ignore) {

@@ -36,17 +36,7 @@
     <string name="input">Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="max">Max.</string>
     <string name="min">Min.</string>
-
-    <string-array name="scale_arrays">
-        <item>_</item>
-        <item>m</item>
-        <item>u</item>
-    </string-array>
-
-    <string-array name="type_arrays">
-        <item>V</item>
-        <item>I</item>
-    </string-array>
+    <string name="comma">.</string>
 
     <!-- Fragment Backup -->
     <string name="frag_back_tmp">Écran des sauvegardes</string>

@@ -44,7 +44,7 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="." />
+            android:text="@string/comma" />
 
         <Button
             android:id="@+id/digit2"
@@ -72,21 +72,19 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/background_spinner"
-        android:entries="@array/scale_arrays"
         android:gravity="start"
         android:popupBackground="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/typeSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/unitSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/typeSpinner"
+        android:id="@+id/unitSpinner"
         android:layout_width="@dimen/spinner_width_720"
         android:layout_height="@dimen/spinner_height_720"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:background="@drawable/background_spinner"
-        android:entries="@array/type_arrays"
         android:gravity="start"
         android:popupBackground="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

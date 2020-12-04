@@ -6,7 +6,7 @@ public class Channel {
     private double currentValue;
     private double minValue;
     private double maxValue;
-    private PowerSupply type;
+    private Unit type;
     private Scale scale;
 
     private boolean isSetActive;
@@ -66,11 +66,11 @@ public class Channel {
         return this;
     }
 
-    public PowerSupply getType() {
+    public Unit getType() {
         return type;
     }
 
-    public Channel setType(PowerSupply type) {
+    public Channel setType(Unit type) {
         this.type = type;
         this.isSetType = true;
         return this;
