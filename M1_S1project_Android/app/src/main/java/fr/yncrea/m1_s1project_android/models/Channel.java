@@ -6,14 +6,14 @@ public class Channel {
     private double currentValue;
     private double minValue;
     private double maxValue;
-    private Unit type;
+    private Unit unit;
     private Scale scale;
 
     private boolean isSetActive;
     private boolean isSetCurrentValue;
     private boolean isSetMinValue;
     private boolean isSetMaxValue;
-    private boolean isSetType;
+    private boolean isSetUnit;
     private boolean isSetScale;
 
 
@@ -66,13 +66,13 @@ public class Channel {
         return this;
     }
 
-    public Unit getType() {
-        return type;
+    public Unit getUnit() {
+        return unit;
     }
 
-    public Channel setType(Unit type) {
-        this.type = type;
-        this.isSetType = true;
+    public Channel setUnit(Unit unit) {
+        this.unit = unit;
+        this.isSetUnit = true;
         return this;
     }
 
@@ -102,8 +102,8 @@ public class Channel {
         return isSetMaxValue;
     }
 
-    public boolean isSetType() {
-        return isSetType;
+    public boolean isSetUnit() {
+        return isSetUnit;
     }
 
     public boolean isSetScale() {

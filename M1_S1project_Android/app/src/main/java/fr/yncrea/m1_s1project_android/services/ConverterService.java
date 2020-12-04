@@ -31,7 +31,7 @@ public class ConverterService {
         if (data.isSetCurrentValue()) json.addProperty("currentValue", data.getCurrentValue());
         if (data.isSetMinValue()) json.addProperty("minValue", data.getMinValue());
         if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
-        if (data.isSetType()) json.addProperty("type", data.getType().name());
+        if (data.isSetUnit()) json.addProperty("type", data.getUnit().name());
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
 
         return json.toString();
@@ -133,7 +133,7 @@ public class ConverterService {
         if(data.has(attribute)){
             try {
                 Unit tmp = Unit.valueOf(data.get(attribute).getAsString());
-                generator.getChannel(channel).setType(tmp);
+                generator.getChannel(channel).setUnit(tmp);
             }
             catch (Exception ignore) {
                 Log.d("testy", "erreur récup "+attribute);

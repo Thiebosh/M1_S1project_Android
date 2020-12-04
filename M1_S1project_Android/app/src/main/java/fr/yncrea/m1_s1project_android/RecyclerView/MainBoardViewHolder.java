@@ -2,7 +2,6 @@ package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -75,11 +74,11 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         setDigitsDisplay(channel.getCurrentValue());
 
         mScaleData.clear();
-        mScaleData.addAll(Scale.getNames(channel.getType()));
+        mScaleData.addAll(Scale.getNames(channel.getUnit()));
         mScaleAdapter.notifyDataSetChanged();
         mScaleSpinner.setSelection(mScaleAdapter.getPosition(channel.getScale().name()));
 
-        mUnitSpinner.setSelection(mUnitAdapter.getPosition(channel.getType().name()));
+        mUnitSpinner.setSelection(mUnitAdapter.getPosition(channel.getUnit().name()));
 
         if (adapter.getLastHolderSelected() == this) {
             if (adapter.getDigitSelected() == -1) mContainer.callOnClick();
@@ -145,7 +144,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Unit selected = Unit.valueOf((String) adapterView.getAdapter().getItem(i));
 
-                if (channel.getType() != selected) {
+                if (channel.getUnit() != selected) {
                     if (channel.isActive()) mChannelActivation.callOnClick();
 
                     mScaleData.clear();
@@ -157,7 +156,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
                     }
                     mScaleSpinner.setSelection(mScaleAdapter.getPosition(channel.getScale().name()));
 
-                    channel.setType(selected);
+                    channel.setUnit(selected);
                 }
             }
 
