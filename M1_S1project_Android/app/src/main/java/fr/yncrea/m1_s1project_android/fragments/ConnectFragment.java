@@ -58,7 +58,7 @@ public class ConnectFragment extends Fragment {
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
 
         // Initialize array adapter for already paired devices
-        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), R.layout.item_device_name);
+        ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         pairedListView.setAdapter(devicesAdapter);
 
         //The on-click listener for all devices in the ListViews
