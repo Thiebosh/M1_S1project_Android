@@ -2,6 +2,7 @@ package fr.yncrea.m1_s1project_android.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,6 +74,7 @@ public class MainBoardViewHolder extends RecyclerView.ViewHolder {
         mChannelActivation.setText(context.getString(R.string.input, channel.getId()));
         setDigitsDisplay(channel.getCurrentValue());
 
+        Log.d("testy",channel.getId()+"");
         mScaleData.clear();
         mScaleData.addAll(Scale.getNames(channel.getUnit()));
         mScaleAdapter.notifyDataSetChanged();
