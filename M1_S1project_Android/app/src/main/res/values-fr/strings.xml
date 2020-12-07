@@ -36,11 +36,18 @@
     <string name="input">Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="max">Max.</string>
     <string name="min">Min.</string>
-    <string name="comma">.</string>
+    <string name="point">.</string>
+    <string name="more">+</string>
+    <string name="less">-</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
 
     <!-- Fragment Backup -->
     <string name="frag_back_tmp">Écran des sauvegardes</string>
-    <string name="togglebutton">ToggleButton</string>
     <string name="slot">Slot <xliff:g id="id_channel">%1$d</xliff:g></string>
+    <string name="save">Enregistre courant</string>
+    <string name="load">Charge affiché</string>
+    <string name="delete">Supprime affiché</string>
+    <string name="lesserThan">≤</string>
 
 </resources>

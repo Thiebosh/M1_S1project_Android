@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/slot_textview"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#777674"
     android:clickable="true"
@@ -12,5 +12,6 @@
     android:padding="20dp"
     android:text="@string/app_name"
     android:textColor="#FFFFFF"
-    android:textSize="20sp"
-    android:textStyle="bold"/>
+    android:textSize="24sp"
+    android:textStyle="bold"
+    tools:context=".recyclers.BackupSlotAdapter" />

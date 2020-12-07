@@ -9,32 +9,31 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/frag_back_recycler_slots"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_slot" />
 
     <View
         android:id="@+id/frag_back_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
         android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frag_back_recycler_slots" />
+        app:layout_constraintStart_toEndOf="@+id/frag_back_recycler_slots"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/defaultTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/frag_back_tmp"
         app:layout_constraintBottom_toTopOf="@+id/frag_back_recycler_config"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frag_back_divider" />
+        app:layout_constraintStart_toEndOf="@+id/frag_back_divider"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/frag_back_recycler_config"
@@ -42,50 +41,49 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="180dp"
+        android:layout_marginBottom="100dp"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frag_back_recycler_slots"
+        app:layout_constraintStart_toEndOf="@+id/frag_back_divider"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="2"
         tools:listitem="@layout/item_channel_display" />
 
     <Button
         android:id="@+id/frag_back_button_save"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:text="@string/save"
-        app:layout_constraintBottom_toTopOf="@+id/frag_back_button_load"
-        app:layout_constraintEnd_toEndOf="@+id/frag_back_button_load"
-        app:layout_constraintStart_toStartOf="@+id/frag_back_button_load" />
+        app:layout_constraintBottom_toBottomOf="@+id/frag_back_button_load"
+        app:layout_constraintEnd_toStartOf="@+id/frag_back_button_load"
+        app:layout_constraintTop_toTopOf="@+id/frag_back_button_load" />
 
     <Button
         android:id="@+id/frag_back_button_load"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="@string/load"
-        app:layout_constraintBottom_toTopOf="@+id/frag_back_button_delete"
-        app:layout_constraintEnd_toEndOf="@+id/frag_back_button_delete"
-        app:layout_constraintStart_toStartOf="@+id/frag_back_button_delete" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frag_back_recycler_slots"
+        app:layout_constraintTop_toBottomOf="@+id/frag_back_recycler_config" />
 
     <Button
         android:id="@+id/frag_back_button_delete"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:text="@string/delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/frag_back_button_load"
+        app:layout_constraintStart_toEndOf="@+id/frag_back_button_load"
+        app:layout_constraintTop_toTopOf="@+id/frag_back_button_load" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

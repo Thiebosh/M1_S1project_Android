@@ -1,4 +1,4 @@
-package fr.yncrea.m1_s1project_android.RecyclerView;
+package fr.yncrea.m1_s1project_android.recyclers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,11 +20,10 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 
 
-public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHolder> {
-    private final Context mContext;
+public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
     private final ArrayList<Channel> mChannelList;
 
-    private MainBoardViewHolder mLastHolderSelected = null;
+    private MainBoardHolder mLastHolderSelected = null;
     private int mFocusedIndex = -1; //mLastHolderSelected.getAdapterPosition() peut casser aux extremes
     private int mDigitSelected = -1;
 
@@ -35,35 +34,34 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     private final EditText mMaximum;
     private final EditText mSelection;
 
-    private final Button mPlus;
-    private final Button mMoins;
+    private final Button mMore;
+    private final Button mLess;
 
-    public MainBoardAdapterView(Context context, View view, ArrayList<Channel> channelList) {
-        this.mContext = context;
+    public MainBoardAdapter(View view, ArrayList<Channel> channelList) {
         this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
 
-        mAllOn = view.findViewById(R.id.AllOn);
-        mAllOff = view.findViewById(R.id.AllOff);
+        mAllOn = view.findViewById(R.id.frag_main_allOn);
+        mAllOff = view.findViewById(R.id.frag_main_allOff);
 
-        mMinimum = view.findViewById(R.id.minInputSelected);
-        mMaximum = view.findViewById(R.id.maxInputSelected);
+        mMinimum = view.findViewById(R.id.frag_main_input_min);
+        mMaximum = view.findViewById(R.id.frag_main_input_max);
 
-        mSelection = view.findViewById(R.id.selectedInput);
+        mSelection = view.findViewById(R.id.frag_main_input_current);
 
-        mPlus = view.findViewById(R.id.plus);
-        mMoins = view.findViewById(R.id.moins);
+        mMore = view.findViewById(R.id.frag_main_button_more);
+        mLess = view.findViewById(R.id.frag_main_button_less);
     }
 
     @NonNull
     @Override
-    public MainBoardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MainBoardViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_channel, parent, false));
+    public MainBoardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MainBoardHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_channel_edit, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position) {
-        holder.setInitialDisplay(this, mContext, mChannelList.get(position));
-        holder.setInteractions(this, mContext, mChannelList.get(position), position);
+    public void onBindViewHolder(@NonNull MainBoardHolder holder, int position) {
+        holder.setInitialDisplay(this, mChannelList.get(position));
+        holder.setInteractions(this, mChannelList.get(position), position);
 
         @SuppressLint("NonConstantResourceId") View.OnKeyListener keyListener = (view, keyCode, event) -> {
             if(mFocusedIndex != -1 && keyCode == 66) {
@@ -79,13 +77,13 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                 }
                 catch (Exception ignore) {
                     switch(id) {
-                        case R.id.minInputSelected:
+                        case R.id.frag_main_input_min:
                             input = min;
                             break;
-                        case R.id.maxInputSelected:
+                        case R.id.frag_main_input_max:
                             input = max;
                             break;
-                        case R.id.selectedInput:
+                        case R.id.frag_main_input_current:
                             input = current;
                             break;
                     }
@@ -93,15 +91,15 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
                     return false;
                 }
 
-                if (id == R.id.minInputSelected && input != min) {
+                if (id == R.id.frag_main_input_min && input != min) {
                     if (input < max) mChannelList.get(mFocusedIndex).setMinValue(input);
                     else ((EditText) view).setText(String.valueOf(min));
                 }
-                else if (id == R.id.maxInputSelected && input != max) {
+                else if (id == R.id.frag_main_input_max && input != max) {
                     if (input > min) mChannelList.get(mFocusedIndex).setMinValue(input);
                     else ((EditText) view).setText(String.valueOf(max));
                 }
-                else if (id == R.id.selectedInput && input != current) {
+                else if (id == R.id.frag_main_input_current && input != current) {
                     if (input >= min && input <= max) {
                         mChannelList.get(mFocusedIndex).setCurrentValue(input);
                         mLastHolderSelected.setDigitsDisplay(input);
@@ -115,8 +113,8 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         mMinimum.setOnKeyListener(keyListener);
         mSelection.setOnKeyListener(keyListener);
 
-        mPlus.setOnClickListener(v -> variation(+1));
-        mMoins.setOnClickListener(v -> variation(-1));
+        mMore.setOnClickListener(v -> variation(holder.itemView.getContext(), +1));
+        mLess.setOnClickListener(v -> variation(holder.itemView.getContext(), -1));
     }
 
     /*
@@ -162,17 +160,17 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         return mAllOff;
     }
 
-    public MainBoardViewHolder getLastHolderSelected() {
+    public MainBoardHolder getLastHolderSelected() {
         return mLastHolderSelected;
     }
 
-    public void setLastHolderSelected(MainBoardViewHolder holder, final Channel channel, final int position) {
+    public void setLastHolderSelected(MainBoardHolder holder, final Channel channel, final int position) {
         mLastHolderSelected = holder;
         mFocusedIndex = position;
 
         mDigitSelected = -1;
-        mPlus.setEnabled(false);
-        mMoins.setEnabled(false);
+        mMore.setEnabled(false);
+        mLess.setEnabled(false);
 
 
         mSelection.setEnabled(true);
@@ -190,12 +188,12 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
     public void setDigitSelected(final int digit) {
         mDigitSelected = digit;
 
-        if (mChannelList.get(mFocusedIndex).getCurrentValue() > 0.000) mMoins.setEnabled(true);
-        if (mChannelList.get(mFocusedIndex).getCurrentValue() < 9.999) mPlus.setEnabled(true);
+        if (mChannelList.get(mFocusedIndex).getCurrentValue() > 0.000) mLess.setEnabled(true);
+        if (mChannelList.get(mFocusedIndex).getCurrentValue() < 9.999) mMore.setEnabled(true);
     }
 
-    private void variation(final int step) {
-        (step > 0 ? mMoins : mPlus).setEnabled(true);
+    private void variation(final Context context, final int step) {
+        (step > 0 ? mLess : mMore).setEnabled(true);
 
         //cause approx issues
         //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -mDigitSelected))).setScale(3, RoundingMode.CEILING).toString());
@@ -250,20 +248,20 @@ public class MainBoardAdapterView extends RecyclerView.Adapter<MainBoardViewHold
         double value = Double.parseDouble(new String(digits));
 
         if (isMax || value >= mChannelList.get(mFocusedIndex).getMaxValue()) {
-            mPlus.setEnabled(false);
+            mMore.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMaxValue();
-            ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
         }
         else if (isMin || value <= mChannelList.get(mFocusedIndex).getMinValue()) {
-            mMoins.setEnabled(false);
+            mLess.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMinValue();
-            ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
         }
 
         mSelection.setText(String.valueOf(value));
         mLastHolderSelected.setDigitsDisplay(value);
         mChannelList.get(mFocusedIndex).setCurrentValue(value);
 
-        ((BluetoothParent) mContext).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));
+        ((BluetoothParent) context).sendData((new Channel()).setId(mFocusedIndex).setCurrentValue(value));
     }
 }
