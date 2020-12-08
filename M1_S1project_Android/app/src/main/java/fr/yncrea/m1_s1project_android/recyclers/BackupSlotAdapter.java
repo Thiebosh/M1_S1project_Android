@@ -52,14 +52,15 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_slot, parent, false);
-        return new Holder(view);
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_slot, parent, false));
+        //return new Holder(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.setDisplay(position);
         holder.setInteractions(mConfigDisplayer, mConfigList.get(position).getChannelList());
+        //((TextView)holder.itemView).setText(holder.itemView.getContext().getString(R.string.slot, position));
     }
 
     @Override
