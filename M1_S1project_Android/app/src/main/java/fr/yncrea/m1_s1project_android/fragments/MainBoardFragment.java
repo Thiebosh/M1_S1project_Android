@@ -1,6 +1,5 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,8 +10,6 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.recyclers.MainBoardAdapter;
@@ -38,7 +35,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
             if (generator.getChannel(0).isActive()) {
                 mAllOnBtn.setChecked(true);
                 mAllOffBtn.setChecked(false);
-            } else {
+            }
+            else {
                 mAllOffBtn.setChecked(true);
                 mAllOnBtn.setChecked(false);
             }
@@ -67,13 +65,8 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
         View view = inflater.inflate(R.layout.fragment_main_board, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        Activity activity = Objects.requireNonNull(getActivity());
-
-        RecyclerView rv = view.findViewById(R.id.frag_main_recycler);
-        mAdapter = new MainBoardAdapter(view, ((BluetoothParent) activity).getGenerator().getChannelList());
-        rv.setAdapter(mAdapter);
-        //((SimpleItemAnimator) Objects.requireNonNull(rv.getItemAnimator())).setSupportsChangeAnimations(false);
-        //mAdapter.notifyDataSetChanged();//données viennent après
+        mAdapter = new MainBoardAdapter(view, ((BluetoothParent) getActivity()).getGenerator().getChannelList());
+        ((RecyclerView) view.findViewById(R.id.frag_main_recycler)).setAdapter(mAdapter);
 
         // Listeners
         mAllOnBtn = view.findViewById(R.id.frag_main_allOn);
@@ -85,7 +78,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
                 ((ToggleButton) view.findViewById(id == R.id.frag_main_allOn ? R.id.frag_main_allOff : R.id.frag_main_allOn)).setChecked(false);
                 ((BluetoothParent) getActivity()).getGenerator().setAllChannelActive(id == R.id.frag_main_allOn);
                 ((BluetoothParent) getActivity()).sendData((new Channel()).setId(-1).setActive(id == R.id.frag_main_allOn));
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();//changer par un adapter.allOn ? évite plantage
             }
         };
 

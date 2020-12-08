@@ -19,12 +19,8 @@ public enum Scale {
     public static ArrayList<Scale> getNamesValues(Unit unit) {
         ArrayList<Scale> enumNames = new ArrayList<>();
 
-        if (unit.equals(Unit.I)) {
-            enumNames.addAll(Arrays.asList(u, m));
-        }
-        else {//unit.equals(Unit.V)
-            enumNames.addAll(Arrays.asList(m, _));
-        }
+        if (unit.equals(Unit.I)) enumNames.addAll(Arrays.asList(u, m));
+        else /*unit.equals(Unit.V) */ enumNames.addAll(Arrays.asList(m, _));
 
         return enumNames;
     }

@@ -107,8 +107,8 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
             if (adapter.getLastHolderSelected() != null)
                 adapter.getLastHolderSelected().decreaseVisibility();
 
-            //mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
-            mContainer.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.background_item));
+            mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
+            //mContainer.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.background_item));
 
             mDigitGroup.setSelectionRequired(true);
 

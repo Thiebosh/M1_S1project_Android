@@ -12,7 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.recyclers.BackupConfigAdapter;
 import fr.yncrea.m1_s1project_android.recyclers.BackupSlotAdapter;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
@@ -55,16 +60,18 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
+        Generator tmp = ((BluetoothParent) getActivity()).getGenerator();
+        ArrayList<Generator> tmpList = new ArrayList<>(Arrays.asList(tmp, new Generator()));
+
         RecyclerView oneConfigRecycler = view.findViewById(R.id.frag_back_recycler_config);
-        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(null);
+        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(tmp.getChannelList());
         oneConfigRecycler.setAdapter(oneConfigAdapter);
-        //oneConfigAdapter.notifyDataSetChanged();
 
         RecyclerView slotRecycler = view.findViewById(R.id.frag_back_recycler_slots);
-        BackupSlotAdapter slotsAdapter = new BackupSlotAdapter(oneConfigAdapter, null);
+        BackupSlotAdapter slotsAdapter = new BackupSlotAdapter(oneConfigAdapter, tmpList);
         slotRecycler.setAdapter(slotsAdapter);
-        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));//mLayoutManager.getOrientation() //slotRecycler.getLayoutManager().getLayoutDirection()
-        slotsAdapter.notifyDataSetChanged();
+        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));
+        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
 
         view.findViewById(R.id.frag_back_button_save).setOnClickListener(v -> {
             String text = "enregistrer nouvelle config à l'emplacement "+slotsAdapter.getFocusedIndex();

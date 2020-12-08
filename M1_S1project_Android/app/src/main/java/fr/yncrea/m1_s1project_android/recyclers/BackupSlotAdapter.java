@@ -35,6 +35,8 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
                 displayer.getChannelList().clear();
                 displayer.getChannelList().addAll(config);
                 displayer.notifyDataSetChanged();
+                
+                //mSlotContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
             });
         }
     }
