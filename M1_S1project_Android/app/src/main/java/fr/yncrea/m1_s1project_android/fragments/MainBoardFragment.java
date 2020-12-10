@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Objects;
+
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.recyclers.MainBoardAdapter;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
@@ -65,7 +67,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
         View view = inflater.inflate(R.layout.fragment_main_board, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        mAdapter = new MainBoardAdapter(view, ((BluetoothParent) getActivity()).getGenerator().getChannelList());
+        mAdapter = new MainBoardAdapter(view, ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList());
         ((RecyclerView) view.findViewById(R.id.frag_main_recycler)).setAdapter(mAdapter);
 
         // Listeners

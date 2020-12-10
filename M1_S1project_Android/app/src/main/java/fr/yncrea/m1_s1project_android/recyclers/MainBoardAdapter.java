@@ -93,18 +93,18 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                 if (id == R.id.frag_main_input_min && input != min) {
                     if (input < max) mChannelList.get(mFocusedIndex).setMinValue(input);
-                    else ((EditText) view).setText(String.valueOf(min));
+                    else mMinimum.setText(String.valueOf(min));
                 }
                 else if (id == R.id.frag_main_input_max && input != max) {
-                    if (input > min) mChannelList.get(mFocusedIndex).setMinValue(input);
-                    else ((EditText) view).setText(String.valueOf(max));
+                    if (input > min) mChannelList.get(mFocusedIndex).setMaxValue(input);
+                    else mMaximum.setText(String.valueOf(max));
                 }
                 else if (id == R.id.frag_main_input_current && input != current) {
                     if (input >= min && input <= max) {
                         mChannelList.get(mFocusedIndex).setCurrentValue(input);
                         mLastHolderSelected.setDigitsDisplay(input);
                     }
-                    else ((EditText) view).setText(String.valueOf(current));
+                    else mSelection.setText(String.valueOf(current));
                 }
             }
             return false;
@@ -171,7 +171,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mDigitSelected = -1;
         mMore.setEnabled(false);
         mLess.setEnabled(false);
-
 
         mSelection.setEnabled(true);
         mSelection.setText(String.valueOf(channel.getCurrentValue()));

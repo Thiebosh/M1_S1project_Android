@@ -329,7 +329,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             // Otherwise, setup the bluetooth session
         }
         else if (mBluetoothService == null) setupBluetooth();
-        savedInstanceState = new Bundle();
     }
 
     @Override

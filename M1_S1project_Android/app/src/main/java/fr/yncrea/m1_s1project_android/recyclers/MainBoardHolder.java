@@ -103,17 +103,18 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         });
 
         mContainer.setOnClickListener(v -> {
-            //if (this != adapter.getLastHolderSelected()) {//pour empecher deselection de digit
-            if (adapter.getLastHolderSelected() != null)
-                adapter.getLastHolderSelected().decreaseVisibility();
+            if (this != adapter.getLastHolderSelected()) {//pour empecher deselection de digit
+                if (adapter.getLastHolderSelected() != null) {
+                    adapter.getLastHolderSelected().decreaseVisibility();
+                }
 
-            mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
-            //mContainer.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.background_item));
+                mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
+                //mContainer.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.background_item)); //pb sur tablette ?
 
-            mDigitGroup.setSelectionRequired(true);
+                mDigitGroup.setSelectionRequired(true);
 
-            adapter.setLastHolderSelected(this, channel, position);
-            //}
+                adapter.setLastHolderSelected(this, channel, position);
+            }
         });
 
         mDigitGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -129,8 +130,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                 Scale selected = Scale.valueOf((String) adapterView.getAdapter().getItem(i));
 
                 if (channel.getScale() != selected) {
-                    if (channel.isActive()) mChannelActivation.callOnClick();
-
+                    //if (channel.isActive()) mChannelActivation.callOnClick();
                     channel.setScale(selected);
                 }
             }

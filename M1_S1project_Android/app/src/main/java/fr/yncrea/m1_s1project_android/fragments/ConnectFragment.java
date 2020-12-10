@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.util.Objects;
 import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.R;
@@ -45,7 +46,7 @@ public class ConnectFragment extends Fragment {
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
         //si était connecté, déconnecte
-        ((BluetoothParent) getActivity()).disconnectDevice();
+        ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
         ((BluetoothParent) getActivity()).getGenerator().getChannelList().clear();
 
         // Find and set up the ListView for paired devices
