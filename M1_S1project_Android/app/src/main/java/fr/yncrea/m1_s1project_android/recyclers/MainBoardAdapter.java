@@ -3,6 +3,8 @@ package fr.yncrea.m1_s1project_android.recyclers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Vibrator;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
+import fr.yncrea.m1_s1project_android.models.Scale;
+import fr.yncrea.m1_s1project_android.models.Unit;
 
 
 public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
@@ -64,49 +69,97 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         holder.setInteractions(this, mChannelList.get(position), position);
 
         @SuppressLint("NonConstantResourceId") View.OnKeyListener keyListener = (view, keyCode, event) -> {
-            if(mFocusedIndex != -1 && keyCode == 66) {
-                int id = view.getId();
+            if(keyCode == 66 && event.getAction() == KeyEvent.ACTION_DOWN) {
+                String input = ((EditText) view).getText().toString();
+
+                //réduction dans limites de l'acceptable
+                boolean updateDisplay = false;
+
+                boolean negative = false;
+                if (input.startsWith("-")) {
+                    input = input.substring(1);
+                    negative = true;
+                }
+
+                Unit unit = mChannelList.get(mFocusedIndex).getUnit();
+                //troncature
+                if (unit == Unit.V && input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                    input = input.substring(0, 5);
+                    updateDisplay = true;
+                }
+                else if (unit == Unit.I && input.length() > 4) {//4 chiffres avant virgule
+                    input = input.substring(0, 4);
+                    updateDisplay = true;
+                }
+
+                if (negative) input = "-"+input;
+                //fin réduction
 
                 double min = mChannelList.get(mFocusedIndex).getMinValue();
                 double max = mChannelList.get(mFocusedIndex).getMaxValue();
                 double current = mChannelList.get(mFocusedIndex).getCurrentValue();
 
-                double input = -1;
+                int id = view.getId();
+                double value = -1;
                 try {
-                    input = Double.parseDouble((((EditText) view).getText().toString()));
+                    value = Double.parseDouble(input);
                 }
                 catch (Exception ignore) {
                     switch(id) {
                         case R.id.frag_main_input_min:
-                            input = min;
+                            value = min;
                             break;
                         case R.id.frag_main_input_max:
-                            input = max;
+                            value = max;
                             break;
                         case R.id.frag_main_input_current:
-                            input = current;
+                            value = current;
                             break;
                     }
-                    ((EditText) view).setText(String.valueOf(input));
+                    ((EditText) view).setText(String.valueOf(value));
                     return false;
                 }
 
-                if (id == R.id.frag_main_input_min && input != min) {
-                    if (input < max) mChannelList.get(mFocusedIndex).setMinValue(input);
+                int absMax = holder.itemView.getContext().getResources().getInteger(unit == Unit.V ?
+                        R.integer.absolute_limit_volt_value :
+                        R.integer.absolute_limit_ampere_value);
+                int absMin = -1*absMax;
+
+                if (id == R.id.frag_main_input_min && value != min) {
+                    if (absMin <= value && value < max) mChannelList.get(mFocusedIndex).setMinValue(value);
                     else mMinimum.setText(String.valueOf(min));
                 }
-                else if (id == R.id.frag_main_input_max && input != max) {
-                    if (input > min) mChannelList.get(mFocusedIndex).setMaxValue(input);
+                else if (id == R.id.frag_main_input_max && value != max) {
+                    if (min < value && value <= absMax) mChannelList.get(mFocusedIndex).setMaxValue(value);
                     else mMaximum.setText(String.valueOf(max));
                 }
-                else if (id == R.id.frag_main_input_current && input != current) {
-                    if (input >= min && input <= max) {
-                        mChannelList.get(mFocusedIndex).setCurrentValue(input);
-                        mLastHolderSelected.setDigitsDisplay(input);
+                else if (id == R.id.frag_main_input_current && value != current) {
+                    double convertedValue = Scale.changeScale(value,
+                            mChannelList.get(mFocusedIndex).getScale(),
+                            Objects.requireNonNull(Scale.scaleOf(holder.itemView.getContext().getResources().getInteger(
+                                    unit == Unit.V ?
+                                            R.integer.absolute_limit_volt_scale :
+                                            R.integer.absolute_limit_ampere_scale))));
+
+                    //garder échelle des bornes pour comparer min max
+
+                    //remettre echelle du canal avant de vérifier et rétablir
+
+                    if (value != convertedValue) updateDisplay = true;
+
+                    Log.d("testy", "passe de "+value+" à "+convertedValue);
+                    value = convertedValue;
+                    input = String.valueOf(value);
+                    if (min <= value && value <= max) {
+                        mChannelList.get(mFocusedIndex).setCurrentValue(value);
+                        mLastHolderSelected.setDigitsDisplay(value);
                     }
                     else mSelection.setText(String.valueOf(current));
                 }
+
+                if (updateDisplay) ((EditText) view).setText(input);
             }
+
             return false;
         };
         mMaximum.setOnKeyListener(keyListener);

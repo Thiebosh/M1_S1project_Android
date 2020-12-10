@@ -29,6 +29,7 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
+import fr.yncrea.m1_s1project_android.models.Scale;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
 import fr.yncrea.m1_s1project_android.services.ConverterService;
 
@@ -312,6 +313,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_app);
 
         String str = getString(R.string.blt_not_connected);

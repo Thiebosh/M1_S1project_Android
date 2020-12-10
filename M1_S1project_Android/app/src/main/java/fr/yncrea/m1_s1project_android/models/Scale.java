@@ -1,5 +1,7 @@
 package fr.yncrea.m1_s1project_android.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,6 +16,19 @@ public enum Scale {
 
     public int getValue() {
         return this.mValue;
+    }
+
+    public static Scale scaleOf(int powerOfTen) {
+        switch (powerOfTen) {
+            case 0:
+                return Scale._;
+            case -3:
+                return Scale.m;
+            case -6:
+                return Scale.u;
+            default:
+                return null;
+        }
     }
 
     public static ArrayList<Scale> getNamesValues(Unit unit) {
@@ -31,5 +46,73 @@ public enum Scale {
         for (Scale tmp : Scale.getNamesValues(unit)) enumNames.add(tmp.name());
 
         return enumNames;
+    }
+
+    public static double changeScale(final double value, final Scale initial, final Scale target) {
+        int shift = initial.mValue - target.mValue;
+
+        if (shift == 0) return value;
+
+        StringBuilder shifter = new StringBuilder(String.valueOf(value));//fonctionne jusque 0.001 mais casse à 0.0001. fonctionne pour x.0001
+
+        int dotPos = shifter.indexOf(".");
+        if (dotPos == -1) {
+            dotPos = shifter.length();//pas de point
+            shifter.append('.');
+        }
+
+        if (shift > 0) {//échelle inférieure
+            for (int i = shifter.length(); i <= dotPos + shift; ++i) shifter.append('0');
+
+            shifter.insert(dotPos + shift + 1, '.');
+            shifter.deleteCharAt(dotPos);
+        }
+
+        else {//échelle supérieure
+            dotPos -= shift;
+
+            for (int i = shifter.length(); i <= dotPos + 1; ++i) shifter.insert(0, '0');
+
+            shifter.insert(dotPos + shift, '.');
+            shifter.deleteCharAt(dotPos+1);
+        }
+
+        /*
+        StringBuilder shifter = new StringBuilder(String.valueOf(value));//fonctionne jusque 0.001 mais casse à 0.0001. fonctionne pour x.0001
+
+        int dotPos = shifter.indexOf(".");
+        if (dotPos == -1) {
+            dotPos = shifter.length();//pas de point
+            shifter.append('.');
+        }
+
+        StringBuilder add = new StringBuilder();
+        for (int i = shifter.length(); i <= dotPos + shift; ++i) add.append('0');
+
+        if (shift > 0) {//échelle inférieure
+            shifter.append(add);
+            shifter.insert(dotPos + shift + 1, '.');
+            shifter.deleteCharAt(dotPos);
+        }
+        else {//échelle supérieure
+            shifter.insert(0, add);
+            Log.d("testy", "position point avant : "+dotPos);
+            dotPos += add.length();
+            Log.d("testy", "ajout : "+add);
+            Log.d("testy", "longueur ajout : "+add.length());
+            Log.d("testy", "position point après : "+dotPos);
+            shifter.insert(dotPos - shift, '.');
+            shifter.deleteCharAt(dotPos);
+        }
+        */
+
+        double result;
+        try {
+            result = Double.parseDouble(shifter.toString());
+        }
+        catch (Exception ignore) {
+            return -1;
+        }
+        return result;
     }
 }
