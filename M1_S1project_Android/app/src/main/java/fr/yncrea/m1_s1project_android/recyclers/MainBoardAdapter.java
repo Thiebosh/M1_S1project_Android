@@ -134,24 +134,15 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     else mMaximum.setText(String.valueOf(max));
                 }
                 else if (id == R.id.frag_main_input_current && value != current) {
-                    double convertedValue = Scale.changeScale(value,
+                    double limitScaledValue = Scale.changeScale(value,
                             mChannelList.get(mFocusedIndex).getScale(),
                             Objects.requireNonNull(Scale.scaleOf(holder.itemView.getContext().getResources().getInteger(
                                     unit == Unit.V ?
                                             R.integer.absolute_limit_volt_scale :
                                             R.integer.absolute_limit_ampere_scale))));
 
-                    //garder échelle des bornes pour comparer min max
-
-                    //remettre echelle du canal avant de vérifier et rétablir
-
-                    if (value != convertedValue) updateDisplay = true;
-
-                    Log.d("testy", "passe de "+value+" à "+convertedValue);
-                    value = convertedValue;
-                    input = String.valueOf(value);
-                    if (min <= value && value <= max) {
-                        mChannelList.get(mFocusedIndex).setCurrentValue(value);
+                    if (min <= limitScaledValue && limitScaledValue <= max) {//comparaison sur même échelle
+                        mChannelList.get(mFocusedIndex).setCurrentValue(value);//application de la valeur sur l'échelle du canal
                         mLastHolderSelected.setDigitsDisplay(value);
                     }
                     else mSelection.setText(String.valueOf(current));
@@ -240,76 +231,64 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
     public void setDigitSelected(final int digit) {
         mDigitSelected = digit;
 
+        //remplacer limites par celles du canal, et après scaling
         if (mChannelList.get(mFocusedIndex).getCurrentValue() > 0.000) mLess.setEnabled(true);
         if (mChannelList.get(mFocusedIndex).getCurrentValue() < 9.999) mMore.setEnabled(true);
+    }
+
+    public void setSelection(final double value) {
+        mSelection.setText(String.valueOf(value));
     }
 
     private void variation(final Context context, final int step) {
         (step > 0 ? mLess : mMore).setEnabled(true);
 
         //cause approx issues
-        //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -mDigitSelected))).setScale(3, RoundingMode.CEILING).toString());
+        //value = Double.parseDouble((BigDecimal.valueOf(value + sign * pow(10, -(mDigitSelected - 1)))).setScale(3, RoundingMode.CEILING).toString());
 
-        StringBuilder tmp = new StringBuilder(String.valueOf(mChannelList.get(mFocusedIndex).getCurrentValue()));
-        while (tmp.length() < 5) tmp.append('0');
-        char[] digits = tmp.toString().toCharArray();
+        //normalize number description
+        StringBuilder litteralValue = new StringBuilder(String.valueOf(mChannelList.get(mFocusedIndex).getCurrentValue()));
+        if (mChannelList.get(mFocusedIndex).getCurrentValue() >= 0) litteralValue.insert(0, '+');
+        while (litteralValue.length() < 6) litteralValue.append('0');//+x.xxx ou -x.xxx
 
+        //double to int : exact values
+        StringBuilder stepBuilder = new StringBuilder("1");
+        while (stepBuilder.length() < (4 - mDigitSelected)) stepBuilder.append('0');//4 digits - le 1 positionné
+        if (step < 0) stepBuilder.insert(0, '-');
+        int integerStep = Integer.parseInt(stepBuilder.toString());
 
-        int digit = mDigitSelected + (mDigitSelected == 0 ? 0 : 1);
+        litteralValue.deleteCharAt(2);
+        int integerValue = Integer.parseInt(litteralValue.toString());//xxxx ou -xxxx
+        integerValue += integerStep;//plus de pb d'approx
 
-        int number = Character.getNumericValue(digits[digit]) + step;
+        //int to double : exact representation
+        litteralValue = new StringBuilder(String.valueOf(integerValue));
+        boolean isPos = integerValue >= 0;
+        if (litteralValue.length() == (isPos ? 4 : 5)) litteralValue.insert(isPos ? 1 : 2, '.');
+        else {
+            litteralValue.insert(isPos ? 0 : 1, "0.");
+            while (litteralValue.length() < (isPos ? 5 : 6)) litteralValue.insert(isPos ? 2 : 3, '0');
+        }
+        double value = Double.parseDouble(litteralValue.toString());
 
-        boolean isMax = false;
-        boolean isMin = false;
-        if (number > 9) {
-            while (number > 9 && digit > 0) {//tant que retenue
-                number -= 10;
-                digits[digit] = Character.forDigit(number, 10);//base 10
-
-                if (digit == 2) --digit;//saute le point
-                number = Character.getNumericValue(digits[--digit]) + 1;//prend digit précédent
-            }
-            if (number < 10) digits[digit] = Character.forDigit(number, 10);//protège digit 0
-            else if (number == 10) {
-                digits[0] = '9';
-                digits[2] = '9';
-                digits[3] = '9';
-                digits[4] = '9';
-
-                isMax = true;
-            }
-        } else if (number < 0) {
-            while (number < 0 && digit > 0) {//tant que retenue
-                number += 10;
-                digits[digit] = Character.forDigit(number, 10);//base 10
-
-                if (digit == 2) --digit;//saute le point
-                number = Character.getNumericValue(digits[--digit]) - 1;//prend digit précédent
-            }
-            if (number > -1) digits[digit] = Character.forDigit(number, 10);//protège digit 0
-            else if (number == -1) {
-                digits[0] = '0';
-                digits[2] = '0';
-                digits[3] = '0';
-                digits[4] = '0';
-
-                isMin = true;
-            }
-        } else digits[digit] = Character.forDigit(number, 10);
-
-        double value = Double.parseDouble(new String(digits));
-
-        if (isMax || value >= mChannelList.get(mFocusedIndex).getMaxValue()) {
+        //compare with limits
+        //change order?
+        if (value >= mChannelList.get(mFocusedIndex).getMaxValue()) {
             mMore.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMaxValue();
             ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
         }
-        else if (isMin || value <= mChannelList.get(mFocusedIndex).getMinValue()) {
+        else if (value <= mChannelList.get(mFocusedIndex).getMinValue()) {
             mLess.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMinValue();
             ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
         }
-
+        else if (value > Math.abs(9.999) && mChannelList.get(mFocusedIndex).getScale() != Scale.getMaxValue(mChannelList.get(mFocusedIndex).getUnit())) {
+            //change scale : first digit -> last digits, other to 0
+            //if neg value, add -
+        }
+        
+        //update all
         mSelection.setText(String.valueOf(value));
         mLastHolderSelected.setDigitsDisplay(value);
         mChannelList.get(mFocusedIndex).setCurrentValue(value);

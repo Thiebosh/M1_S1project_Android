@@ -43,6 +43,14 @@
             app:singleSelection="true">
 
             <Button
+                android:id="@+id/item_channel_button_digit_sign"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/more" />
+
+            <Button
                 android:id="@+id/item_channel_button_digit1"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
@@ -79,8 +87,8 @@
             android:layout_width="@dimen/spinner_width"
             android:layout_height="@dimen/spinner_height"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/background_spinner"
             android:gravity="start"

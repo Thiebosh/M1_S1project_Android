@@ -31,7 +31,7 @@ public enum Scale {
         }
     }
 
-    public static ArrayList<Scale> getNamesValues(Unit unit) {
+    public static ArrayList<Scale> getNamesValues(final Unit unit) {
         ArrayList<Scale> enumNames = new ArrayList<>();
 
         if (unit.equals(Unit.I)) enumNames.addAll(Arrays.asList(u, m));
@@ -40,12 +40,24 @@ public enum Scale {
         return enumNames;
     }
 
-    public static ArrayList<String> getNames(Unit unit) {
+    public static ArrayList<String> getNames(final Unit unit) {
         ArrayList<String> enumNames = new ArrayList<>();
 
         for (Scale tmp : Scale.getNamesValues(unit)) enumNames.add(tmp.name());
 
         return enumNames;
+    }
+
+    public static Scale getMinValue(final Unit unit) {
+        Scale min = Scale._;
+        for (Scale current: getNamesValues(unit)) if (current.getValue() < min.getValue()) min = current;
+        return min;
+    }
+
+    public static Scale getMaxValue(final Unit unit) {
+        Scale min = Scale.u;
+        for (Scale current: getNamesValues(unit)) if (current.getValue() > min.getValue()) min = current;
+        return min;
     }
 
     public static double changeScale(final double value, final Scale initial, final Scale target) {
@@ -77,34 +89,6 @@ public enum Scale {
             shifter.deleteCharAt(dotPos+1);
         }
 
-        /*
-        StringBuilder shifter = new StringBuilder(String.valueOf(value));//fonctionne jusque 0.001 mais casse à 0.0001. fonctionne pour x.0001
-
-        int dotPos = shifter.indexOf(".");
-        if (dotPos == -1) {
-            dotPos = shifter.length();//pas de point
-            shifter.append('.');
-        }
-
-        StringBuilder add = new StringBuilder();
-        for (int i = shifter.length(); i <= dotPos + shift; ++i) add.append('0');
-
-        if (shift > 0) {//échelle inférieure
-            shifter.append(add);
-            shifter.insert(dotPos + shift + 1, '.');
-            shifter.deleteCharAt(dotPos);
-        }
-        else {//échelle supérieure
-            shifter.insert(0, add);
-            Log.d("testy", "position point avant : "+dotPos);
-            dotPos += add.length();
-            Log.d("testy", "ajout : "+add);
-            Log.d("testy", "longueur ajout : "+add.length());
-            Log.d("testy", "position point après : "+dotPos);
-            shifter.insert(dotPos - shift, '.');
-            shifter.deleteCharAt(dotPos);
-        }
-        */
 
         double result;
         try {

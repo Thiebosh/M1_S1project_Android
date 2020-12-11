@@ -10,7 +10,6 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -18,6 +17,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
@@ -33,6 +33,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
     private final MaterialButtonToggleGroup mDigitGroup;
     private final ArrayList<Integer> digitsIds;
+    private final Button mDigitSign;
     private final Button mDigit1;
     private final Button mDigit2;
     private final Button mDigit3;
@@ -51,6 +52,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mChannelActivation = itemView.findViewById(R.id.item_channel_button_onOff);
 
         mDigitGroup = itemView.findViewById(R.id.item_channel_toggle_digits);
+        mDigitSign = itemView.findViewById(R.id.item_channel_button_digit_sign);
         mDigit1 = itemView.findViewById(R.id.item_channel_button_digit1);
         mDigit2 = itemView.findViewById(R.id.item_channel_button_digit2);
         mDigit3 = itemView.findViewById(R.id.item_channel_button_digit3);
@@ -127,11 +129,33 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mScaleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Scale selected = Scale.valueOf((String) adapterView.getAdapter().getItem(i));
+                Scale selectedScale = Scale.valueOf((String) adapterView.getAdapter().getItem(i));
 
-                if (channel.getScale() != selected) {
+                if (channel.getScale() != selectedScale) {
                     //if (channel.isActive()) mChannelActivation.callOnClick();
-                    channel.setScale(selected);
+
+                    Scale limitScale = Objects.requireNonNull(Scale.scaleOf(itemView.getContext().getResources().getInteger(
+                            channel.getUnit() == Unit.V ?
+                                    R.integer.absolute_limit_volt_scale :
+                                    R.integer.absolute_limit_ampere_scale)));
+
+                    //if (channel.getScale().getValue() < selectedScale.getValue()) {//risque de dépassement des limites
+                    if (selectedScale.getValue() == limitScale.getValue()) {//risque de dépassement des limites
+                        //double limitScaledValue = Scale.changeScale(channel.getCurrentValue(), selectedScale, limitScale);
+
+                        if (channel.getCurrentValue() > channel.getMaxValue()) {
+                            channel.setCurrentValue(channel.getMaxValue());
+                            setDigitsDisplay(channel.getCurrentValue());
+                            adapter.setSelection(channel.getCurrentValue());
+                        }
+                        else if (channel.getCurrentValue() < channel.getMinValue()) {
+                            channel.setCurrentValue(channel.getMinValue());
+                            setDigitsDisplay(channel.getCurrentValue());
+                            adapter.setSelection(channel.getCurrentValue());
+                        }
+                    }
+
+                    channel.setScale(selectedScale);
                 }
             }
 
@@ -178,12 +202,14 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
     public void setDigitsDisplay(final double value) {
         StringBuilder tmp = new StringBuilder(String.valueOf(value));
-        while (tmp.length() < 5) tmp.append('0');
+        if (value >= 0) tmp.insert(0, '+');
+        while (tmp.length() < 6) tmp.append('0');
         char[] digits = tmp.toString().toCharArray();
 
-        mDigit1.setText(String.valueOf(digits[0]));
-        mDigit2.setText(String.valueOf(digits[2]));
-        mDigit3.setText(String.valueOf(digits[3]));
-        mDigit4.setText(String.valueOf(digits[4]));
+        mDigitSign.setText(String.valueOf(digits[0]));
+        mDigit1.setText(String.valueOf(digits[1]));
+        mDigit2.setText(String.valueOf(digits[3]));
+        mDigit3.setText(String.valueOf(digits[4]));
+        mDigit4.setText(String.valueOf(digits[5]));
     }
 }
