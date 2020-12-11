@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="absolute_limit_volt_value">8</integer>
+    <integer name="absolute_limit_volt_scale">0</integer>
+
+    <integer name="absolute_limit_ampere_value">5</integer>
+    <integer name="absolute_limit_ampere_scale">-3</integer>
+</resources>

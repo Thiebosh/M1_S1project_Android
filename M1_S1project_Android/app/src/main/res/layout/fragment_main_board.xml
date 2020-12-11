@@ -8,7 +8,7 @@
     tools:context=".fragments.MainBoardFragment">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/frag_main_text_allChannel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -20,50 +20,49 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
-        android:id="@+id/AllOn"
+        android:id="@+id/frag_main_allOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="ON"
-        android:textOff="ON"
-        android:textOn="ON"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toStartOf="@+id/AllOff"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        android:textOff="@string/on"
+        android:textOn="@string/on"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_main_text_allChannel"
+        app:layout_constraintEnd_toStartOf="@+id/frag_main_allOff"
+        app:layout_constraintTop_toTopOf="@+id/frag_main_text_allChannel" />
 
     <ToggleButton
-        android:id="@+id/AllOff"
+        android:id="@+id/frag_main_allOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:text="OFF"
-        android:textOff="OFF"
-        android:textOn="OFF"
-        app:layout_constraintBottom_toBottomOf="@+id/AllOn"
+        android:textOff="@string/off"
+        android:textOn="@string/off"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_main_allOn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/AllOn" />
+        app:layout_constraintTop_toTopOf="@+id/frag_main_allOn" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mainboard_recycler"
+        android:id="@+id/frag_main_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="80dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="140dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_channel_edit" />
 
 
     <EditText
-        android:id="@+id/minInputSelected"
+        android:id="@+id/frag_main_input_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -73,41 +72,41 @@
         android:gravity="center"
         android:hint="@string/min"
         android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintBottom_toBottomOf="@+id/frag_log_relativeLayout"
-        app:layout_constraintEnd_toStartOf="@+id/frag_log_relativeLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_main_relative_moreLess"
+        app:layout_constraintEnd_toStartOf="@+id/frag_main_relative_moreLess"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/frag_log_relativeLayout" />
+        app:layout_constraintTop_toTopOf="@+id/frag_main_relative_moreLess" />
 
     <RelativeLayout
-        android:id="@+id/frag_log_relativeLayout"
+        android:id="@+id/frag_main_relative_moreLess"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/selectedInput"
+        app:layout_constraintBottom_toTopOf="@+id/frag_main_input_current"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/moins"
+            android:id="@+id/frag_main_button_less"
             android:layout_width="52dp"
             android:layout_height="44dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:enabled="false"
-            android:text="-" />
+            android:text="@string/less" />
 
         <Button
-            android:id="@+id/plus"
+            android:id="@+id/frag_main_button_more"
             android:layout_width="52dp"
             android:layout_height="44dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:enabled="false"
-            android:text="+" />
+            android:text="@string/more" />
     </RelativeLayout>
 
     <EditText
-        android:id="@+id/maxInputSelected"
+        android:id="@+id/frag_main_input_max"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -117,13 +116,13 @@
         android:gravity="center"
         android:hint="@string/max"
         android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintBottom_toBottomOf="@+id/frag_log_relativeLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_main_relative_moreLess"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/frag_log_relativeLayout"
-        app:layout_constraintTop_toTopOf="@+id/frag_log_relativeLayout" />
+        app:layout_constraintStart_toEndOf="@+id/frag_main_relative_moreLess"
+        app:layout_constraintTop_toTopOf="@+id/frag_main_relative_moreLess" />
 
     <EditText
-        android:id="@+id/selectedInput"
+        android:id="@+id/frag_main_input_current"
         android:layout_width="134dp"
         android:layout_height="46dp"
         android:layout_marginBottom="16dp"
@@ -134,7 +133,6 @@
         android:inputType="numberSigned|numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

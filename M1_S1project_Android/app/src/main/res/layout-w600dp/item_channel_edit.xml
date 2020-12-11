@@ -6,10 +6,10 @@
     android:id="@+id/item_channel_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".fragments.MainBoardFragment">
+    tools:context=".recyclers.MainBoardHolder">
 
     <Button
-        android:id="@+id/activation"
+        android:id="@+id/item_channel_button_onOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -23,18 +23,26 @@
 
 
     <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleButton"
+        android:id="@+id/item_channel_toggle_digits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/scaleSpinner"
-        app:layout_constraintStart_toEndOf="@+id/activation"
+        app:layout_constraintEnd_toStartOf="@+id/item_channel_spinner_scale"
+        app:layout_constraintStart_toEndOf="@+id/item_channel_button_onOff"
         app:layout_constraintTop_toTopOf="parent"
         app:selectionRequired="true"
         app:singleSelection="true">
 
         <Button
-            android:id="@+id/digit1"
+            android:id="@+id/item_channel_button_digit_sign"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/more" />
+
+        <Button
+            android:id="@+id/item_channel_button_digit1"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
@@ -44,29 +52,29 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="@string/comma" />
+            android:text="@string/point" />
 
         <Button
-            android:id="@+id/digit2"
+            android:id="@+id/item_channel_button_digit2"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/digit3"
+            android:id="@+id/item_channel_button_digit3"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/digit4"
+            android:id="@+id/item_channel_button_digit4"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/digit_500"
             android:layout_height="wrap_content" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <Spinner
-        android:id="@+id/scaleSpinner"
+        android:id="@+id/item_channel_spinner_scale"
         android:layout_width="@dimen/spinner_width_720"
         android:layout_height="@dimen/spinner_height_720"
         android:layout_marginEnd="8dp"
@@ -75,11 +83,11 @@
         android:gravity="start"
         android:popupBackground="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/unitSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/item_channel_spinner_unit"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/unitSpinner"
+        android:id="@+id/item_channel_spinner_unit"
         android:layout_width="@dimen/spinner_width_720"
         android:layout_height="@dimen/spinner_height_720"
         android:layout_marginEnd="24dp"

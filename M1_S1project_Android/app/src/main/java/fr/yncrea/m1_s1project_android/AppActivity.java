@@ -8,20 +8,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PersistableBundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Objects;
 import java.util.Stack;
@@ -35,6 +29,7 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
+import fr.yncrea.m1_s1project_android.models.Scale;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
 import fr.yncrea.m1_s1project_android.services.ConverterService;
 
@@ -81,8 +76,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+        //rotation de tous les affichages en mémoire
+        //peut tenter de garder indice de rotation et de recréer le fragment que si cet indice est franchi
+        //ici, n'appelle que loadfragment(mFragmentStack.peek())
+        //vérifier que ces deux cas fonctionnent avec fragment temporaire ou si nécessaire de le stocker à part
+
         int i = 0;
-        Stack<Fragment> copy = new Stack<>();//(Stack<Fragment>) mFragmentStack.clone();
+        Stack<Fragment> copy = new Stack<>();
 
         Fragment holder;
         while (!mFragmentStack.empty()) {
@@ -90,31 +91,18 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             String simpleName = holder.getClass().getSimpleName();
             if (MainBoardFragment.class.getSimpleName().equals(simpleName)) {
                 copy.push(new MainBoardFragment());
-            } else if (BackupFragment.class.getSimpleName().equals(simpleName)) {
-                copy.push(new BackupFragment());
-            } else {
-                copy.push(holder);
             }
+            else if (BackupFragment.class.getSimpleName().equals(simpleName)) {
+                copy.push(new BackupFragment());
+            }
+            else copy.push(holder);
             i++;
         }
         
         //mFragmentStack.addAll(copy);
-        for(int j = 0; j < i; j++){
-            mFragmentStack.push(copy.pop());
-        }
+        for (int j = 0; j < i; j++) mFragmentStack.push(copy.pop());
 
         loadFragment(mFragmentStack.peek(), true);
-
-/*
-        if (mFragmentStack.peek().getClass().getSimpleName().equals(MainBoardFragment.class.getSimpleName())) {
-            loadFragment(new MainBoardFragment(), true);
-        }
-        else{
-
-            loadFragment(mFragmentStack.peek(), true);
-        }
-*/
-
     }
 
     /*
@@ -143,8 +131,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
         String temp = ConverterService.extractJsonData(data);
         Log.d("testy send", ""+temp);
         if (mBluetoothService != null) mBluetoothService.send(temp);
-
-        //if (mBluetoothService != null) mBluetoothService.send("get");
     }
 
     @Override
@@ -327,6 +313,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_app);
 
         String str = getString(R.string.blt_not_connected);
@@ -344,22 +331,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             // Otherwise, setup the bluetooth session
         }
         else if (mBluetoothService == null) setupBluetooth();
-        savedInstanceState = new Bundle();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        // Performing this check in onResume() covers the case in which BT was
-        // not enabled during onStart(), so we were paused to enable it...
-        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
-        if (mBluetoothService != null) {
-            // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mBluetoothService.getState() == BluetoothService.STATE_NONE) {
-                // Start the Bluetooth chat services
-                mBluetoothService.start();
-            }
+        if (mBluetoothService != null && mBluetoothService.getState() == BluetoothService.STATE_NONE) {
+            mBluetoothService.start();
         }
 
         loadFragment(new ConnectFragment(), true);//charge premier fragment

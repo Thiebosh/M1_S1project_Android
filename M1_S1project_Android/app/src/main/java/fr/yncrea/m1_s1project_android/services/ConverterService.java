@@ -48,7 +48,7 @@ public class ConverterService {
         }
 
         if (data.keySet().size() < 2) {//aucune ou une seule clé
-            Log.d("testy", "nécessite au moins deux clés : id + quelque chose. a reçu "+data.keySet().size());
+            //Log.d("testy", "nécessite au moins deux clés : id + quelque chose. a reçu "+data.keySet().size());
             return -10;
         }
 
@@ -60,7 +60,7 @@ public class ConverterService {
             channel = data.get(attribute).getAsInt();
         }
         catch (Exception ignore) {
-            Log.d("testy", "erreur en récup "+attribute);
+            //Log.d("testy", "erreur en récup "+attribute);
             return -10;
         }
         if(channel == -1){
@@ -76,7 +76,7 @@ public class ConverterService {
             return -1;
         }
         if (channel > generator.getChannelList().size()) {
-            Log.d("testy", "index hors tableau");
+            //Log.d("testy", "index hors tableau");
             return -10;
         }
 
@@ -88,7 +88,7 @@ public class ConverterService {
                 generator.getChannel(channel).setActive(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
+                //Log.d("testy", "erreur récup "+attribute);
                 return -10;
             }
         }
@@ -100,7 +100,7 @@ public class ConverterService {
                 generator.getChannel(channel).setCurrentValue(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur de la récup "+attribute);
+                //Log.d("testy", "erreur de la récup "+attribute);
                 return -10;
             }
         }
@@ -112,7 +112,7 @@ public class ConverterService {
                 generator.getChannel(channel).setMinValue(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
+                //Log.d("testy", "erreur récup "+attribute);
                 return -10;
             }
         }
@@ -124,7 +124,7 @@ public class ConverterService {
                 generator.getChannel(channel).setMaxValue(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
+                //Log.d("testy", "erreur récup "+attribute);
                 return -10;
             }
         }
@@ -136,7 +136,7 @@ public class ConverterService {
                 generator.getChannel(channel).setUnit(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
+                //Log.d("testy", "erreur récup "+attribute);
                 return -10;
             }
         }
@@ -148,7 +148,7 @@ public class ConverterService {
                 generator.getChannel(channel).setScale(tmp);
             }
             catch (Exception ignore) {
-                Log.d("testy", "erreur récup "+attribute);
+                //Log.d("testy", "erreur récup "+attribute);
                 return -10;
             }
         }

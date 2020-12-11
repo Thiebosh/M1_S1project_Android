@@ -10,7 +10,7 @@
     android:paddingBottom="5dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="6dp"
-    tools:context=".fragments.MainBoardFragment">
+    tools:context=".recyclers.MainBoardHolder">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_channel_container"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/activation"
+            android:id="@+id/item_channel_button_onOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -28,22 +28,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleButton"
+            android:id="@+id/item_channel_toggle_digits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/scaleSpinner"
-            app:layout_constraintEnd_toStartOf="@+id/scaleSpinner"
+            app:layout_constraintBottom_toBottomOf="@+id/item_channel_spinner_scale"
+            app:layout_constraintEnd_toStartOf="@+id/item_channel_spinner_scale"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/scaleSpinner"
+            app:layout_constraintTop_toTopOf="@+id/item_channel_spinner_scale"
             app:selectionRequired="false"
             app:singleSelection="true">
 
             <Button
-                android:id="@+id/digit1"
+                android:id="@+id/item_channel_button_digit_sign"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/more" />
+
+            <Button
+                android:id="@+id/item_channel_button_digit1"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
@@ -53,44 +61,44 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="@string/comma" />
+                android:text="@string/point" />
 
             <Button
-                android:id="@+id/digit2"
+                android:id="@+id/item_channel_button_digit2"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/digit3"
+                android:id="@+id/item_channel_button_digit3"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/digit4"
+                android:id="@+id/item_channel_button_digit4"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/digit"
                 android:layout_height="wrap_content" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <Spinner
-            android:id="@+id/scaleSpinner"
+            android:id="@+id/item_channel_spinner_scale"
             android:layout_width="@dimen/spinner_width"
             android:layout_height="@dimen/spinner_height"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/background_spinner"
             android:gravity="start"
             android:popupBackground="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/unitSpinner"
-            app:layout_constraintTop_toBottomOf="@+id/activation" />
+            app:layout_constraintEnd_toStartOf="@+id/item_channel_spinner_unit"
+            app:layout_constraintTop_toBottomOf="@+id/item_channel_button_onOff" />
 
         <Spinner
-            android:id="@+id/unitSpinner"
+            android:id="@+id/item_channel_spinner_unit"
             android:layout_width="@dimen/spinner_width"
             android:layout_height="@dimen/spinner_height"
             android:layout_marginEnd="16dp"
@@ -98,9 +106,9 @@
             android:background="@drawable/background_spinner"
             android:gravity="start"
             android:popupBackground="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/scaleSpinner"
+            app:layout_constraintBottom_toBottomOf="@+id/item_channel_spinner_scale"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/scaleSpinner" />
+            app:layout_constraintTop_toTopOf="@+id/item_channel_spinner_scale" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
