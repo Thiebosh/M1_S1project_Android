@@ -1,5 +1,7 @@
 package fr.yncrea.m1_s1project_android.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -63,7 +65,7 @@ public enum Scale {
 
         if (shift == 0) return value;
 
-        StringBuilder shifter = new StringBuilder(String.valueOf(value));//fonctionne jusque 0.001 mais casse à 0.0001. fonctionne pour x.0001
+        StringBuilder shifter = new StringBuilder(String.valueOf(Math.abs(value)));//fonctionne jusque 0.001 mais casse à 0.0001. fonctionne pour x.0001
 
         int dotPos = shifter.indexOf(".");
         if (dotPos == -1) {
@@ -79,22 +81,14 @@ public enum Scale {
         }
 
         else {//échelle supérieure
-            dotPos -= shift;
+            for (int i = 0; i < -shift; ++i) shifter.insert(0, '0');
 
-            for (int i = shifter.length(); i <= dotPos + 1; ++i) shifter.insert(0, '0');
-
-            shifter.insert(dotPos + shift, '.');
-            shifter.deleteCharAt(dotPos + 1);
+            shifter.insert(dotPos, '.');
+            shifter.deleteCharAt(dotPos - shift + 1);
         }
 
+        if (value < 0) shifter.insert(0, '-');
 
-        double result;
-        try {
-            result = Double.parseDouble(shifter.toString());
-        }
-        catch (Exception ignore) {
-            return -1;
-        }
-        return result;
+        return Double.parseDouble(shifter.toString());//si erreur, pb de changement de point
     }
 }

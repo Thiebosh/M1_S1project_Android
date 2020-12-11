@@ -70,6 +70,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
         @SuppressLint("NonConstantResourceId") View.OnKeyListener keyListener = (view, keyCode, event) -> {
             if(keyCode == 66 && event.getAction() == KeyEvent.ACTION_DOWN) {
+                int id = view.getId();
                 String input = ((EditText) view).getText().toString();
 
                 //réduction dans limites de l'acceptable
@@ -83,13 +84,32 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                 Unit unit = mChannelList.get(mFocusedIndex).getUnit();
                 //troncature
-                if (unit == Unit.V && input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
-                    input = input.substring(0, 5);
-                    updateDisplay = true;
+                if (id == R.id.frag_main_input_current) {
+                    if (input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                        input = input.substring(0, 5);
+                        updateDisplay = true;
+                    }
+                    if (false) {
+
+                    }
+                    //if pas point en position 1,
+                        //si peut monter en échelle
+                            //vérifie position point
+                            //monte channel en échelle
+                            //fait changer value d'échelle
+                            //update display
+                        //sinon
+                            //doit interdire valeur : remet val initiale comme dans try catch et quitte
                 }
-                else if (unit == Unit.I && input.length() > 4) {//4 chiffres avant virgule
-                    input = input.substring(0, 4);
-                    updateDisplay = true;
+                else {//min ou max
+                    if (unit == Unit.V && input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                        input = input.substring(0, 5);
+                        updateDisplay = true;
+                    }
+                    if (unit == Unit.I && input.length() > 4) {//4 chiffres avant virgule
+                        input = input.substring(0, 4);
+                        updateDisplay = true;
+                    }
                 }
 
                 if (negative) input = "-"+input;
@@ -100,7 +120,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 double max = mChannelList.get(mFocusedIndex).getMaxValue();
                 double current = mChannelList.get(mFocusedIndex).getCurrentValue();
 
-                int id = view.getId();
                 double value = -1;
                 try {
                     value = Double.parseDouble(input);
@@ -121,9 +140,14 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     return false;
                 }
 
+                Scale limitScale = Objects.requireNonNull(Scale.scaleOf(holder.itemView.getContext().getResources().getInteger(
+                        unit == Unit.V ? R.integer.absolute_limit_volt_scale : R.integer.absolute_limit_ampere_scale)));
+
                 int absMax = holder.itemView.getContext().getResources().getInteger(unit == Unit.V ?
                         R.integer.absolute_limit_volt_value :
                         R.integer.absolute_limit_ampere_value);
+                absMax = (int) Scale.changeScale(absMax, Scale._, limitScale);
+
                 int absMin = -1 * absMax;
 
                 if (id == R.id.frag_main_input_min && value != min) {
@@ -231,6 +255,9 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mDigitSelected = digit;
 
         //remplacer limites par celles du canal, et après scaling
+        if (false) {
+            
+        }
         if (mChannelList.get(mFocusedIndex).getCurrentValue() > 0.000) mLess.setEnabled(true);
         if (mChannelList.get(mFocusedIndex).getCurrentValue() < 9.999) mMore.setEnabled(true);
     }
@@ -265,26 +292,41 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         boolean isPositive = integerValue >= 0;
         if (litteralValue.length() == (isPositive ? 4 : 5)) litteralValue.insert(isPositive ? 1 : 2, '.');
         else {
-            litteralValue.insert(isPositive ? 0 : 1, "0.");
-            while (litteralValue.length() < (isPositive ? 5 : 6)) litteralValue.insert(isPositive ? 2 : 3, '0');
+            if (Math.abs(integerValue) < 10000) {
+                litteralValue.insert(isPositive ? 0 : 1, "0.");
+                while (litteralValue.length() < (isPositive ? 5 : 6)) litteralValue.insert(isPositive ? 2 : 3, '0');
+            }
+            else litteralValue.insert(isPositive ? 2 : 3, '.');//si necessaire, flag pour changement de scale
         }
         double value = Double.parseDouble(litteralValue.toString());
 
-        //compare with limits
+        //compare with limits on same scale
+        Unit unit = mChannelList.get(mFocusedIndex).getUnit();
+        Scale valueScale = mChannelList.get(mFocusedIndex).getScale();
+        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(context.getResources().getInteger(
+                unit == Unit.V ? R.integer.absolute_limit_volt_scale : R.integer.absolute_limit_ampere_scale)));
+        double scaledValue = Scale.changeScale(value, valueScale, limitScale);
+
         //change limit scales
-        if (value >= mChannelList.get(mFocusedIndex).getMaxValue()) {
+        if (scaledValue >= mChannelList.get(mFocusedIndex).getMaxValue()) {
             mMore.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMaxValue();
             ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
-        }
-        else if (value <= mChannelList.get(mFocusedIndex).getMinValue()) {
+        } else if (scaledValue <= mChannelList.get(mFocusedIndex).getMinValue()) {
             mLess.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMinValue();
             ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
         }
-        else if (value > Math.abs(9.999) && mChannelList.get(mFocusedIndex).getScale() != Scale.getMaxValue(mChannelList.get(mFocusedIndex).getUnit())) {
-            //change scale : first digit -> last digits, other to 0
-            //if neg value, add -
+        else if (Math.abs(value) > 9.999) {
+            if (valueScale == Scale.getMaxValue(unit)) value = isPositive ? 9.999 : -9.999;
+            else {
+                //valide si troncature / arrondi... :
+                //value = Scale.changeScale(value, mChannelList.get(mFocusedIndex).getScale(), limitScale);//2 échelles par unité
+                value = Double.parseDouble((isPositive ? "+" : "-") + "0.0" + (int) Math.abs(value));
+
+                mChannelList.get(mFocusedIndex).setScale(limitScale);
+                mLastHolderSelected.setScale(limitScale);
+            }
         }
 
         //update all

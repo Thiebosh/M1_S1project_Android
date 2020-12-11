@@ -209,4 +209,8 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mDigit3.setText(String.valueOf(digits[4]));
         mDigit4.setText(String.valueOf(digits[5]));
     }
+
+    public void setScale(final Scale scale) {
+        mScaleSpinner.setSelection(mScaleAdapter.getPosition(scale.name()));
+    }
 }

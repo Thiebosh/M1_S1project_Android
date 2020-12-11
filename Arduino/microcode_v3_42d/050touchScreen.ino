@@ -24,7 +24,7 @@ uint8_t getInputFromTouchScreen() {
         //hc06.println("\n");
         if (strCmd.equals("initPlz")) {
           Serial.println("émission de la réponse");
-          String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":2.6,\"minValue\":0,\"maxValue\":5,\"unit\":V,\"scale\":m},";
+          String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":9.6,\"minValue\":0,\"maxValue\":5,\"unit\":V,\"scale\":m},";
           String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"minValue\":0,\"maxValue\":5,\"unit\":I,\"scale\":u},";
           String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"minValue\":5,\"maxValue\":10,\"unit\":V,\"scale\":m},";
           String c4 = "{\"id\":3,\"isActive\":false,\"currentValue\":1.4,\"minValue\":0,\"maxValue\":5,\"unit\":V,\"scale\":m},";
