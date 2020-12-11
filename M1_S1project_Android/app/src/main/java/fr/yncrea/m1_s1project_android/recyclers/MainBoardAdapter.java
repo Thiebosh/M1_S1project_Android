@@ -74,8 +74,8 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                 //réduction dans limites de l'acceptable
                 boolean updateDisplay = false;
-
                 boolean negative = false;
+
                 if (input.startsWith("-")) {
                     input = input.substring(1);
                     negative = true;
@@ -93,6 +93,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 }
 
                 if (negative) input = "-"+input;
+                if (updateDisplay) ((EditText) view).setText(input);
                 //fin réduction
 
                 double min = mChannelList.get(mFocusedIndex).getMinValue();
@@ -123,7 +124,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 int absMax = holder.itemView.getContext().getResources().getInteger(unit == Unit.V ?
                         R.integer.absolute_limit_volt_value :
                         R.integer.absolute_limit_ampere_value);
-                int absMin = -1*absMax;
+                int absMin = -1 * absMax;
 
                 if (id == R.id.frag_main_input_min && value != min) {
                     if (absMin <= value && value < max) mChannelList.get(mFocusedIndex).setMinValue(value);
@@ -147,8 +148,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     }
                     else mSelection.setText(String.valueOf(current));
                 }
-
-                if (updateDisplay) ((EditText) view).setText(input);
             }
 
             return false;
@@ -263,16 +262,16 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
         //int to double : exact representation
         litteralValue = new StringBuilder(String.valueOf(integerValue));
-        boolean isPos = integerValue >= 0;
-        if (litteralValue.length() == (isPos ? 4 : 5)) litteralValue.insert(isPos ? 1 : 2, '.');
+        boolean isPositive = integerValue >= 0;
+        if (litteralValue.length() == (isPositive ? 4 : 5)) litteralValue.insert(isPositive ? 1 : 2, '.');
         else {
-            litteralValue.insert(isPos ? 0 : 1, "0.");
-            while (litteralValue.length() < (isPos ? 5 : 6)) litteralValue.insert(isPos ? 2 : 3, '0');
+            litteralValue.insert(isPositive ? 0 : 1, "0.");
+            while (litteralValue.length() < (isPositive ? 5 : 6)) litteralValue.insert(isPositive ? 2 : 3, '0');
         }
         double value = Double.parseDouble(litteralValue.toString());
 
         //compare with limits
-        //change order?
+        //change limit scales
         if (value >= mChannelList.get(mFocusedIndex).getMaxValue()) {
             mMore.setEnabled(false);
             value = mChannelList.get(mFocusedIndex).getMaxValue();
@@ -287,7 +286,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
             //change scale : first digit -> last digits, other to 0
             //if neg value, add -
         }
-        
+
         //update all
         mSelection.setText(String.valueOf(value));
         mLastHolderSelected.setDigitsDisplay(value);

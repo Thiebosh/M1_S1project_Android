@@ -10,6 +10,7 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -76,7 +77,6 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mChannelActivation.setText(itemView.getContext().getString(R.string.input, channel.getId()));
         setDigitsDisplay(channel.getCurrentValue());
 
-        Log.d("testy",channel.getId()+"");
         mScaleData.clear();
         mScaleData.addAll(Scale.getNames(channel.getUnit()));
         mScaleAdapter.notifyDataSetChanged();
@@ -139,10 +139,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                                     R.integer.absolute_limit_volt_scale :
                                     R.integer.absolute_limit_ampere_scale)));
 
-                    //if (channel.getScale().getValue() < selectedScale.getValue()) {//risque de dépassement des limites
                     if (selectedScale.getValue() == limitScale.getValue()) {//risque de dépassement des limites
-                        //double limitScaledValue = Scale.changeScale(channel.getCurrentValue(), selectedScale, limitScale);
-
                         if (channel.getCurrentValue() > channel.getMaxValue()) {
                             channel.setCurrentValue(channel.getMaxValue());
                             setDigitsDisplay(channel.getCurrentValue());

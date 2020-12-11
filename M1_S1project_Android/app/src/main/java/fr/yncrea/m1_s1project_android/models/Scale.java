@@ -1,7 +1,5 @@
 package fr.yncrea.m1_s1project_android.models;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -55,9 +53,9 @@ public enum Scale {
     }
 
     public static Scale getMaxValue(final Unit unit) {
-        Scale min = Scale.u;
-        for (Scale current: getNamesValues(unit)) if (current.getValue() > min.getValue()) min = current;
-        return min;
+        Scale max = Scale.u;
+        for (Scale current: getNamesValues(unit)) if (current.getValue() > max.getValue()) max = current;
+        return max;
     }
 
     public static double changeScale(final double value, final Scale initial, final Scale target) {
@@ -86,7 +84,7 @@ public enum Scale {
             for (int i = shifter.length(); i <= dotPos + 1; ++i) shifter.insert(0, '0');
 
             shifter.insert(dotPos + shift, '.');
-            shifter.deleteCharAt(dotPos+1);
+            shifter.deleteCharAt(dotPos + 1);
         }
 
 

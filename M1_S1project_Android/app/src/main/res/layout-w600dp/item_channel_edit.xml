@@ -36,7 +36,7 @@
         <Button
             android:id="@+id/item_channel_button_digit_sign"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="25dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="@string/more" />
