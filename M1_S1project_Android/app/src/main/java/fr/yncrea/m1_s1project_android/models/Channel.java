@@ -4,8 +4,10 @@ public class Channel {
     private int id;
     private boolean isActive;
     private double currentValue;
-    private double minValue;
-    private double maxValue;
+    private double minVoltValue = -3.3;
+    private double maxVoltValue = 3.3;
+    private double minAmpereValue = -5000;
+    private double maxAmpereValue = 5000;
     private Unit unit;
     private Scale scale;
 
@@ -47,22 +49,28 @@ public class Channel {
     }
 
     public double getMinValue() {
-        return minValue;
+        return unit == Unit.V ? minVoltValue : minAmpereValue;
     }
 
     public Channel setMinValue(double minValue) {
-        this.minValue = minValue;
+        if (unit == Unit.V) minVoltValue = minValue;
+        else minAmpereValue = minValue;
+
         this.isSetMinValue = true;
+
         return this;
     }
 
     public double getMaxValue() {
-        return maxValue;
+        return unit == Unit.V ? maxVoltValue : maxAmpereValue;
     }
 
     public Channel setMaxValue(double maxValue) {
-        this.maxValue = maxValue;
+        if (unit == Unit.V) maxVoltValue = maxValue;
+        else maxAmpereValue = maxValue;
+
         this.isSetMaxValue = true;
+
         return this;
     }
 

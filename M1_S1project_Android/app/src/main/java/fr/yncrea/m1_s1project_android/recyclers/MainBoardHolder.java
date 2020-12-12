@@ -105,7 +105,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         });
 
         mContainer.setOnClickListener(v -> {
-            if (this != adapter.getLastHolderSelected()) {//pour empecher deselection de digit
+            if (MainBoardHolder.this != adapter.getLastHolderSelected()) {//pour empecher deselection de digit
                 if (adapter.getLastHolderSelected() != null) {
                     adapter.getLastHolderSelected().decreaseVisibility();
                 }
@@ -115,7 +115,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
                 mDigitGroup.setSelectionRequired(true);
 
-                adapter.setLastHolderSelected(this, channel, position);
+                adapter.setLastHolderSelected(MainBoardHolder.this, channel, position);
             }
         });
 
@@ -149,10 +149,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
                     channel.setScale(selectedScale);
 
-                    if (adapter.getDigitSelected() != -1) {
-                        Log.d("testy", "update buttons");
-                        adapter.setDigitSelected(adapter.getDigitSelected());
-                    }
+                    if (adapter.getDigitSelected() != -1) adapter.setDigitSelected(adapter.getDigitSelected());
                 }
             }
 
@@ -180,6 +177,14 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     mScaleSpinner.setSelection(mScaleAdapter.getPosition(channel.getScale().name()));
 
                     channel.setUnit(selected);
+
+                    channel.setCurrentValue(0);
+                    setDigitsDisplay(channel.getCurrentValue());
+                    adapter.setSelection(channel.getCurrentValue());
+
+                    if (MainBoardHolder.this == adapter.getLastHolderSelected()) {
+                        adapter.setLastHolderSelected(MainBoardHolder.this, channel, position);
+                    }
                 }
             }
 
