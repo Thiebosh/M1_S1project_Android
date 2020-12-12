@@ -134,12 +134,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                 if (channel.getScale() != selectedScale) {
                     //if (channel.isActive()) mChannelActivation.callOnClick();
 
-                    Scale limitScale = Objects.requireNonNull(Scale.scaleOf(itemView.getContext().getResources().getInteger(
-                            channel.getUnit() == Unit.V ?
-                                    R.integer.absolute_limit_volt_scale :
-                                    R.integer.absolute_limit_ampere_scale)));
-
-                    if (selectedScale.getValue() == limitScale.getValue()) {//risque de dépassement des limites
+                    if (selectedScale.getValue() == Scale.getMaxValue(channel.getUnit()).getValue()) {//risque de dépassement des limites
                         if (channel.getCurrentValue() > channel.getMaxValue()) {
                             channel.setCurrentValue(channel.getMaxValue());
                             setDigitsDisplay(channel.getCurrentValue());

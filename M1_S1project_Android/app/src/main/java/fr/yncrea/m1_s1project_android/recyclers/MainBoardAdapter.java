@@ -83,26 +83,25 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 }
 
                 Unit unit = mChannelList.get(mFocusedIndex).getUnit();
+                Scale limitScale = Scale.getMaxValue(unit);
+                Scale currentScale = mChannelList.get(mFocusedIndex).getScale();
                 //troncature
                 if (id == R.id.frag_main_input_current && input.length() >= 2) {
+                    if (input.charAt(1) != '.' && currentScale.getValue() < limitScale.getValue()) {
+                        input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, limitScale));
+                        mChannelList.get(mFocusedIndex).setScale(limitScale);
+                        mLastHolderSelected.setScale(limitScale);
+                        currentScale = limitScale;
+                    }
+
                     if (input.charAt(1) == '.') {
-                        if (input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
-                            input = input.substring(0, 5);
-                            updateDisplay = true;
-                        }
+                        if (input.length() > 5) input = input.substring(0, 5);//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                        updateDisplay = true;
                     }
-                    else {//point ailleurs ou pas de point
-
+                    else {
+                        ((EditText) view).setText(String.valueOf(mChannelList.get(mFocusedIndex).getCurrentValue()));
+                        return false;
                     }
-
-                    //if pas point en position 1,
-                        //si peut monter en échelle
-                            //vérifie position point
-                            //monte channel en échelle
-                            //fait changer value d'échelle
-                            //update display
-                        //sinon
-                            //doit interdire valeur : remet val initiale comme dans try catch et quitte
                 }
                 else {//min ou max
                     if (unit == Unit.V && input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
@@ -143,14 +142,10 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     return false;
                 }
 
-                Scale limitScale = Objects.requireNonNull(Scale.scaleOf(holder.itemView.getContext().getResources().getInteger(
-                        unit == Unit.V ? R.integer.absolute_limit_volt_scale : R.integer.absolute_limit_ampere_scale)));
-
                 int absMax = holder.itemView.getContext().getResources().getInteger(unit == Unit.V ?
                         R.integer.absolute_limit_volt_value :
                         R.integer.absolute_limit_ampere_value);
                 absMax = (int) Scale.changeScale(absMax, Scale._, limitScale);
-
                 int absMin = -1 * absMax;
 
                 if (id == R.id.frag_main_input_min && value != min) {
@@ -162,12 +157,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     else mMaximum.setText(String.valueOf(max));
                 }
                 else if (id == R.id.frag_main_input_current && value != current) {
-                    double limitScaledValue = Scale.changeScale(value,
-                            mChannelList.get(mFocusedIndex).getScale(),
-                            Objects.requireNonNull(Scale.scaleOf(holder.itemView.getContext().getResources().getInteger(
-                                    unit == Unit.V ?
-                                            R.integer.absolute_limit_volt_scale :
-                                            R.integer.absolute_limit_ampere_scale))));
+                    double limitScaledValue = Scale.changeScale(value, currentScale, limitScale);
 
                     if (min <= limitScaledValue && limitScaledValue <= max) {//comparaison sur même échelle
                         mChannelList.get(mFocusedIndex).setCurrentValue(value);//application de la valeur sur l'échelle du canal
@@ -258,10 +248,8 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mDigitSelected = digit;
 
         //compare with limits on same scale
-        Unit unit = mChannelList.get(mFocusedIndex).getUnit();
         Scale valueScale = mChannelList.get(mFocusedIndex).getScale();
-        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(mLastHolderSelected.itemView.getResources().getInteger(
-                unit == Unit.V ? R.integer.absolute_limit_volt_scale : R.integer.absolute_limit_ampere_scale)));
+        Scale limitScale = Scale.getMaxValue(mChannelList.get(mFocusedIndex).getUnit());
         double scaledValue = Scale.changeScale(mChannelList.get(mFocusedIndex).getCurrentValue(), valueScale, limitScale);
 
         mMore.setEnabled(false);
@@ -310,10 +298,8 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         double value = Double.parseDouble(litteralValue.toString());
 
         //compare with limits on same scale
-        Unit unit = mChannelList.get(mFocusedIndex).getUnit();
         Scale valueScale = mChannelList.get(mFocusedIndex).getScale();
-        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(context.getResources().getInteger(
-                unit == Unit.V ? R.integer.absolute_limit_volt_scale : R.integer.absolute_limit_ampere_scale)));
+        Scale limitScale = Scale.getMaxValue(mChannelList.get(mFocusedIndex).getUnit());
         double scaledValue = Scale.changeScale(value, valueScale, limitScale);
 
         //change limit scales
@@ -327,7 +313,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
             ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
         }
         else if (Math.abs(value) > 9.999) {
-            if (valueScale == Scale.getMaxValue(unit)) value = isPositive ? 9.999 : -9.999;
+            if (valueScale == limitScale) value = isPositive ? 9.999 : -9.999;
             else {
                 //valide si troncature / arrondi... :
                 //value = Scale.changeScale(value, mChannelList.get(mFocusedIndex).getScale(), limitScale);//2 échelles par unité
