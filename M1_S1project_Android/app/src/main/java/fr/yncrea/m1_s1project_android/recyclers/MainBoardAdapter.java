@@ -84,14 +84,17 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                 Unit unit = mChannelList.get(mFocusedIndex).getUnit();
                 //troncature
-                if (id == R.id.frag_main_input_current) {
-                    if (input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
-                        input = input.substring(0, 5);
-                        updateDisplay = true;
+                if (id == R.id.frag_main_input_current && input.length() >= 2) {
+                    if (input.charAt(1) == '.') {
+                        if (input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                            input = input.substring(0, 5);
+                            updateDisplay = true;
+                        }
                     }
-                    if (false) {
+                    else {//point ailleurs ou pas de point
 
                     }
+
                     //if pas point en position 1,
                         //si peut monter en échelle
                             //vérifie position point
@@ -254,12 +257,18 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
     public void setDigitSelected(final int digit) {
         mDigitSelected = digit;
 
-        //remplacer limites par celles du canal, et après scaling
-        if (false) {
-            
-        }
-        if (mChannelList.get(mFocusedIndex).getCurrentValue() > 0.000) mLess.setEnabled(true);
-        if (mChannelList.get(mFocusedIndex).getCurrentValue() < 9.999) mMore.setEnabled(true);
+        //compare with limits on same scale
+        Unit unit = mChannelList.get(mFocusedIndex).getUnit();
+        Scale valueScale = mChannelList.get(mFocusedIndex).getScale();
+        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(mLastHolderSelected.itemView.getResources().getInteger(
+                unit == Unit.V ? R.integer.absolute_limit_volt_scale : R.integer.absolute_limit_ampere_scale)));
+        double scaledValue = Scale.changeScale(mChannelList.get(mFocusedIndex).getCurrentValue(), valueScale, limitScale);
+
+        mMore.setEnabled(false);
+        mLess.setEnabled(false);
+
+        if (scaledValue < mChannelList.get(mFocusedIndex).getMaxValue()) mMore.setEnabled(true);
+        if (scaledValue > mChannelList.get(mFocusedIndex).getMinValue()) mLess.setEnabled(true);
     }
 
     public void setSelection(final double value) {

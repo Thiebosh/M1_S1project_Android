@@ -153,6 +153,11 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     }
 
                     channel.setScale(selectedScale);
+
+                    if (adapter.getDigitSelected() != -1) {
+                        Log.d("testy", "update buttons");
+                        adapter.setDigitSelected(adapter.getDigitSelected());
+                    }
                 }
             }
 
