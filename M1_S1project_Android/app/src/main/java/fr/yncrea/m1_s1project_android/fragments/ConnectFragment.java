@@ -37,7 +37,7 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
 
     @Override
     public void updateTitle(String title) {
-        mTitle.setText(title);//getString(R.string.frag_conn_connecting_device, deviceName)
+        mTitle.setText(title);
     }
 
     /*

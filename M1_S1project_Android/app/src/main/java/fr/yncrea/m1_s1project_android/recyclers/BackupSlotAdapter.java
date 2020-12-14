@@ -3,10 +3,10 @@ package fr.yncrea.m1_s1project_android.recyclers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,20 +44,22 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
         public void setInteractions(BackupSlotAdapter adapter, BackupConfigAdapter displayer, final ArrayList<Channel> config, Context context) {
             mSlotContainer.setOnClickListener(v -> {
-                ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
-                //apply color on item
-                //displayer.getChannelList().clear();
-                //displayer.getChannelList().addAll(config);
-                //displayer.notifyDataSetChanged();
-                if (this != adapter.getLastHolderSelected()) {//pour empecher deselection de digit
+                if (this != adapter.getLastHolderSelected()) {
                     if (adapter.getLastHolderSelected() != null) {
                         adapter.getLastHolderSelected().getSlotContainer().setBackgroundColor(itemView.getContext().getResources().getColor(R.color.gray));
                     }
 
                     mSlotContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
 
-                    adapter.setLastHolderSelected(this);
+                    adapter.setLastHolderSelected(this, getAdapterPosition());
 
+                    //si pas encore acquis données de cette config => tableau de bool faux, met à true quand demandé ? permet de passer outre slots vides
+                    ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
+
+                    //sinon
+                    //displayer.getChannelList().clear();
+                    //displayer.getChannelList().addAll(config);
+                    //displayer.notifyDataSetChanged();
                 }
             });
         }
@@ -66,20 +68,33 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
     private final ArrayList<Generator> mConfigList;
     private final BackupConfigAdapter mConfigDisplayer;
+
     private BackupSlotAdapter.Holder mLastHolderSelected = null;
+    private int mFocusedIndex = -1;
+
+    private final Button mSave;
+
+
+    public BackupSlotAdapter(View view, BackupConfigAdapter configDisplayer, ArrayList<Generator> configList) {
+        this.mConfigDisplayer = configDisplayer;
+        this.mConfigList = configList != null ? configList : new ArrayList<>();//secu
+
+        mSave = view.findViewById(R.id.frag_back_button_save);
+    }
+
+    public ArrayList<Generator> getConfigList() {
+        return mConfigList;
+    }
 
     public Holder getLastHolderSelected() {
         return mLastHolderSelected;
     }
 
-    public void setLastHolderSelected(Holder holder){
+    public void setLastHolderSelected(final Holder holder, final int position){
         this.mLastHolderSelected = holder;
-    }
+        mFocusedIndex = position;
 
-
-    public BackupSlotAdapter(BackupConfigAdapter configDisplayer, ArrayList<Generator> configList) {
-        this.mConfigDisplayer = configDisplayer;
-        this.mConfigList = configList != null ? configList : new ArrayList<>();//secu
+        mSave.setActivated(true);
     }
 
     @NonNull
@@ -104,14 +119,12 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
     }
 
     public int getFocusedIndex() {
-        return 1;
+        return mFocusedIndex;
     }
 
     private static Activity getActivity(Context context) {
         while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
-                return (Activity)context;
-            }
+            if (context instanceof Activity) return (Activity)context;
             context = ((ContextWrapper)context).getBaseContext();
         }
         return null;
