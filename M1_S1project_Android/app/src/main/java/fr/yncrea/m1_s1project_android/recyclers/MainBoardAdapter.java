@@ -100,20 +100,29 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 }
 
                 Unit unit = channel.getUnit();
-                Scale maxScale = Scale.getMaxValue(unit);
-                Scale currentScale = channel.getScale();
                 //troncature
                 if (id == R.id.frag_main_input_current && input.length() >= 2) {
+                    Scale maxScale = Scale.getMaxValue(unit);
+                    Scale currentScale = channel.getScale();
+
                     if (input.charAt(1) != '.' && currentScale.getValue() < maxScale.getValue()) {
                         input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, maxScale));
                         channel.setScale(maxScale);
                         mLastHolderSelected.setScale(maxScale);
                         mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
-                        currentScale = maxScale;
                     }
 
-                    if (input.charAt(1) == '.') {
-                        if (input.length() > 5) input = input.substring(0, 5);//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                    if (input.charAt(1) == '.' && input.length() > 5) {
+                        Scale minScale = Scale.getMinValue(unit);
+
+                        if (currentScale.getValue() > minScale.getValue() && input.startsWith("0.00")) {//change scale
+                            input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, minScale));
+                            channel.setScale(minScale);
+                            mLastHolderSelected.setScale(minScale);
+                            mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+                        }
+                        else input = input.substring(0, 5);//1 avant virgule, virgule, 3 apres virgule
+
                         updateDisplay = true;
                     }
                     else {
@@ -178,7 +187,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     else mMax.setText(String.valueOf(max));
                 }
                 else if (id == R.id.frag_main_input_current && value != current) {
-                    double limitScaledValue = Scale.changeScale(value, currentScale, limitScale);
+                    double limitScaledValue = Scale.changeScale(value, channel.getScale(), limitScale);
 
                     if (min <= limitScaledValue && limitScaledValue <= max) {//comparaison sur même échelle
                         channel.setCurrentValue(value);//application de la valeur sur l'échelle du canal
