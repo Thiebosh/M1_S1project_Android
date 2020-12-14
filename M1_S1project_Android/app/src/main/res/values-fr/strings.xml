@@ -25,6 +25,7 @@
     <string name="frag_conn_connecting_device">Tentative de connexion à <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="frag_conn_none_paired">Aucun appareil n\'a été jumelé</string>
 
+    <string name="remember">Se rappeler de moi?</string>
 
     <!-- Fragment MainBoard -->
     <string name="frag_main_tmp">Écran principal</string>

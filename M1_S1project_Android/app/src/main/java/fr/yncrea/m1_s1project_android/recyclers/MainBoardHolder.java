@@ -1,7 +1,6 @@
 package fr.yncrea.m1_s1project_android.recyclers;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,7 +9,6 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -18,7 +16,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
@@ -111,7 +108,6 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                 }
 
                 mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
-                //mContainer.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.background_item)); //pb sur tablette ?
 
                 mDigitGroup.setSelectionRequired(true);
 

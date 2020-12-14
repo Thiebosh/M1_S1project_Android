@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -392,7 +391,6 @@ public class BluetoothService {
                     if (bytes != 0) {
                         String tmp = new String(buffer, 0, bytes);
                         str.append(tmp);
-                        Log.d("testy", tmp);
 
                         for (char c : tmp.toCharArray()) {
                             if (c == '{') brackets++;

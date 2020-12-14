@@ -25,6 +25,8 @@
     <string name="frag_conn_connecting_device">Try to connect to <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="frag_conn_none_paired">No devices have been paired</string>
 
+    <string name="remember">Remember me?</string>
+
 
     <!-- Fragment MainBoard -->
     <string name="frag_main_tmp">MainBoard screen</string>

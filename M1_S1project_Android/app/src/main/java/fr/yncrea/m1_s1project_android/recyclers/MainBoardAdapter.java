@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Vibrator;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -208,19 +207,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mLess.setOnClickListener(v -> variation(holder.itemView.getContext(), -1));
     }
 
-    /*
-    @Override
-    public void onBindViewHolder(@NonNull MainBoardViewHolder holder, int position, List<Object> payloads) {
-        if(!payloads.isEmpty()) {
-            if (payloads.get(0) instanceof Double) {
-                Log.d("testy", "binder recieve "+payloads.get(0));
-                holder.setDigitsDisplay(((Double) payloads.get(0)));
-            }
-        }
-        else super.onBindViewHolder(holder,position, payloads);
-    }
-    */
-
     @Override
     public int getItemCount() {
         return mChannelList.size();
@@ -308,7 +294,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
     }
 
     public void setSelection(final double value) {
-        Log.d("testy", "cause 3");
         mCurrent.setText(String.valueOf(value));
     }
 
@@ -358,11 +343,11 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         if (scaledValue >= channel.getMaxValue()) {
             mMore.setEnabled(false);
             value = channel.getMaxValue();
-            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(R.integer.duration_vibration_button_more_less);
         } else if (scaledValue <= channel.getMinValue()) {
             mLess.setEnabled(false);
             value = channel.getMinValue();
-            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(R.integer.duration_vibration_button_more_less);
         }
         else if (Math.abs(value) > 9.999) {
             if (valueScale == limitScale) value = isPositive ? 9.999 : -9.999;

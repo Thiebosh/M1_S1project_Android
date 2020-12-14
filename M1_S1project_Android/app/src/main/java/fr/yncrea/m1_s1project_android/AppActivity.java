@@ -29,9 +29,8 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
-import fr.yncrea.m1_s1project_android.models.Scale;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
-import fr.yncrea.m1_s1project_android.services.ConverterService;
+import fr.yncrea.m1_s1project_android.services.JsonConverterService;
 
 /**
  * Activité principale : gestion des channels du MIVS
@@ -109,7 +108,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      * Section BluetoothParent
      */
 
-    private final Generator mGenerator = new Generator();
+    boolean mAutoConnect = true;
 
     /**
      * Establish connection with other device
@@ -128,7 +127,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final Channel data) {
-        String temp = ConverterService.extractJsonData(data);
+        String temp = JsonConverterService.extractJsonData(data);
         Log.d("testy send", ""+temp);
         if (mBluetoothService != null) mBluetoothService.send(temp);
     }
@@ -136,6 +135,16 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     @Override
     public Generator getGenerator() {
         return mGenerator;
+    }
+
+    @Override
+    public boolean getAutoConnect() {
+        return mAutoConnect;
+    }
+
+    @Override
+    public void setAutoConnect(boolean state) {
+        mAutoConnect = state;
     }
 
     /*
@@ -215,7 +224,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         int index = -2;
 
                         if (str.startsWith("channelList", 2)) {
-                            Generator storage = ConverterService.createJsonObject(str);
+                            Generator storage = JsonConverterService.createJsonObject(str);
                             if (storage == null) {
                                 mBluetoothService.send("initPlz");//requête pour les données
                                 Toast.makeText(AppActivity.this, "Erreur de réception : nouvel essai", Toast.LENGTH_SHORT).show();
@@ -236,11 +245,11 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
                             String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
 
-                            Generator storage = ConverterService.createJsonObject(init);
+                            Generator storage = JsonConverterService.createJsonObject(init);
                             mGenerator.setChannelList(Objects.requireNonNull(storage).getChannelList());
                         }
                         else {
-                            index = ConverterService.applyJsonData(mGenerator, str);
+                            index = JsonConverterService.applyJsonData(mGenerator, str);
                             if (index == -10) break;//error
                         }
 
@@ -342,6 +351,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
         }
 
         loadFragment(new ConnectFragment(), true);//charge premier fragment
+        setAutoConnect(true);
     }
 
 

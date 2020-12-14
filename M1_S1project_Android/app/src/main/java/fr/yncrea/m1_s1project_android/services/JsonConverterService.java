@@ -12,7 +12,7 @@ import fr.yncrea.m1_s1project_android.models.Unit;
 import fr.yncrea.m1_s1project_android.models.Scale;
 
 
-public class ConverterService {
+public class JsonConverterService {
 
     public static Generator createJsonObject(final String str) {
         try {

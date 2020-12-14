@@ -1,13 +1,12 @@
 package fr.yncrea.m1_s1project_android.interfaces;
 
-import android.content.res.Configuration;
-
 import androidx.fragment.app.Fragment;
 
 import java.util.Stack;
 
 /**
- * needs to implement onBackPressed()
+ * needs to implement onBackPressed() and onConfigurationChanged
+ * needs to add android:configChanges="orientation|screenSize" to activity
  */
 public interface FragmentSwitcher {
 

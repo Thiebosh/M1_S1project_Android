@@ -12,4 +12,8 @@ public interface BluetoothConstants {
     String DEVICE_NAME = "device_name";
     String TOAST = "toast";
     String RECEIVE = "receive";
+
+    String PREF_SLOT_ACCESS = "devicePrefs";
+    String PREF_IS_SAVED = "addressData";
+    String PREF_ACCESS_ADDRESS = "macAddress";
 }

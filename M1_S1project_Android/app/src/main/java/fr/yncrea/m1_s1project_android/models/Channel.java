@@ -2,21 +2,21 @@ package fr.yncrea.m1_s1project_android.models;
 
 public class Channel {
     private int id;
-    private boolean isActive;
-    private double currentValue;
+    private boolean isActive = false;
+    private double currentValue = 0;
     private double minVoltValue = -3.3;
     private double maxVoltValue = 3.3;
     private double minAmpereValue = -5000;
     private double maxAmpereValue = 5000;
-    private Unit unit;
-    private Scale scale;
+    private Unit unit = Unit.V;
+    private Scale scale = Scale._;
 
-    private boolean isSetActive;
-    private boolean isSetCurrentValue;
-    private boolean isSetMinValue;
-    private boolean isSetMaxValue;
-    private boolean isSetUnit;
-    private boolean isSetScale;
+    private boolean isSetActive = false;
+    private boolean isSetCurrentValue = false;
+    private boolean isSetMinValue = false;
+    private boolean isSetMaxValue = false;
+    private boolean isSetUnit = false;
+    private boolean isSetScale = false;
 
 
     public int getId() {

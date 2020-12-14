@@ -2,6 +2,7 @@ package fr.yncrea.m1_s1project_android.fragments;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,7 +21,10 @@ import java.util.Objects;
 import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ConnectFragment extends Fragment {
 
@@ -49,6 +54,14 @@ public class ConnectFragment extends Fragment {
         ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
         ((BluetoothParent) getActivity()).getGenerator().getChannelList().clear();
 
+        //si premier lancement et adresse en mémoire, autoconnect
+        SharedPreferences loginPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(BluetoothConstants.PREF_SLOT_ACCESS, MODE_PRIVATE);
+        SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+        if (((BluetoothParent) getActivity()).getAutoConnect() && loginPreferences.getBoolean(BluetoothConstants.PREF_IS_SAVED, false)) {
+            ((BluetoothParent) getActivity()).connectDevice(loginPreferences.getString(BluetoothConstants.PREF_ACCESS_ADDRESS, ""));
+            ((BluetoothParent) getActivity()).setAutoConnect(false);
+        }
+
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
 
@@ -69,6 +82,15 @@ public class ConnectFragment extends Fragment {
 
             // Connexion test : if success, handler will change fragment
             ((BluetoothParent) getActivity()).connectDevice(address);
+            ((BluetoothParent) getActivity()).setAutoConnect(false);
+
+            //remember mac adress
+            if (((CheckBox) view.findViewById(R.id.frag_conn_checkbox_remember)).isChecked()) {
+                loginPrefsEditor.putBoolean(BluetoothConstants.PREF_IS_SAVED, true);
+                loginPrefsEditor.putString(BluetoothConstants.PREF_ACCESS_ADDRESS, address);
+            }
+            else loginPrefsEditor.clear();
+            loginPrefsEditor.apply();
         };
         pairedListView.setOnItemClickListener(deviceClickListener);
 
