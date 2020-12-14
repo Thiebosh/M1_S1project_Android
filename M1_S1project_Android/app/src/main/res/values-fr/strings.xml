@@ -34,8 +34,11 @@
     <string name="modeCurrent"><xliff:g id="scale_channel2">%s</xliff:g>I</string>
     <string name="noSelection">Pas de sélection</string>
     <string name="input">Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
-    <string name="max">Max.</string>
-    <string name="min">Min.</string>
+    <string name="max">Max</string>
+    <string name="min">Min</string>
+    <string name="inputScaleUnit">Canal <xliff:g id="id_channel">%1$d</xliff:g> - <xliff:g id="scale">%2$s</xliff:g><xliff:g id="unit">%3$s</xliff:g></string>
+    <string name="maxScaleUnit">Max <xliff:g id="scale">%1$s</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="minScaleUnit">Min <xliff:g id="scale">%1$s</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
     <string name="point">.</string>
     <string name="more">+</string>
     <string name="less">-</string>

@@ -149,7 +149,13 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
                     channel.setScale(selectedScale);
 
-                    if (adapter.getDigitSelected() != -1) adapter.setDigitSelected(adapter.getDigitSelected());
+                    int digit = adapter.getDigitSelected();
+
+                    if (MainBoardHolder.this == adapter.getLastHolderSelected()) {
+                        adapter.setLastHolderSelected(MainBoardHolder.this, channel, position);
+                    }
+
+                    if (digit != -1) adapter.setDigitSelected(digit);
                 }
             }
 
@@ -203,8 +209,8 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
     }
 
     public void setDigitsDisplay(final double value) {
-        StringBuilder tmp = new StringBuilder(String.valueOf(value));
-        if (value >= 0) tmp.insert(0, '+');
+        StringBuilder tmp = new StringBuilder(String.valueOf(Math.abs(value)));
+        tmp.insert(0, value >= 0 ? '+' : '-');
         while (tmp.length() < 6) tmp.append('0');
         char[] digits = tmp.toString().toCharArray();
 

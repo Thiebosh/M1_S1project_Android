@@ -1,7 +1,5 @@
 package fr.yncrea.m1_s1project_android.models;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 

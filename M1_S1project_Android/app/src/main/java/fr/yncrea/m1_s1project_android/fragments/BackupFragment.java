@@ -64,8 +64,8 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         ArrayList<Generator> tmpList = new ArrayList<>(Arrays.asList(tmp, new Generator()));
 
         RecyclerView oneConfigRecycler = view.findViewById(R.id.frag_back_recycler_config);
-        //oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.VERTICAL));
-        //oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
+        oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.VERTICAL));
+        oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
         BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(tmp.getChannelList());
         oneConfigRecycler.setAdapter(oneConfigAdapter);
 

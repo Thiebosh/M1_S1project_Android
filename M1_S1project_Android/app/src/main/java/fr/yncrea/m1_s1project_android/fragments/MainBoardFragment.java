@@ -1,6 +1,7 @@
 package fr.yncrea.m1_s1project_android.fragments;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Objects;
@@ -68,7 +70,15 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
         mAdapter = new MainBoardAdapter(view, ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList());
-        ((RecyclerView) view.findViewById(R.id.frag_main_recycler)).setAdapter(mAdapter);
+        RecyclerView recycler = view.findViewById(R.id.frag_main_recycler);
+        recycler.setAdapter(mAdapter);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        if ((metrics.widthPixels * 160 / metrics.densityDpi) > 600) {//width screen for card item
+            recycler.addItemDecoration(new DividerItemDecoration(recycler.getContext(), DividerItemDecoration.VERTICAL));
+            recycler.addItemDecoration(new DividerItemDecoration(recycler.getContext(), DividerItemDecoration.HORIZONTAL));
+        }
 
         // Listeners
         mAllOnBtn = view.findViewById(R.id.frag_main_allOn);

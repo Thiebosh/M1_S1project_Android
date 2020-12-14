@@ -83,7 +83,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/frag_main_relative_minmax"
+                android:id="@+id/frag_main_relative_limits"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -91,39 +91,61 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frag_main_relative_allOnOff">
 
-                <EditText
-                    android:id="@+id/frag_main_input_min"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/frag_main_hint_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
-                    android:autofillHints=""
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:hint="@string/min"
-                    android:inputType="numberSigned|numberDecimal" />
+                    android:hint="@string/min">
 
-                <EditText
-                    android:id="@+id/frag_main_input_max"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/frag_main_input_min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:maxLines="1"
+                        android:minWidth="65dp"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:paddingBottom="6dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/frag_main_hint_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:autofillHints=""
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:hint="@string/max"
-                    android:inputType="numberSigned|numberDecimal" />
+                    android:hint="@string/max">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/frag_main_input_max"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:maxLines="1"
+                        android:minWidth="65dp"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:paddingBottom="6dp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/frag_main_relative_moreLess"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frag_main_relative_minmax">
+                app:layout_constraintTop_toBottomOf="@+id/frag_main_relative_limits">
 
                 <Button
                     android:id="@+id/frag_main_button_less"
@@ -144,21 +166,32 @@
                     android:text="@string/more" />
             </RelativeLayout>
 
-            <EditText
-                android:id="@+id/frag_main_input_current"
-                android:layout_width="134dp"
-                android:layout_height="46dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/frag_main_hint_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
-                android:autofillHints=""
-                android:enabled="false"
-                android:gravity="center"
                 android:hint="@string/noSelection"
-                android:inputType="numberSigned|numberDecimal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frag_main_relative_moreLess" />
+                app:layout_constraintTop_toBottomOf="@+id/frag_main_relative_moreLess">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/frag_main_input_current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:maxLines="1"
+                    android:minWidth="160dp"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="6dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>
