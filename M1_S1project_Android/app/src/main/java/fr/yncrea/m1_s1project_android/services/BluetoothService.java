@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
 
 public class BluetoothService {
@@ -37,19 +35,18 @@ public class BluetoothService {
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
-
-    private final Resources mResources;
+    public static final int STATE_DISCONNECT = 4;  // now disconnected from the remote device
+    public static final int STATE_FAILED = 5;
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
      *
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothService(final Resources resources, final Handler handler) {
+    public BluetoothService(final Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
-        mResources = resources;
     }
 
     /**
@@ -82,14 +79,14 @@ public class BluetoothService {
         // Start the thread to connect with the given device
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
-        // Update UI title
-        updateUserInterfaceTitle();
+
+        updateUserInterface();
     }
 
     /**
-     * Update UI title according to the current state of the chat connection
+     * Update UI according to the current state of the chat connection
      */
-    private synchronized void updateUserInterfaceTitle() {
+    private synchronized void updateUserInterface() {
         // Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(BluetoothConstants.MESSAGE_STATE_CHANGE, mState, -1).sendToTarget();
     }
@@ -129,8 +126,8 @@ public class BluetoothService {
         bundle.putString(BluetoothConstants.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-        // Update UI title
-        updateUserInterfaceTitle();
+
+        updateUserInterface();
     }
 
     /**
@@ -155,8 +152,8 @@ public class BluetoothService {
             mSecureAcceptThread = new AcceptThread();
             mSecureAcceptThread.start();
         }
-        // Update UI title
-        updateUserInterfaceTitle();
+
+        updateUserInterface();
     }
 
     /**
@@ -181,17 +178,10 @@ public class BluetoothService {
      * Indicate that the connection attempt failed or the connexion was lost
      * and notify the UI Activity.
      */
-    private void connectionClosed(final String reason) {
-        // Send a failure message back to the Activity
-        final Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_TOAST);
-        final Bundle bundle = new Bundle();
-        bundle.putString(BluetoothConstants.TOAST, reason);
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
+    private void connectionClosed(final int reason) {
+        mState = reason;
 
-        mState = STATE_NONE;
-        // Update UI title
-        updateUserInterfaceTitle();
+        updateUserInterface();
 
         // Start the service over to restart listening mode
         BluetoothService.this.start();
@@ -219,7 +209,7 @@ public class BluetoothService {
 
         mState = STATE_NONE;
         // Update UI title
-        updateUserInterfaceTitle();
+        updateUserInterface();
     }
 
     /**
@@ -329,7 +319,7 @@ public class BluetoothService {
                     mmSocket.close();
                 }
                 catch (IOException ignored) {}
-                connectionClosed(mResources.getString(R.string.blt_connection_failed));
+                connectionClosed(STATE_FAILED);
                 return;
             }
 
@@ -408,7 +398,7 @@ public class BluetoothService {
                     }
                 }
                 catch (IOException e) {
-                    connectionClosed(mResources.getString(R.string.blt_disconnected));
+                    connectionClosed(STATE_DISCONNECT);
                     break;
                 }
             }

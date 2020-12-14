@@ -22,13 +22,14 @@
     <string name="frag_conn_select_device">Sélectionnez un appareil</string>
     <string name="frag_conn_paired_devices">Appareils connus</string>
 
-    <string name="frag_conn_connecting_device">Tentative de connexion à <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="frag_conn_none_paired">Aucun appareil n\'a été jumelé</string>
+    <string name="frag_conn_connecting_device">Tentative de connexion à <xliff:g id="device_name">%1$s</xliff:g>…</string>
+    <string name="frag_conn_connexion_failed">Échec de la connexion à <xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="frag_conn_retrieve_data">Chargement des données depuis <xliff:g id="device_name">%1$s</xliff:g>…</string>
 
-    <string name="remember">Se rappeler de moi?</string>
+    <string name="frag_conn_autoConnect">Connexion automatique ?</string>
 
     <!-- Fragment MainBoard -->
-    <string name="frag_main_tmp">Écran principal</string>
     <string name="allChannel">Tous les canaux</string>
     <string name="OnOff">On/Off</string>
     <string name="modeVolt"><xliff:g id="scale_channel1">%s</xliff:g>V</string>
@@ -47,7 +48,6 @@
     <string name="off">OFF</string>
 
     <!-- Fragment Backup -->
-    <string name="frag_back_tmp">Écran des sauvegardes</string>
     <string name="slot">Slot <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="save">Enregistre courant</string>
     <string name="load">Charge affiché</string>

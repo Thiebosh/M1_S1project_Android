@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:checked="true"
-        android:text="@string/remember"
+        android:text="@string/frag_conn_autoConnect"
         app:buttonTint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

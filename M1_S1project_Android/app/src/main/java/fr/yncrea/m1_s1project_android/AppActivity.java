@@ -24,6 +24,7 @@ import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
 import fr.yncrea.m1_s1project_android.fragments.MainBoardFragment;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothConnect;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
@@ -171,7 +172,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     /**
      * Name of the connected device
      */
-    private String mConnectedDeviceName = null;
+    private String mConnectedDeviceName = "device";
 
 
     /**
@@ -179,25 +180,46 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
     private void setupBluetooth() {
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mBluetoothService = new BluetoothService(getResources(), new Handler(Looper.myLooper()) {
+        mBluetoothService = new BluetoothService(new Handler(Looper.myLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 // The Handler that gets information back from the BluetoothChatService
                 String str;
                 switch (msg.what) {
+                    case BluetoothConstants.MESSAGE_DEVICE_NAME:
+                        mConnectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
+                        break;
+
                     case BluetoothConstants.MESSAGE_STATE_CHANGE:
-                        Log.d("testy", "messageStateChange");
-                        // Updates the status on the action bar.
                         switch (msg.arg1) {
-                            case BluetoothService.STATE_CONNECTED:
-                                str = getString(R.string.blt_connected, mConnectedDeviceName);
-                                break;
-                            case BluetoothService.STATE_CONNECTING:
-                                str = getString(R.string.blt_connecting);
-                                break;
                             case BluetoothService.STATE_NONE:
                                 str = getString(R.string.blt_not_connected);
                                 break;
+
+                            case BluetoothService.STATE_CONNECTING:
+                                str = getString(R.string.frag_conn_connecting_device, mConnectedDeviceName);
+                                ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                str = getString(R.string.blt_connecting);
+                                break;
+
+                            case BluetoothService.STATE_FAILED:
+                                str = getString(R.string.frag_conn_connexion_failed, mConnectedDeviceName);
+                                ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                str = getString(R.string.blt_not_connected);
+                                break;
+
+                            case BluetoothService.STATE_CONNECTED:
+                                str = getString(R.string.frag_conn_retrieve_data, mConnectedDeviceName);
+                                ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                str = getString(R.string.blt_connected, mConnectedDeviceName);
+                                sendData("initPlz");//requete pour les données
+                                break;
+
+                            case BluetoothService.STATE_DISCONNECT:
+                                loadFragment(new ConnectFragment(), true);//charge premier fragment
+                                str = getString(R.string.blt_not_connected);
+                                break;
+
                             default:
                                 str = null;
                         }
@@ -205,25 +227,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             Objects.requireNonNull(getSupportActionBar()).setSubtitle(str);
                         }
                         break;
-
-                    case BluetoothConstants.MESSAGE_DEVICE_NAME:
-                        Log.d("testy", "messageDeviceName");
-                        // save the connected device's name
-                        mConnectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
-                        str = getString(R.string.blt_connected, mConnectedDeviceName);
-                        Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
-                        //autorise connexion
-                        loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
-                        sendData("initPlz");//requête pour les données
-                        Toast.makeText(AppActivity.this, "Chargement des données, veuillez patienter", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case BluetoothConstants.MESSAGE_TOAST:
-                        str = msg.getData().getString(BluetoothConstants.TOAST);
-                        Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
-                        break;
-                        //si perd connexion, déconnecter
-                        //si échec de connexion, remettre titre initial
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
@@ -237,6 +240,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 break;
                             }
                             mGenerator.setChannelList(storage.getChannelList());
+                            loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
+                            break;
                         }
                         // le else if qui suit ne sert que pour l'utilisation entre 2 android
                         else if (str.equals("initPlz")) {

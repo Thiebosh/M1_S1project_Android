@@ -21,12 +21,24 @@ import java.util.Objects;
 import java.util.Set;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothConnect;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothConstants;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ConnectFragment extends Fragment {
+public class ConnectFragment extends Fragment implements BluetoothConnect {
+
+    private TextView mTitle;
+
+    /*
+     * Section BluetoothConnect
+     */
+
+    @Override
+    public void updateTitle(String title) {
+        mTitle.setText(title);//getString(R.string.frag_conn_connecting_device, deviceName)
+    }
 
     /*
      * Section Menu
@@ -62,6 +74,8 @@ public class ConnectFragment extends Fragment {
             ((BluetoothParent) getActivity()).setAutoConnect(false);
         }
 
+        mTitle = view.findViewById(R.id.frag_conn_textView_title);
+
         // Find and set up the ListView for paired devices
         ListView pairedListView = view.findViewById(R.id.frag_conn_listView_paired_devices);
 
@@ -77,8 +91,7 @@ public class ConnectFragment extends Fragment {
             String deviceName = info.substring(0, info.length() - 18);//mac adress + space
 
             // Notify user during connexion test
-            String str = getString(R.string.frag_conn_connecting_device, deviceName);
-            ((TextView) view.findViewById(R.id.frag_conn_textView_title)).setText(str);
+            mTitle.setText(getString(R.string.frag_conn_connecting_device, deviceName));
 
             // Connexion test : if success, handler will change fragment
             ((BluetoothParent) getActivity()).connectDevice(address);
