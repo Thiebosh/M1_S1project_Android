@@ -8,5 +8,5 @@
     <integer name="absolute_limit_ampere_scale_value">-3</integer>
     <integer name="absolute_limit_ampere_scale_display">-6</integer>
 
-    <integer name="duration_vibration_button_more_less">400</integer>
+    <integer name="duration_vibration_button_more_less">300</integer>
 </resources>

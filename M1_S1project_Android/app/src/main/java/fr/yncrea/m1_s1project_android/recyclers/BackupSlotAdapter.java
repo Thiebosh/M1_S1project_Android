@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import fr.yncrea.m1_s1project_android.R;
+import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 
@@ -51,6 +52,8 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
                     mSlotContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
 
                     adapter.setLastHolderSelected(this);
+
+                    ((BluetoothParent) itemView.getContext()).sendData("slot"+getAdapterPosition());
                 }
             });
         }

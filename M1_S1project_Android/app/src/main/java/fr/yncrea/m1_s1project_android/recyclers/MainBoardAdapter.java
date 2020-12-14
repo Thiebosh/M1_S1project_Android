@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Vibrator;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -343,11 +344,11 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         if (scaledValue >= channel.getMaxValue()) {
             mMore.setEnabled(false);
             value = channel.getMaxValue();
-            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(R.integer.duration_vibration_button_more_less);
+            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(mResources.getInteger(R.integer.duration_vibration_button_more_less));
         } else if (scaledValue <= channel.getMinValue()) {
             mLess.setEnabled(false);
             value = channel.getMinValue();
-            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(R.integer.duration_vibration_button_more_less);
+            ((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(mResources.getInteger(R.integer.duration_vibration_button_more_less));
         }
         else if (Math.abs(value) > 9.999) {
             if (valueScale == limitScale) value = isPositive ? 9.999 : -9.999;

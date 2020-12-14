@@ -186,6 +186,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                 String str;
                 switch (msg.what) {
                     case BluetoothConstants.MESSAGE_STATE_CHANGE:
+                        Log.d("testy", "messageStateChange");
                         // Updates the status on the action bar.
                         switch (msg.arg1) {
                             case BluetoothService.STATE_CONNECTED:
@@ -206,13 +207,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         break;
 
                     case BluetoothConstants.MESSAGE_DEVICE_NAME:
+                        Log.d("testy", "messageDeviceName");
                         // save the connected device's name
                         mConnectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
                         str = getString(R.string.blt_connected, mConnectedDeviceName);
                         Toast.makeText(AppActivity.this, str, Toast.LENGTH_SHORT).show();
                         //autorise connexion
                         loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
-                        mBluetoothService.send("initPlz");//requête pour les données
+                        sendData("initPlz");//requête pour les données
                         Toast.makeText(AppActivity.this, "Chargement des données, veuillez patienter", Toast.LENGTH_SHORT).show();
                         break;
 
@@ -230,7 +232,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if (storage == null) {
-                                mBluetoothService.send("initPlz");//requête pour les données
+                                sendData("initPlz");//requête pour les données
                                 Toast.makeText(AppActivity.this, "Erreur de réception : nouvel essai", Toast.LENGTH_SHORT).show();
                                 break;
                             }
