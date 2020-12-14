@@ -186,9 +186,9 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
                     channel.setCurrentValue(0);
                     setDigitsDisplay(channel.getCurrentValue());
-                    adapter.setSelection(channel.getCurrentValue());
 
                     if (MainBoardHolder.this == adapter.getLastHolderSelected()) {
+                        adapter.setSelection(channel.getCurrentValue());
                         adapter.setLastHolderSelected(MainBoardHolder.this, channel, position);
                     }
                 }
