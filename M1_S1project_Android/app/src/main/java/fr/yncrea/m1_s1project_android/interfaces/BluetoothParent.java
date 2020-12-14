@@ -9,6 +9,7 @@ public interface BluetoothParent {
     void connectDevice(final String deviceMacAddress);
     void disconnectDevice();
     void sendData(final Channel data);//emission / reception
+    void sendData(final String data);//emission / reception
     Generator getGenerator();
     boolean getAutoConnect();
     void setAutoConnect(boolean state);

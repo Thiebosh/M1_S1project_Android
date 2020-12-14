@@ -127,9 +127,13 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final Channel data) {
-        String temp = JsonConverterService.extractJsonData(data);
-        Log.d("testy send", ""+temp);
-        if (mBluetoothService != null) mBluetoothService.send(temp);
+        sendData(JsonConverterService.extractJsonData(data));
+    }
+
+    @Override
+    public void sendData(final String data) {
+        Log.d("testy send", ""+data);
+        if (mBluetoothService != null) mBluetoothService.send(data);
     }
 
     @Override
