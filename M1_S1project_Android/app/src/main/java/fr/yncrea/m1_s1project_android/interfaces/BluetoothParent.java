@@ -1,19 +1,16 @@
 package fr.yncrea.m1_s1project_android.interfaces;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 
 public interface BluetoothParent {
     Generator mGenerator = new Generator();
-    //Generator mBackupGenerator = new Generator();
-    boolean[] isStoreCharged = new boolean[8];
-    ArrayList<Generator> mBackupGenerator = new ArrayList<Generator>(){{
-        add(new Generator());
-        add(new Generator());
-        add(new Generator());
-    }};
+    ArrayList<Boolean> isStoreCharged = new ArrayList<>(Arrays.asList(true, true, false));
+    ArrayList<Generator> mBackupGenerator = new ArrayList<>(Arrays.asList(new Generator(), new Generator(), new Generator()));
 
     boolean getAutoConnect();
     void setAutoConnect(boolean state);
@@ -22,7 +19,4 @@ public interface BluetoothParent {
 
     void sendData(final Channel data);//emission / reception
     void sendData(final String data);//emission / reception
-    Generator getGenerator();
-    ArrayList<Generator> getBackupGenerator();
-    boolean getStoreCharged(final int store);
 }

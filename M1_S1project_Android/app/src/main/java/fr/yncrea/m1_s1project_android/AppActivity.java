@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -140,21 +140,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     @Override
-    public Generator getGenerator() {
-        return mGenerator;
-    }
-
-    @Override
-    public ArrayList<Generator> getBackupGenerator() {
-        return mBackupGenerator;
-    }
-
-    @Override
-    public boolean getStoreCharged(int store) {
-        return isStoreCharged[store];
-    }
-
-    @Override
     public boolean getAutoConnect() {
         return mAutoConnect;
     }
@@ -232,6 +217,11 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             case BluetoothService.STATE_DISCONNECT:
                                 loadFragment(new ConnectFragment(), true);//charge premier fragment
                                 str = getString(R.string.blt_not_connected);
+                                BluetoothParent.mGenerator.getChannelList().clear();
+                                BluetoothParent.isStoreCharged.clear();
+                                BluetoothParent.isStoreCharged.addAll(Arrays.asList(true, true, false));//tmp
+                                BluetoothParent.mBackupGenerator.clear();
+                                BluetoothParent.mBackupGenerator.addAll(Arrays.asList(new Generator(), new Generator(), new Generator()));//tmp
                                 break;
 
                             default:
@@ -264,7 +254,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             Log.d("testy", str);
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if(storage != null){
-                                isStoreCharged[store_number] = true;
+                                isStoreCharged.set(store_number, true);
                                 mBackupGenerator.get(store_number).setChannelList(storage.getChannelList());
                                 Log.d("testy", "store charged"+storage.getChannelList().size());
 

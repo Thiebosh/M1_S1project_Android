@@ -64,7 +64,7 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
 
         //si était connecté, déconnecte
         ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
-        ((BluetoothParent) getActivity()).getGenerator().getChannelList().clear();
+        BluetoothParent.mGenerator.getChannelList().clear();
 
         //si premier lancement et adresse en mémoire, autoconnect
         SharedPreferences loginPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(BluetoothConstants.PREF_SLOT_ACCESS, MODE_PRIVATE);
