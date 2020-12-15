@@ -168,6 +168,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     }
 
                     channel.setScale(selectedScale);
+                    ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(selectedScale));
 
                     int digit = adapter.getDigitSelected();
 
@@ -206,6 +207,8 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
                     channel.setCurrentValue(0);
                     setDigitsDisplay(channel.getCurrentValue());
+
+                    ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setUnit(selected).setCurrentValue(0));
 
                     if (MainBoardHolder.this == adapter.getLastHolderSelected()) {
                         adapter.setSelection(channel.getCurrentValue());

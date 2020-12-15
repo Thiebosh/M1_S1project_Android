@@ -78,7 +78,7 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
     public BackupSlotAdapter(View view, BackupConfigAdapter configDisplayer, ArrayList<Generator> configList) {
         this.mConfigDisplayer = configDisplayer;
-        this.mConfigList = configList != null ? configList : new ArrayList<>();//secu
+        this.mConfigList = configList != null ? configList : new ArrayList<>(8);//secu
 
         mSave = view.findViewById(R.id.frag_back_button_save);
         mLoad = view.findViewById(R.id.frag_back_button_load);
