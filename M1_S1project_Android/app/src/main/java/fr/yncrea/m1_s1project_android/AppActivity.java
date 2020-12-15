@@ -299,6 +299,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                     }
                                 }
                             }
+
+                            loadFragment(new BackupFragment(), true);
                             break;
                             //for(int i = 0; i < )
                         }
@@ -314,7 +316,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 Log.d("testy", "store charged"+storage.getChannelList().size());
 
                             }
-                            loadFragment(new BackupFragment(), true);
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, store_number);
                             break;
 

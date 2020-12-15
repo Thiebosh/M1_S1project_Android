@@ -40,13 +40,14 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
         public void setDisplay(final int position) {
             if(BluetoothParent.isStore.get(position)){
+                Log.d("testy", "store of position "+position+" = "+BluetoothParent.isStore.get(position));
                 mStoreContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.green));
             }
             mStoreContainer.setText(itemView.getContext().getString(R.string.store, position));
             mStoreContainer.setTag(position);
         }
 
-        public void setInteractions(BackupStoreAdapter adapter, BackupConfigAdapter displayer, final ArrayList<Channel> config, Context context) {
+        public void setInteractions(BackupStoreAdapter adapter, BackupConfigAdapter displayer, Context context) {
             mStoreContainer.setOnClickListener(v -> {
                 if (this != adapter.getLastHolderSelected()) {
                     if (adapter.getLastHolderSelected() != null) {
@@ -157,7 +158,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.setDisplay(position);
-        holder.setInteractions(this, mConfigDisplayer, mConfigList.get(position).getChannelList(), holder.itemView.getContext());
+        holder.setInteractions(this, mConfigDisplayer, holder.itemView.getContext());
         //((TextView)holder.itemView).setText(holder.itemView.getContext().getString(R.string.store, position));
 
 
