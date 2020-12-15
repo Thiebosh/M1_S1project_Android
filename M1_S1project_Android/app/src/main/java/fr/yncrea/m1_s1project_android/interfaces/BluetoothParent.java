@@ -10,7 +10,7 @@ import fr.yncrea.m1_s1project_android.models.Generator;
 public interface BluetoothParent {
     Generator mGenerator = new Generator();
     ArrayList<Boolean> mIsStores = new ArrayList<>();
-    ArrayList<Generator> mBackupGenerator = new ArrayList<>();
+    ArrayList<Generator> mBackupGenerators = new ArrayList<>();
 
     boolean getAutoConnect();
     void setAutoConnect(boolean state);

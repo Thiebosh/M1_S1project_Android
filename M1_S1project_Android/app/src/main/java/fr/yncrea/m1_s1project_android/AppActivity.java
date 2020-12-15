@@ -21,8 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -235,7 +233,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 str = getString(R.string.blt_not_connected);
                                 BluetoothParent.mGenerator.getChannelList().clear();
                                 BluetoothParent.mIsStores.clear();
-                                BluetoothParent.mBackupGenerator.clear();
+                                BluetoothParent.mBackupGenerators.clear();
                                 break;
 
                             default:
@@ -248,7 +246,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        int index;
+                        int index = -2;
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = JsonConverterService.createJsonObject(str);
@@ -263,36 +261,27 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         }
                         else if(str.startsWith("getStores", 2)){
                             setIsStoresInitialized(true);
-                            JSONObject jsonObject = null;
                             JSONArray jArray = null;
                             try {
-                                jsonObject = new JSONObject(str);
-                                Log.d("testy", "etape 1");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                jArray = jsonObject.getJSONArray("getStores");
-                                Log.d("testy", "etape 2");
+                                jArray = (new JSONObject(str)).getJSONArray("getStores");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             if (jArray != null) {
                                 for (int i = 0; i < jArray.length(); i++){
                                     try {
-                                        mIsStores.add(jArray.getInt(i)==1);
-                                        BluetoothParent.mBackupGenerator.add(new Generator());
-                                        Log.d("testy", "jsonObject : "+i+" = "+ mIsStores.get(i));
-                                        //listdata.add(jsonObject.getString(i));
+                                        BluetoothParent.mIsStores.add(jArray.getInt(i)==1);
+                                        BluetoothParent.mBackupGenerators.add(new Generator());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             }
 
-                            loadFragment(new BackupFragment(), true);
+                            //loadFragment(new BackupFragment(), true);
+                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
                             break;
-                            //for(int i = 0; i < )
+
                         }
                         else if(str.startsWith("store", 2)){
                             int store_number = Character.getNumericValue(str.charAt(7));
@@ -302,7 +291,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if(storage != null){
                                 mIsStores.set(store_number, true);
-                                mBackupGenerator.get(store_number).setChannelList(storage.getChannelList());
+                                mBackupGenerators.get(store_number).setChannelList(storage.getChannelList());
                                 Log.d("testy", "store charged"+storage.getChannelList().size());
 
                             }
@@ -322,18 +311,27 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":1.02,\"unit\":I,\"minAmpereValue\":0.5,\"maxAmpereValue\":1.50,\"scale\":u},";
                             String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
                             String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
-
-                            Generator storage = JsonConverterService.createJsonObject(init);
-                            mGenerator.setChannelList(Objects.requireNonNull(storage).getChannelList());
-                            loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
+                            sendData(init);
                             break;
+                        }
+                        else if (str.equals("getStores")) {
+                            String init = "{\"getStores\":[1,1,0,0,0,1,0,0]}";
+                            sendData(init);
+                        }
+                        else if (str.equals("store0")) {
+                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                            String c3 = "{\"id\":2,\"isActive\":true,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                            String c4 = "{\"id\":3,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                            String c8 = "{\"id\":7,\"isActive\":false,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                            String init = "{\"store0\":["+c1+c3+c4+c8+"]}";
+                            sendData(init);
                         }
                         else {
                             index = JsonConverterService.applyJsonData(mGenerator, str);
                             if (index == -10) break;//error
+                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(mGenerator, index);
                         }
 
-                        ((BluetoothChildren) mFragmentStack.peek()).applyChanges(mGenerator, index);
                         break;
                 }
             }
