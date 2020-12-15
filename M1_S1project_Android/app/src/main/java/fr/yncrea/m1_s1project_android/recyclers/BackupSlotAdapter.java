@@ -3,6 +3,7 @@ package fr.yncrea.m1_s1project_android.recyclers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +58,8 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
                     ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
 
                     //sinon
-                    displayer.setChannelList(config);
-                    displayer.notifyDataSetChanged();
+                    //displayer.setChannelList(config);
+                    //displayer.notifyDataSetChanged();
                 }
             });
         }
@@ -78,7 +79,7 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
     public BackupSlotAdapter(View view, BackupConfigAdapter configDisplayer, ArrayList<Generator> configList) {
         this.mConfigDisplayer = configDisplayer;
-        this.mConfigList = configList != null ? configList : new ArrayList<>();//secu
+        this.mConfigList = configList != null ? configList : new ArrayList<>(8);//secu
 
         mSave = view.findViewById(R.id.frag_back_button_save);
         mLoad = view.findViewById(R.id.frag_back_button_load);
@@ -123,6 +124,11 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
     public void setLastHolderSelected(final Holder holder, final int position){
         this.mLastHolderSelected = holder;
         mFocusedIndex = position;
+        mSave.setVisibility(View.VISIBLE);
+        mLoad.setVisibility(View.VISIBLE);
+        mDelete.setVisibility(View.VISIBLE);
+        mSave.setEnabled(true);
+
 
         if (!mConfigList.get(mFocusedIndex).getChannelList().isEmpty()) mLoad.setActivated(true);
         if (!mConfigList.get(mFocusedIndex).getChannelList().isEmpty()) mDelete.setActivated(true);
@@ -146,7 +152,10 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
         mSave.setOnClickListener(v -> {
             //set tous les canaux à faux
             //Generator save = (new Generator(((BluetoothParent) context).getGenerator())).setAllChannelActive(false);//constructeur par copie ?
-            Generator save = (((BluetoothParent) context).getGenerator()).setAllChannelActive(false);
+            //Generator save = (((BluetoothParent) getActivity(context)).getGenerator()).setAllChannelActive(false);
+            Generator save = new Generator();
+            save.setChannelList((ArrayList<Channel>) (((BluetoothParent) getActivity(context)).getGenerator()).getChannelList().clone());
+            save.setAllChannelActive(false);
 
             if (save != mConfigList.get(mFocusedIndex)) {//verifier que fonctionne bien
                 //remplace config précédente
@@ -157,7 +166,7 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
                 mConfigDisplayer.notifyDataSetChanged();
 
                 //envoie commande à arduino : contient déjà données
-                ((BluetoothParent) context).sendData("save_slot_"+mFocusedIndex);
+                ((BluetoothParent) getActivity(context)).sendData("save_slot_"+mFocusedIndex);
 
                 mLoad.setActivated(true);
                 mDelete.setActivated(true);
@@ -168,12 +177,12 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
             //récupère config
             ArrayList<Channel> savedConfig = mConfigList.get(mFocusedIndex).getChannelList();
 
-            if (savedConfig != ((BluetoothParent) context).getGenerator().setAllChannelActive(false).getChannelList()) {//vérifier que fonctionne sans casser mainboard
+            if (savedConfig != ((BluetoothParent) getActivity(context)).getGenerator().setAllChannelActive(false).getChannelList()) {//vérifier que fonctionne sans casser mainboard
                 //la charge
-                ((BluetoothParent) context).getGenerator().setChannelList(savedConfig);
+                ((BluetoothParent) getActivity(context)).getGenerator().setChannelList(savedConfig);
 
                 //envoie commande à arduino : contient déjà données
-                ((BluetoothParent) context).sendData("load_slot_" + mFocusedIndex);
+                ((BluetoothParent) getActivity(context)).sendData("load_slot_" + mFocusedIndex);
             }
         });
 
@@ -186,7 +195,7 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
             mConfigDisplayer.notifyDataSetChanged();
 
             //envoie commande à arduino : contient déjà données
-            ((BluetoothParent) context).sendData("delete_slot_"+mFocusedIndex);
+            ((BluetoothParent) getActivity(context)).sendData("delete_slot_"+mFocusedIndex);
 
             mLoad.setActivated(false);
             mDelete.setActivated(false);
