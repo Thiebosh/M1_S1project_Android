@@ -28,8 +28,8 @@ void bluetoothCommunication(){
       //Serial.println("{\"getStores\":[1,1,0,0,0,1,0,0]}");
       //hc06.print("{\"getStores\":[1,1,0,0,0,1,0,0]}");
     }
-    else if (strCmd.startsWith("store"){
-      uint8_t store_number = (uint8_t)strCmd.substring(5);
+    else if (strCmd.startsWith("store")){
+      uint8_t store_number = (uint8_t)strCmd.substring(5).toInt();
       getStore(store_number);
     }
     /*
