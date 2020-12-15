@@ -121,8 +121,9 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      * Establish connection with other device
      */
     @Override
-    public void connectDevice(final String deviceMacAddress) {
+    public void connectDevice(final String deviceName, final String deviceMacAddress) {
         if (mBluetoothService != null && mBluetoothAdapter != null) {
+            mConnectedDeviceName = deviceName;
             mBluetoothService.connect(mBluetoothAdapter.getRemoteDevice(deviceMacAddress));
         }
     }
@@ -198,7 +199,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     /**
      * Name of the connected device
      */
-    private String mConnectedDeviceName = "device";
+    private String mConnectedDeviceName = null;
 
 
     /**
@@ -212,10 +213,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                 // The Handler that gets information back from the BluetoothChatService
                 String str;
                 switch (msg.what) {
-                    case BluetoothConstants.MESSAGE_DEVICE_NAME:
-                        mConnectedDeviceName = msg.getData().getString(BluetoothConstants.DEVICE_NAME);
-                        break;
-
                     case BluetoothConstants.MESSAGE_STATE_CHANGE:
                         switch (msg.arg1) {
                             case BluetoothService.STATE_NONE:

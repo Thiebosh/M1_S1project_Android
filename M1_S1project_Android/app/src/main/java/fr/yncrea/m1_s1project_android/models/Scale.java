@@ -1,5 +1,7 @@
 package fr.yncrea.m1_s1project_android.models;
 
+import android.annotation.SuppressLint;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -58,12 +60,20 @@ public enum Scale {
         return max;
     }
 
+    @SuppressLint("DefaultLocale")
     public static double changeScale(final double value, final Scale initial, final Scale target) {
         int shift = initial.mValue - target.mValue;
 
         if (shift == 0) return value;
 
-        StringBuilder shifter = new StringBuilder(String.valueOf(Math.abs(value)));//fonctionne jusque 0.001 mais casse à 0.0001. fonctionne pour x.0001
+        StringBuilder shifter;
+        if (Math.abs(value) >= 0.001) shifter = new StringBuilder(String.valueOf(Math.abs(value)));
+        else {
+            shifter = new StringBuilder(String.format("%.6f", Math.abs(value)));
+            shifter.deleteCharAt(1);
+            shifter.insert(1, '.');
+        }
+
 
         int dotPos = shifter.indexOf(".");
         if (dotPos == -1) {
