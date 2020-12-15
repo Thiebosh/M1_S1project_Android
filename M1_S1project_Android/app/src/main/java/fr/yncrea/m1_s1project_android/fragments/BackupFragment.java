@@ -18,7 +18,7 @@ import java.util.Objects;
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.recyclers.BackupConfigAdapter;
-import fr.yncrea.m1_s1project_android.recyclers.BackupSlotAdapter;
+import fr.yncrea.m1_s1project_android.recyclers.BackupStoreAdapter;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.models.Generator;
 
@@ -27,7 +27,7 @@ import fr.yncrea.m1_s1project_android.models.Generator;
  */
 public class BackupFragment extends Fragment implements BluetoothChildren {
 
-    private BackupSlotAdapter mSlotsAdapter;
+    private BackupStoreAdapter mSlotsAdapter;
 
     /*
      * Section BluetoothChildren
@@ -37,7 +37,7 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
     public void applyChanges(Generator generator, int index) {
         //update nb generator
         mSlotsAdapter.updateChannelListData(generator.getChannelList(), index);
-        //update slot x
+        //update store x
 
         //update par commande (save, load, delete)
     }
@@ -65,20 +65,21 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        Generator tmp = ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator();
+        Generator tmp = BluetoothParent.mGenerator;
         ArrayList<Generator> tmpList = new ArrayList<>(Arrays.asList(tmp, new Generator()));
 
         RecyclerView oneConfigRecycler = view.findViewById(R.id.frag_back_recycler_config);
         oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.VERTICAL));
         oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
-        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(tmp.getChannelList());
+        //BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(tmp.getChannelList());
+        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(new Generator().getChannelList());
         oneConfigRecycler.setAdapter(oneConfigAdapter);
 
-        RecyclerView slotRecycler = view.findViewById(R.id.frag_back_recycler_slots);
-        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));
-        slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
-        mSlotsAdapter = new BackupSlotAdapter(view, oneConfigAdapter, tmpList);
-        slotRecycler.setAdapter(mSlotsAdapter);
+        RecyclerView storeRecycler = view.findViewById(R.id.frag_back_recycler_stores);
+        storeRecycler.addItemDecoration(new DividerItemDecoration(storeRecycler.getContext(), DividerItemDecoration.VERTICAL));
+        storeRecycler.addItemDecoration(new DividerItemDecoration(storeRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
+        mSlotsAdapter = new BackupStoreAdapter(view, oneConfigAdapter, tmpList);
+        storeRecycler.setAdapter(mSlotsAdapter);
 
         return view;
     }

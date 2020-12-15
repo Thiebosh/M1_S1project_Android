@@ -149,8 +149,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     @Override
-    public boolean getSlotCharged(int slot) {
-        return isSlotCharged[slot];
+    public boolean getStoreCharged(int store) {
+        return isStoreCharged[store];
     }
 
     @Override
@@ -260,19 +260,20 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                             break;
                         }
-                        else if(str.startsWith("slot", 2)){
-                            int slot_number = Character.getNumericValue(str.charAt(6));
-                            Log.d("testy", "slot received : "+str);
-                            str = str.replace("slot"+slot_number, "channelList");
+                        else if(str.startsWith("store", 2)){
+                            int store_number = Character.getNumericValue(str.charAt(7));
+                            Log.d("testy", "store received : "+str);
+                            str = str.replace("store"+store_number, "channelList");
                             Log.d("testy", str);
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if(storage != null){
-                                isSlotCharged[slot_number] = true;
-                                mBackupGenerator.get(slot_number).setChannelList(storage.getChannelList());
-                                Log.d("testy", "slot charged"+storage.getChannelList().size());
+                                isStoreCharged[store_number] = true;
+                                mBackupGenerator.get(store_number).setChannelList(storage.getChannelList());
+                                Log.d("testy", "store charged"+storage.getChannelList().size());
+
                             }
 
-                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, slot_number);
+                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, store_number);
                             break;
 
                         }
