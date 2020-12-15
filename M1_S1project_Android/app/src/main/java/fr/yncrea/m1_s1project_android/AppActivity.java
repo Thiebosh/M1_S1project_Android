@@ -198,19 +198,25 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                             case BluetoothService.STATE_CONNECTING:
                                 str = getString(R.string.frag_conn_connecting_device, mConnectedDeviceName);
-                                ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                if (mFragmentStack.peek() instanceof BluetoothConnect) {
+                                    ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                }
                                 str = getString(R.string.blt_connecting);
                                 break;
 
                             case BluetoothService.STATE_FAILED:
                                 str = getString(R.string.frag_conn_connexion_failed, mConnectedDeviceName);
-                                ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                if (mFragmentStack.peek() instanceof BluetoothConnect) {
+                                    ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                }
                                 str = getString(R.string.blt_not_connected);
                                 break;
 
                             case BluetoothService.STATE_CONNECTED:
                                 str = getString(R.string.frag_conn_retrieve_data, mConnectedDeviceName);
-                                ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                if (mFragmentStack.peek() instanceof BluetoothConnect) {
+                                    ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
+                                }
                                 str = getString(R.string.blt_connected, mConnectedDeviceName);
                                 sendData("initPlz");//requete pour les données
                                 break;

@@ -80,7 +80,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         }
         else {
             mChannelList.set(index, tmp.get(index));
-            this.notifyItemChanged(index);
+            this.notifyItemChanged(index, mLastHolderSelected);//modifie instance plutôt que de la recréer
         }
     }
 
@@ -155,6 +155,8 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
         if (scaledValue < channel.getMaxValue()) mMore.setEnabled(true);
         if (scaledValue > channel.getMinValue()) mLess.setEnabled(true);
+
+        //((BluetoothParent) getContext()).sendData((new Channel()).setId(channel.getId()).setCurrentValue(value));
     }
 
 

@@ -66,7 +66,7 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
     }
 
-    private final ArrayList<Generator> mConfigList;
+    private final ArrayList<Generator> mConfigList;//arrayList<bool> mConfigList => récupère tableau de bool des acquis ou non
     private final BackupConfigAdapter mConfigDisplayer;
 
     private BackupSlotAdapter.Holder mLastHolderSelected = null;
