@@ -120,7 +120,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
             mChannelActivation.setBackgroundColor(itemView.getContext().getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
 
-            ((BluetoothParent) itemView.getContext()).getGenerator().getChannel(channel.getId()).setActive(channel.isActive());
+            BluetoothParent.mGenerator.getChannel(channel.getId()).setActive(channel.isActive());
 
             ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setActive(channel.isActive()));
         });
@@ -158,12 +158,18 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                         if (channel.getCurrentValue() > channel.getMaxValue()) {
                             channel.setCurrentValue(channel.getMaxValue());
                             setDigitsDisplay(channel.getCurrentValue());
-                            adapter.setSelection(channel.getCurrentValue());
+                            if (adapter.getLastHolderSelected() != null) {
+                                adapter.setSelection(channel.getCurrentValue());
+                            }
+                            ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setCurrentValue(channel.getMaxValue()));
                         }
                         else if (channel.getCurrentValue() < channel.getMinValue()) {
                             channel.setCurrentValue(channel.getMinValue());
                             setDigitsDisplay(channel.getCurrentValue());
-                            adapter.setSelection(channel.getCurrentValue());
+                            if (adapter.getLastHolderSelected() != null) {
+                                adapter.setSelection(channel.getCurrentValue());
+                            }
+                            ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setCurrentValue(channel.getMinValue()));
                         }
                     }
 
@@ -206,12 +212,13 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     channel.setUnit(selected);
 
                     channel.setCurrentValue(0);
-                    setDigitsDisplay(channel.getCurrentValue());
+                    setDigitsDisplay(0);
+                    if (adapter.getLastHolderSelected() != null) adapter.setSelection(0);
 
-                    ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setActive(false).setUnit(selected).setCurrentValue(0));
+                    ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId())
+                            .setActive(false).setUnit(selected).setScale(channel.getScale()).setCurrentValue(0));
 
                     if (MainBoardHolder.this == adapter.getLastHolderSelected()) {
-                        adapter.setSelection(channel.getCurrentValue());
                         adapter.setLastHolderSelected(MainBoardHolder.this, channel, position);
                     }
                 }
