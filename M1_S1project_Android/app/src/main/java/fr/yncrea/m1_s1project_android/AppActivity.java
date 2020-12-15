@@ -258,6 +258,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                             Generator storage = JsonConverterService.createJsonObject(init);
                             mGenerator.setChannelList(Objects.requireNonNull(storage).getChannelList());
+                            loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
+                            break;
                         }
                         else {
                             index = JsonConverterService.applyJsonData(mGenerator, str);

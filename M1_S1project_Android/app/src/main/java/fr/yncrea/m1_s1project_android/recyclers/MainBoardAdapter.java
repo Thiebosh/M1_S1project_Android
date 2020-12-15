@@ -78,11 +78,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
             for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
             this.notifyDataSetChanged();
         }
-        /*else if (index == -2) {
-            mChannelList.clear();
-            mChannelList.addAll(tmp);
-            this.notifyDataSetChanged();
-        }*/
         else {
             mChannelList.set(index, tmp.get(index));
             this.notifyItemChanged(index);
