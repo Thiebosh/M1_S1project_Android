@@ -38,7 +38,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
         }
 
         public void setDisplay(final int position) {
-            if(BluetoothParent.isStore.get(position)){
+            if(BluetoothParent.mIsStores.get(position)){
                 mStoreContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.green));
             }
             mStoreContainer.setText(itemView.getContext().getString(R.string.store, position));
@@ -60,7 +60,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
                     //Log.d("testy", "direct test "+BluetoothParent.mGenerator.getChannel(5).getCurrentValue());
 
                     //si pas encore acquis données de cette config => tableau de bool faux, met à true quand demandé ? permet de passer outre stores vides
-                    if(BluetoothParent.isStoreCharged.get(getAdapterPosition()) && BluetoothParent.mBackupGenerator.get(getAdapterPosition()).getChannelList().isEmpty()){
+                    if(BluetoothParent.mIsStores.get(getAdapterPosition()) && BluetoothParent.mBackupGenerator.get(getAdapterPosition()).getChannelList().isEmpty()){
                         ((BluetoothParent) getActivity(context)).sendData("store"+getAdapterPosition());
                         displayer.setChannelList(new ArrayList<>());
                         displayer.notifyDataSetChanged();
@@ -68,7 +68,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
                     else {
                         displayer.setChannelList(BluetoothParent.mBackupGenerator.get(getAdapterPosition()).getChannelList());
                         displayer.notifyDataSetChanged();
-                        Log.d("testy", "direct test " + BluetoothParent.isStoreCharged.get(getAdapterPosition()));
+                        Log.d("testy", "direct test " + BluetoothParent.mIsStores.get(getAdapterPosition()));
                     }
                 }
             });
@@ -106,7 +106,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
     @Override
     public int getItemCount() {
-        return BluetoothParent.isStore.size();
+        return BluetoothParent.mIsStores.size();
     }
 
     private static Activity getActivity(Context context) {
@@ -129,7 +129,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
         mLoad.setVisibility(View.VISIBLE);
         mDelete.setVisibility(View.VISIBLE);
 
-        if (!BluetoothParent.isStoreCharged.get(mFocusedIndex)) {
+        if (!BluetoothParent.mIsStores.get(mFocusedIndex)) {
             mSave.setEnabled(true);
             mLoad.setEnabled(false);
             mDelete.setEnabled(false);

@@ -11,8 +11,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
