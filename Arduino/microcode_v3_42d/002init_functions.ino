@@ -4,7 +4,6 @@
    returns: 0 = all passed, 1 = dac0 failed, 2 = dac1 failed, 3 = both failed
 */
 uint8_t testDac(void) {
-  Serial.println("exec fct testDac in 002"); // changement
   uint8_t result = 0;
 
   tft.print("** Test DAC0... ");
@@ -67,7 +66,6 @@ uint8_t testDac(void) {
   returns: boards on slot status , 1 bit per slot, bit 7..0 = slot 7..0, 0: no board, 1: board connected
 */
 uint8_t detectBoardOnSlot() {
-  Serial.println("exec fct detectBoardOnSlot in 002"); // changement
   uint8_t slotStatus = 0;
 
   tft.setTextColor(ILI9341_BLUE);
@@ -169,7 +167,6 @@ uint8_t detectBoardOnSlot() {
    returns: 0: test failed, 1: test passed
 */
 uint8_t testFramMemory(uint8_t address) {
-  Serial.println("exec fct testFramMemory in 002"); // changement
   tft.print("** FRAM test... ");
   Wire.beginTransmission(address);
   if (!Wire.endTransmission()) {
@@ -191,7 +188,6 @@ uint8_t testFramMemory(uint8_t address) {
    returns: 0: test failed, 1: test passed
 */
 uint8_t testConnectedBoard(uint8_t slot) {
-  Serial.println("exec fct testConnectedBoard in 002"); // changement
   tft.print("** Test board in slot ");
   tft.print(slot);
   tft.print(" ...");
@@ -216,7 +212,6 @@ uint8_t testConnectedBoard(uint8_t slot) {
    returns: nothing
 */
 void setupConnectedBoard(uint8_t slot) {
-  Serial.println("exec fct setupConnectedBoard in 002"); // changement
   Wire.beginTransmission(MCP23xxx_ADDRESS + slot);
   Wire.write(MCP23xxx_GPPU);
   Wire.write(IVSOURCE_JUMPERS_READ); // GP2 input pull-up
@@ -229,7 +224,6 @@ void setupConnectedBoard(uint8_t slot) {
    returns: board type (0..254), read error = 255
 */
 uint8_t readConnectedBoard(uint8_t slot) {
-  Serial.println("exec fct readConnectedBoard in 002"); // changement
   Wire.beginTransmission(MCP23xxx_ADDRESS + slot);
   Wire.write(MCP23xxx_GPIO);
   Wire.endTransmission();
@@ -251,7 +245,6 @@ uint8_t readConnectedBoard(uint8_t slot) {
    returns: nothing
 */
 void ivSourceReset(uint8_t slot) {
-  Serial.println("exec fct ivSourceReset in 002"); // changement
   switch (slot) {
     case (0):
       IV00.init();
@@ -293,7 +286,6 @@ void ivSourceReset(uint8_t slot) {
 */
 
 void defaultsRestore(uint8_t factory) {
-  Serial.println("exec fct defaultsRestore in 002"); // changement
 
   channelModeStatus = DEF_CHANNEL_MODE;
   //channelModeStatus = 0x02;
@@ -347,7 +339,6 @@ void defaultsRestore(uint8_t factory) {
 */
 
 void systemBoot() {
-  Serial.println("exec fct systemBoot in 002"); // changement
 } // end systemBoot()
 
 
@@ -357,7 +348,6 @@ void systemBoot() {
    returns: nothing
 */
 void ivSourceDetect() {
-  Serial.println("exec fct ivSourceDetect in 002"); // changement
   ivSourcePosition = 0x00;
 
   for (uint8_t i = 0; i < 8; i++) {

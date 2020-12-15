@@ -9,7 +9,6 @@
    returns: nothing
 */
 void userStoreMenuDisplay() {
-  Serial.println("exec fct userStoreMenuDisplay in 013"); // changement
   tft.fillScreen(ILI9341_BLACK);
 
   for (int i = 0; i < 8; i++) displayUserStoreMenuLine(0, 5 + 35 * i, i);
@@ -23,7 +22,6 @@ void userStoreMenuDisplay() {
    returns: nothing
 */
 void userRecallMenuDisplay() {
-  Serial.println("exec fct userRecallMenuDisplay in 013"); // changement
   tft.fillScreen(ILI9341_BLACK);
 
   for (int i = 0; i < 8; i++) displayUserRecallMenuLine(0, 5 + 35 * i, i);
@@ -32,7 +30,6 @@ void userRecallMenuDisplay() {
 
 
 void displayUserStoreMenuLine(uint16_t x0, uint16_t y0, uint8_t user) {
-  Serial.println("exec fct displayUserStoreMenuLine in 013"); // changement
   if (userConfigStored & 0x01 << user) {
     tft.fillRoundRect(USERSTORERECALLBUTTON_X + x0, USERSTORERECALLBUTTON_Y + y0, USERSTORERECALLBUTTON_W, USERSTORERECALLBUTTON_H, RADIUS, ILI9341_BLUE);
   } else {
@@ -47,7 +44,6 @@ void displayUserStoreMenuLine(uint16_t x0, uint16_t y0, uint8_t user) {
 }
 
 void displayUserStoreRecallMenuAbort(uint16_t x0, uint16_t y0) {
-  Serial.println("exec fct displayUserStoreRecallMenuAbort in 013"); // changement
   tft.fillRoundRect(USERSTORERECALLBUTTON_X + x0, USERSTORERECALLBUTTON_Y + y0, USERSTORERECALLBUTTON_W, USERSTORERECALLBUTTON_H, RADIUS, ILI9341_BLUE);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -56,7 +52,6 @@ void displayUserStoreRecallMenuAbort(uint16_t x0, uint16_t y0) {
 }
 
 void displayUserRecallMenuLine(uint16_t x0, uint16_t y0, uint8_t user) {
-  Serial.println("exec fct displayUserRecallMenuLine in 013"); // changement
   if (userConfigStored & 0x01 << user) {
     tft.fillRoundRect(USERSTORERECALLBUTTON_X + x0, USERSTORERECALLBUTTON_Y + y0, USERSTORERECALLBUTTON_W, USERSTORERECALLBUTTON_H, RADIUS, ILI9341_BLUE);
   } else {

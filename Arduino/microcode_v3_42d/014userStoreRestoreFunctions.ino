@@ -4,7 +4,6 @@
    returns: nothing
 */
 void storeUserCongig(uint8_t user) {
-  Serial.println("exec fct storeUserCongig in 014"); // changement
   uint16_t baseAddress = (FRAM_ADDRESS << 8) + STORE0_BASE_ADDRESS + 0x80 * user;
 
   fram.writeByte(baseAddress, channelModeStatus);
@@ -52,7 +51,6 @@ void storeUserCongig(uint8_t user) {
    returns: nothing
 */
 void recallUserCongig(uint8_t user) {
-  Serial.println("exec fct recallUserCongig in 014"); // changement
   uint16_t baseAddress = (FRAM_ADDRESS << 8) + STORE0_BASE_ADDRESS + 0x80 * user;
 
   for (uint8_t i = 0; i < 8; i++) switchChannelOff(i);  // all channels off

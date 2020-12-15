@@ -5,7 +5,6 @@
   changes global variables keyboardValue and keyboardUnit
 */
 uint8_t displayKeyboardContext(uint8_t sourceType) {
-  Serial.println("exec fct displayKeyboardContext in 010"); // changement
 
   TS_Point p;
   int key;

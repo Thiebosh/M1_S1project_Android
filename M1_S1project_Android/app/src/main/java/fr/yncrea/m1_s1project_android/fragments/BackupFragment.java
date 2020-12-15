@@ -62,6 +62,8 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(!((BluetoothParent) Objects.requireNonNull(getContext())).getIsStoresInitialized())
+            ((BluetoothParent) Objects.requireNonNull(getContext())).sendData("getStores");
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 

@@ -17,6 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
@@ -111,6 +115,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
 
     boolean mAutoConnect = true;
+    boolean mIsStoresInitialized = false;
 
     /**
      * Establish connection with other device
@@ -161,6 +166,16 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     @Override
     public void setAutoConnect(boolean state) {
         mAutoConnect = state;
+    }
+
+    @Override
+    public boolean getIsStoresInitialized() {
+        return mIsStoresInitialized;
+    }
+
+    @Override
+    public void setIsStoresInitialized(boolean init) {
+        mIsStoresInitialized = init;
     }
 
     /*
@@ -260,6 +275,36 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                             break;
                         }
+                        else if(str.startsWith("getStores", 2)){
+                            setIsStoresInitialized(true);
+                            JSONObject jsonObject = null;
+                            JSONArray jArray = null;
+                            try {
+                                jsonObject = new JSONObject(str);
+                                Log.d("testy", "etape 1");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                jArray = jsonObject.getJSONArray("getStores");
+                                Log.d("testy", "etape 2");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (jArray != null) {
+                                for (int i = 0; i < jArray.length(); i++){
+                                    try {
+                                        isStore.add(jArray.getInt(i)==1);
+                                        Log.d("testy", "jsonObject : "+i+" = "+isStore.get(i));
+                                        //listdata.add(jsonObject.getString(i));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                            break;
+                            //for(int i = 0; i < )
+                        }
                         else if(str.startsWith("store", 2)){
                             int store_number = Character.getNumericValue(str.charAt(7));
                             Log.d("testy", "store received : "+str);
@@ -272,7 +317,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 Log.d("testy", "store charged"+storage.getChannelList().size());
 
                             }
-
+                            loadFragment(new BackupFragment(), true);
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, store_number);
                             break;
 

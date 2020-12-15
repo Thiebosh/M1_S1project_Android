@@ -8,7 +8,9 @@ import fr.yncrea.m1_s1project_android.models.Generator;
 public interface BluetoothParent {
     Generator mGenerator = new Generator();
     //Generator mBackupGenerator = new Generator();
-    boolean[] isStoreCharged = new boolean[8];
+    //boolean isStoresInitialized = false;
+    boolean[] isStoreCharged = new boolean[]{};
+    ArrayList<Boolean> isStore = new ArrayList<>();
     ArrayList<Generator> mBackupGenerator = new ArrayList<Generator>(){{
         add(new Generator());
         add(new Generator());
@@ -24,4 +26,6 @@ public interface BluetoothParent {
     boolean getStoreCharged(final int store);
     boolean getAutoConnect();
     void setAutoConnect(boolean state);
+    boolean getIsStoresInitialized();
+    void setIsStoresInitialized(boolean init);
 }

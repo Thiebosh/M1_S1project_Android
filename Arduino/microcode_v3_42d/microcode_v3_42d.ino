@@ -60,16 +60,14 @@
         corrected bug: possible to recall a nonexisting stored config in change user recall  menu     
 */
 
-/*
-// debug flags changement : block ci dessous commenté
-#define DEBUG_ROTARY
-#define DEBUG_SWROT
-#define DEBUG_ONOFF // changement : ligne commentée
-#define DEBUG_DACTEST
-#define DEBUG_TS
-#define DEBUG_NVIC
+// debug flags
+//#define DEBUG_ROTARY
+//#define DEBUG_SWROT
+//#define DEBUG_ONOFF
+//#define DEBUG_DACTEST
+//#define DEBUG_TS
+//#define DEBUG_NVIC
 //#define KBD_DEBUG
-*/
 
 //Code version to be updated accordingly
 char* code_version = "3.42d";
@@ -85,7 +83,13 @@ char* version_date = "28 may 2020";
 #include <IVsource_v2.h>
 #include <AD5764R.h>
 
+/* Bluetooth & Json changement */
 #include <ArduinoJson.h>
+#define hc06 Serial1
+int intCmd = 0;
+int rep = 9;
+String strCmd = "";
+String str = "";
 
 /*hardware chip select pins*/
 #define TFT_DC 9
@@ -114,11 +118,6 @@ char* version_date = "28 may 2020";
 
 #define FRAM_ADDRESS 0x50 // I2C address
 
-#define hc06 Serial1 // changement : define module bluetooth
-int intCmd = 0;
-int rep = 9;
-String strCmd = "";
-String str = "";
 
 /* objects definition */
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);  // TFT screen
@@ -253,7 +252,7 @@ void setup() {
   /*
      resets parasitic interrupts
   */
-  allOnPressed = 0; // changement : allOnPressed = 0
+  allOnPressed = 0;
   allOffPressed = 0;
   codeWheelIncrement = 0;
   codeWheelSwPressed = 0;
@@ -280,53 +279,6 @@ void setup() {
      for keyboard
   */
   buildKeyboardKeyBounds();
-
-
-  //Deserialisation
-  /*
-  {
-    const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3) + 30;
-    DynamicJsonDocument doc(capacity);
-    char json[] = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";//Using a char[] enables the "zero-copy" mode
-    
-    DeserializationError error = deserializeJson(doc, json);
-  
-    if (error) {
-      Serial.print(F("deserializeJson() failed: "));
-      Serial.println(error.f_str());
-      return;
-    }
-    
-    const char* sensor = doc["sensor"];
-    long time = doc["time"];
-    double latitude = doc["data"][0];
-    double longitude = doc["data"][1];
-  
-    Serial.println(sensor);
-    Serial.println(time);
-    Serial.println(latitude, 6);
-    Serial.println(longitude, 6);
-  }
-
-  //Serialisation
-  {
-    const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3);
-    DynamicJsonDocument doc(capacity);
-    
-    doc["sensor"] = "gps";
-    doc["time"] = 1351824120;
-    //alternative : doc["value"].set(42); permet de vérifier la bonne insersion : retourne true si ok, false si plus de place
-    
-    JsonArray data = doc.createNestedArray("data");
-    data.add(48.75608);
-    data.add(2.302038);
-    
-    serializeJson(doc, Serial);
-  }
-  */
-  // alternative à serialisation : 
-  // Convert the document to an object
-  //JsonObject obj = doc.to<JsonObject>();
   
 } // end setup()
 
@@ -459,9 +411,10 @@ void loop() {
     255: nothing pressed or only context changed (new context displayed)
     0 to 254:  a button requiring further action is pressed
   */
-Serial.println("Before getInputFromTouchScreen"); // changement
+
 if (!touchscreenLocked) tsPressed = getInputFromTouchScreen();
-Serial.println("ts pressed : "); // changement : ligne inexistante
+
+bluetoothCommunication();
 
 
   /*
