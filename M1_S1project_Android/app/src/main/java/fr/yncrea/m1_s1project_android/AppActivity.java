@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -143,6 +144,16 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     @Override
+    public ArrayList<Generator> getBackupGenerator() {
+        return mBackupGenerator;
+    }
+
+    @Override
+    public boolean getSlotCharged(int slot) {
+        return isSlotCharged[slot];
+    }
+
+    @Override
     public boolean getAutoConnect() {
         return mAutoConnect;
     }
@@ -242,6 +253,22 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             mGenerator.setChannelList(storage.getChannelList());
                             loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                             break;
+                        }
+                        else if(str.startsWith("slot", 2)){
+                            int slot_number = Character.getNumericValue(str.charAt(6));
+                            Log.d("testy", "slot received : "+str);
+                            str = str.replace("slot"+slot_number, "channelList");
+                            Log.d("testy", str);
+                            Generator storage = JsonConverterService.createJsonObject(str);
+                            if(storage != null){
+                                isSlotCharged[slot_number] = true;
+                                mBackupGenerator.get(slot_number).setChannelList(storage.getChannelList());
+                                Log.d("testy", "slot charged"+storage.getChannelList().size());
+                            }
+
+                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, slot_number);
+                            break;
+
                         }
                         // le else if qui suit ne sert que pour l'utilisation entre 2 android
                         else if (str.equals("initPlz")) {

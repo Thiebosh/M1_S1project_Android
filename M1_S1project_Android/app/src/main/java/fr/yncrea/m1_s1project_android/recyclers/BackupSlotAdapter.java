@@ -54,12 +54,22 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
                     adapter.setLastHolderSelected(this, getAdapterPosition());
 
-                    //si pas encore acquis données de cette config => tableau de bool faux, met à true quand demandé ? permet de passer outre slots vides
-                    ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
 
-                    //sinon
-                    //displayer.setChannelList(config);
-                    //displayer.notifyDataSetChanged();
+                    //Log.d("testy", "direct test "+BluetoothParent.mGenerator.getChannel(5).getCurrentValue());
+
+                    //si pas encore acquis données de cette config => tableau de bool faux, met à true quand demandé ? permet de passer outre slots vides
+                    if(!((BluetoothParent) getActivity(context)).getSlotCharged(getAdapterPosition())){
+                        ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
+                    }
+                    else {
+
+                        //while(BluetoothParent.mBackupGenerator.get(getAdapterPosition()) != null){}
+
+                        //sinon
+                        displayer.setChannelList(((BluetoothParent) getActivity(context)).getBackupGenerator().get(getAdapterPosition()).getChannelList());
+                        displayer.notifyDataSetChanged();
+                        Log.d("testy", "direct test " + BluetoothParent.isSlotCharged[getAdapterPosition()]);
+                    }
                 }
             });
         }
@@ -87,6 +97,10 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
     }
 
     public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+        Log.d("testy", "update in slot adapter");
+        mConfigList.set(index, (new Generator()).setChannelList(tmp));
+        mConfigDisplayer.updateChannelListData(tmp, index);
+        //notifyDataSetChanged();
         /*
         if (index == -1) {
             boolean active = tmp.get(0).isActive();

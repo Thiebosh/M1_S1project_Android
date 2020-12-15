@@ -9,8 +9,9 @@ public class Generator {
         return channelList;
     }
 
-    public void setChannelList(final ArrayList<Channel> channelList) {
+    public Generator setChannelList(final ArrayList<Channel> channelList) {
         this.channelList = channelList;
+        return this;
     }
 
     public Generator setAllChannelActive(final boolean active) {

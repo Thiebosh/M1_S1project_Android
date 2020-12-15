@@ -27,6 +27,8 @@ import fr.yncrea.m1_s1project_android.models.Generator;
  */
 public class BackupFragment extends Fragment implements BluetoothChildren {
 
+    private BackupSlotAdapter mSlotsAdapter;
+
     /*
      * Section BluetoothChildren
      */
@@ -34,7 +36,7 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
     @Override
     public void applyChanges(Generator generator, int index) {
         //update nb generator
-
+        mSlotsAdapter.updateChannelListData(generator.getChannelList(), index);
         //update slot x
 
         //update par commande (save, load, delete)
@@ -75,8 +77,8 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         RecyclerView slotRecycler = view.findViewById(R.id.frag_back_recycler_slots);
         slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.VERTICAL));
         slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
-        BackupSlotAdapter slotsAdapter = new BackupSlotAdapter(view, oneConfigAdapter, tmpList);
-        slotRecycler.setAdapter(slotsAdapter);
+        mSlotsAdapter = new BackupSlotAdapter(view, oneConfigAdapter, tmpList);
+        slotRecycler.setAdapter(mSlotsAdapter);
 
         return view;
     }
