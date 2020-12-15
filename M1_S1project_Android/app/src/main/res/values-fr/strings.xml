@@ -48,7 +48,7 @@
     <string name="off">OFF</string>
 
     <!-- Fragment Backup -->
-    <string name="slot">Slot <xliff:g id="id_channel">%1$d</xliff:g></string>
+    <string name="store">Store <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="save">Enregistre courant</string>
     <string name="load">Charge affiché</string>
     <string name="delete">Supprime affiché</string>

@@ -8,21 +8,21 @@
     tools:context=".fragments.BackupFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/frag_back_recycler_slots"
+        android:id="@+id/frag_back_recycler_stores"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_slot" />
+        tools:listitem="@layout/item_store" />
 
     <View
         android:id="@+id/frag_back_divider"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="?android:attr/listDivider"
-        app:layout_constraintStart_toEndOf="@+id/frag_back_recycler_slots"
+        app:layout_constraintStart_toEndOf="@+id/frag_back_recycler_stores"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -66,7 +66,7 @@
         android:text="@string/load"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/frag_back_recycler_slots"
+        app:layout_constraintStart_toEndOf="@+id/frag_back_recycler_stores"
         app:layout_constraintTop_toBottomOf="@+id/frag_back_recycler_config" />
 
     <Button

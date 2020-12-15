@@ -41,7 +41,7 @@ uint8_t getInputFromTouchScreen() {
           Serial.println("désactive bouton de channel 0");
           //hc06.print("{\"id\":0,\"isActive\":false}");
         }
-        else if (strCmd.equals("slot0")) {
+        else if (strCmd.equals("store0")) {
           String c1 = "{\"id\":0,\"isActive\":true,\"currentValue\":4.2,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
           String c2 = "{\"id\":1,\"isActive\":false,\"currentValue\":1.3,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
           String c3 = "{\"id\":2,\"isActive\":true,\"currentValue\":9.5,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
@@ -50,16 +50,16 @@ uint8_t getInputFromTouchScreen() {
           String c6 = "{\"id\":5,\"isActive\":false,\"currentValue\":2.587,\"unit\":V,\"minVoltValue\":-0.54,\"maxVoltValue\":5,\"scale\":_},";
           String c7 = "{\"id\":6,\"isActive\":true,\"currentValue\":1.02,\"unit\":I,\"minAmpereValue\":0.5,\"maxAmpereValue\":1.50,\"scale\":u},";
           String c8 = "{\"id\":7,\"isActive\":false,\"currentValue\":0.25,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-          String slot0 = "{\"slot0\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
-          hc06.print(slot0);
+          String store0 = "{\"store0\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
+          hc06.print(store0);
         }
-        else if (strCmd.equals("slot1")) {
+        else if (strCmd.equals("store1")) {
           String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
           String c3 = "{\"id\":2,\"isActive\":true,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
           String c4 = "{\"id\":3,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
           String c8 = "{\"id\":7,\"isActive\":false,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-          String slot1 = "{\"slot1\":["+c1+c3+c4+c8+"]}";
-          hc06.print(slot1);
+          String store1 = "{\"store1\":["+c1+c3+c4+c8+"]}";
+          hc06.print(store1);
         }
         else if (strCmd.equals("get")) {
           int reponse = getChannelValue(0);
