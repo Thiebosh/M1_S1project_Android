@@ -9,6 +9,7 @@ public interface BluetoothParent {
     Generator mGenerator = new Generator();
     //Generator mBackupGenerator = new Generator();
     boolean[] isStoreCharged = new boolean[8];
+    ArrayList<Boolean> isStore = new ArrayList<>();
     ArrayList<Generator> mBackupGenerator = new ArrayList<Generator>(){{
         add(new Generator());
         add(new Generator());
@@ -25,4 +26,6 @@ public interface BluetoothParent {
     Generator getGenerator();
     ArrayList<Generator> getBackupGenerator();
     boolean getStoreCharged(final int store);
+    boolean getIsStoresInitialized();
+    void setIsStoresInitialized(boolean init);
 }
