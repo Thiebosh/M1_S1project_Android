@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
-import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.recyclers.BackupConfigAdapter;
 import fr.yncrea.m1_s1project_android.recyclers.BackupSlotAdapter;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
@@ -35,7 +33,11 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
 
     @Override
     public void applyChanges(Generator generator, int index) {
+        //update nb generator
 
+        //update slot x
+
+        //update par commande (save, load, delete)
     }
 
 
@@ -75,42 +77,6 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         slotRecycler.addItemDecoration(new DividerItemDecoration(slotRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
         BackupSlotAdapter slotsAdapter = new BackupSlotAdapter(view, oneConfigAdapter, tmpList);
         slotRecycler.setAdapter(slotsAdapter);
-
-
-        //passer ces trois là dans backupSlotAdapter, au même titre que les éléments du bas de main board. exemple de lien / activation avec save
-        view.findViewById(R.id.frag_back_button_save).setOnClickListener(v -> {
-            String text = "enregistrer nouvelle config à l'emplacement "+slotsAdapter.getFocusedIndex();
-            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
-
-            //set tous les canaux à faux
-
-            //remplace config précédente
-            slotsAdapter.getConfigList().set(slotsAdapter.getFocusedIndex(), new Generator());
-
-            //envoie données à arduino
-            ((BluetoothParent) getActivity()).sendData("");
-        });
-
-        view.findViewById(R.id.frag_back_button_load).setOnClickListener(v -> {
-            //récupère config
-            ArrayList<Channel> savedConfig = slotsAdapter.getConfigList().get(slotsAdapter.getFocusedIndex()).getChannelList();
-
-            //la charge
-            ((BluetoothParent) getActivity()).getGenerator().setChannelList(savedConfig);
-
-            //envoie données à arduino
-            ((BluetoothParent) getActivity()).sendData("");
-        });
-
-        view.findViewById(R.id.frag_back_button_delete).setOnClickListener(v -> {
-            //supprime config
-            slotsAdapter.getConfigList().get(slotsAdapter.getFocusedIndex()).setChannelList(new ArrayList<>());
-
-            //if c'est le bouton sur lequel on est, actualiser oneConfigRecycler
-
-            //envoie données à arduino
-            ((BluetoothParent) getActivity()).sendData("");
-        });
 
         return view;
     }

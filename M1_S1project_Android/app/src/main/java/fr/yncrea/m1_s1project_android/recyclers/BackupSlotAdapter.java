@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +26,6 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
 
         private final TextView mSlotContainer;
         public Context ctx;
-
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -57,9 +57,8 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
                     ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
 
                     //sinon
-                    //displayer.getChannelList().clear();
-                    //displayer.getChannelList().addAll(config);
-                    //displayer.notifyDataSetChanged();
+                    displayer.getChannelList().addAll(config);
+                    displayer.notifyDataSetChanged();
                 }
             });
         }
@@ -73,6 +72,8 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
     private int mFocusedIndex = -1;
 
     private final Button mSave;
+    private final Button mLoad;
+    private final Button mDelete;
 
 
     public BackupSlotAdapter(View view, BackupConfigAdapter configDisplayer, ArrayList<Generator> configList) {
@@ -80,10 +81,39 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
         this.mConfigList = configList != null ? configList : new ArrayList<>();//secu
 
         mSave = view.findViewById(R.id.frag_back_button_save);
+        mLoad = view.findViewById(R.id.frag_back_button_load);
+        mDelete = view.findViewById(R.id.frag_back_button_delete);
     }
 
-    public ArrayList<Generator> getConfigList() {
-        return mConfigList;
+    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+        /*
+        if (index == -1) {
+            boolean active = tmp.get(0).isActive();
+            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
+            this.notifyDataSetChanged();
+        }
+        else if (index == -2) {
+            mChannelList.clear();
+            mChannelList.addAll(tmp);
+            this.notifyDataSetChanged();
+        }
+        else {
+            mChannelList.set(index, tmp.get(index));
+            this.notifyItemChanged(index);
+        }*/
+    }
+
+    @Override
+    public int getItemCount() {
+        return mConfigList.size();
+    }
+
+    private static Activity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) return (Activity)context;
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
     }
 
     public Holder getLastHolderSelected() {
@@ -94,7 +124,8 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
         this.mLastHolderSelected = holder;
         mFocusedIndex = position;
 
-        mSave.setActivated(true);
+        if (!mConfigList.get(mFocusedIndex).getChannelList().isEmpty()) mLoad.setActivated(true);
+        if (!mConfigList.get(mFocusedIndex).getChannelList().isEmpty()) mDelete.setActivated(true);
     }
 
     @NonNull
@@ -111,22 +142,54 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
         //((TextView)holder.itemView).setText(holder.itemView.getContext().getString(R.string.slot, position));
 
 
-    }
+        Context context = holder.itemView.getContext();
+        mSave.setOnClickListener(v -> {
+            //set tous les canaux à faux
+            //Generator save = (new Generator(((BluetoothParent) context).getGenerator())).setAllChannelActive(false);//constructeur par copie ?
+            Generator save = (((BluetoothParent) context).getGenerator()).setAllChannelActive(false);
 
-    @Override
-    public int getItemCount() {
-        return mConfigList.size();
-    }
+            if (save != mConfigList.get(mFocusedIndex)) {//verifier que fonctionne bien
+                //remplace config précédente
+                mConfigList.set(mFocusedIndex, save);
 
-    public int getFocusedIndex() {
-        return mFocusedIndex;
-    }
+                //actualise oneConfigRecycler (config affichée)
+                mConfigDisplayer.setChannelList(save.getChannelList());
+                mConfigDisplayer.notifyDataSetChanged();
 
-    private static Activity getActivity(Context context) {
-        while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) return (Activity)context;
-            context = ((ContextWrapper)context).getBaseContext();
-        }
-        return null;
+                //envoie commande à arduino : contient déjà données
+                ((BluetoothParent) context).sendData("save_slot_"+mFocusedIndex);
+
+                mLoad.setActivated(true);
+                mDelete.setActivated(true);
+            }
+        });
+
+        mLoad.setOnClickListener(v -> {
+            //récupère config
+            ArrayList<Channel> savedConfig = mConfigList.get(mFocusedIndex).getChannelList();
+
+            if (savedConfig != ((BluetoothParent) context).getGenerator().setAllChannelActive(false).getChannelList()) {//vérifier que fonctionne sans casser mainboard
+                //la charge
+                ((BluetoothParent) context).getGenerator().setChannelList(savedConfig);
+
+                //envoie commande à arduino : contient déjà données
+                ((BluetoothParent) context).sendData("load_slot_" + mFocusedIndex);
+            }
+        });
+
+        mDelete.setOnClickListener(v -> {
+            //supprime config
+            mConfigList.get(mFocusedIndex).setChannelList(new ArrayList<>());
+
+            //actualise oneConfigRecycler (config affichée)
+            mConfigDisplayer.setChannelList(new ArrayList<>());
+            mConfigDisplayer.notifyDataSetChanged();
+
+            //envoie commande à arduino : contient déjà données
+            ((BluetoothParent) context).sendData("delete_slot_"+mFocusedIndex);
+
+            mLoad.setActivated(false);
+            mDelete.setActivated(false);
+        });
     }
 }

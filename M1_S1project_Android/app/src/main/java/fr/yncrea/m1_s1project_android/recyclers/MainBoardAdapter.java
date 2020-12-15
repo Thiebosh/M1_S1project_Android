@@ -72,6 +72,97 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mLess = view.findViewById(R.id.frag_main_button_less);
     }
 
+    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+        if (index == -1) {
+            boolean active = tmp.get(0).isActive();
+            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
+            this.notifyDataSetChanged();
+        }
+        /*else if (index == -2) {
+            mChannelList.clear();
+            mChannelList.addAll(tmp);
+            this.notifyDataSetChanged();
+        }*/
+        else {
+            mChannelList.set(index, tmp.get(index));
+            this.notifyItemChanged(index);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mChannelList.size();
+    }
+
+    public ToggleButton getAllOn() {
+        return mAllOn;
+    }
+
+    public ToggleButton getAllOff() {
+        return mAllOff;
+    }
+
+    public MainBoardHolder getLastHolderSelected() {
+        return mLastHolderSelected;
+    }
+
+    public int getDigitSelected() {
+        return mDigitSelected;
+    }
+
+    public void setSelection(final double value) {
+        mCurrent.setText(String.valueOf(value));
+    }
+
+    public void setLastHolderSelected(final MainBoardHolder holder, final Channel channel, final int position) {
+        mLastHolderSelected = holder;
+        mFocusedIndex = position;
+
+        mDigitSelected = -1;
+        mMore.setEnabled(false);
+        mLess.setEnabled(false);
+
+        mCurrent.setEnabled(true);
+        mMin.setEnabled(true);
+        mMax.setEnabled(true);
+
+        mCurrent.setText(String.valueOf(channel.getCurrentValue()));
+        mMin.setText(String.valueOf(channel.getMinValue()));
+        mMax.setText(String.valueOf(channel.getMaxValue()));
+
+        mMin.setMinimumWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, mResources.getDisplayMetrics()));
+        mMax.setMinimumWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, mResources.getDisplayMetrics()));
+
+
+        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(mResources.getInteger(
+                channel.getUnit() == Unit.V ?
+                        R.integer.absolute_limit_volt_scale_display : R.integer.absolute_limit_ampere_scale_display)));
+
+        mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+        mHintMin.setHint(holder.itemView.getContext().getString(R.string.minScaleUnit, limitScale.name(), channel.getUnit().name()));
+        mHintMax.setHint(holder.itemView.getContext().getString(R.string.maxScaleUnit, limitScale.name(), channel.getUnit().name()));
+    }
+
+    public void setDigitSelected(final int digit) {
+        mDigitSelected = digit;
+        Channel channel = mChannelList.get(mFocusedIndex);
+
+        //compare with limits on same scale
+        Scale valueScale = channel.getScale();
+        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(mResources.getInteger(
+                channel.getUnit() == Unit.V ?
+                        R.integer.absolute_limit_volt_scale_value : R.integer.absolute_limit_ampere_scale_value)));
+
+        double scaledValue = Scale.changeScale(channel.getCurrentValue(), valueScale, limitScale);
+
+        mMore.setEnabled(false);
+        mLess.setEnabled(false);
+
+        if (scaledValue < channel.getMaxValue()) mMore.setEnabled(true);
+        if (scaledValue > channel.getMinValue()) mLess.setEnabled(true);
+    }
+
+
     @NonNull
     @Override
     public MainBoardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -205,96 +296,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
         mMore.setOnClickListener(v -> variation(holder.itemView.getContext(), +1));
         mLess.setOnClickListener(v -> variation(holder.itemView.getContext(), -1));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mChannelList.size();
-    }
-
-    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
-        if (index == -1) {
-            boolean active = tmp.get(0).isActive();
-            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
-            this.notifyDataSetChanged();
-        }
-        else if (index == -2) {
-            mChannelList.clear();
-            mChannelList.addAll(tmp);
-            this.notifyDataSetChanged();
-        }
-        else {
-            mChannelList.set(index, tmp.get(index));
-            this.notifyItemChanged(index);
-        }
-    }
-
-    public ToggleButton getAllOn() {
-        return mAllOn;
-    }
-
-    public ToggleButton getAllOff() {
-        return mAllOff;
-    }
-
-    public MainBoardHolder getLastHolderSelected() {
-        return mLastHolderSelected;
-    }
-
-    public void setLastHolderSelected(final MainBoardHolder holder, final Channel channel, final int position) {
-        mLastHolderSelected = holder;
-        mFocusedIndex = position;
-
-        mDigitSelected = -1;
-        mMore.setEnabled(false);
-        mLess.setEnabled(false);
-
-        mCurrent.setEnabled(true);
-        mMin.setEnabled(true);
-        mMax.setEnabled(true);
-
-        mCurrent.setText(String.valueOf(channel.getCurrentValue()));
-        mMin.setText(String.valueOf(channel.getMinValue()));
-        mMax.setText(String.valueOf(channel.getMaxValue()));
-
-        mMin.setMinimumWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, mResources.getDisplayMetrics()));
-        mMax.setMinimumWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, mResources.getDisplayMetrics()));
-
-
-        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(mResources.getInteger(
-                channel.getUnit() == Unit.V ?
-                        R.integer.absolute_limit_volt_scale_display : R.integer.absolute_limit_ampere_scale_display)));
-
-        mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
-        mHintMin.setHint(holder.itemView.getContext().getString(R.string.minScaleUnit, limitScale.name(), channel.getUnit().name()));
-        mHintMax.setHint(holder.itemView.getContext().getString(R.string.maxScaleUnit, limitScale.name(), channel.getUnit().name()));
-    }
-
-    public int getDigitSelected() {
-        return mDigitSelected;
-    }
-
-    public void setDigitSelected(final int digit) {
-        mDigitSelected = digit;
-        Channel channel = mChannelList.get(mFocusedIndex);
-
-        //compare with limits on same scale
-        Scale valueScale = channel.getScale();
-        Scale limitScale = Objects.requireNonNull(Scale.scaleOf(mResources.getInteger(
-                channel.getUnit() == Unit.V ?
-                        R.integer.absolute_limit_volt_scale_value : R.integer.absolute_limit_ampere_scale_value)));
-
-        double scaledValue = Scale.changeScale(channel.getCurrentValue(), valueScale, limitScale);
-
-        mMore.setEnabled(false);
-        mLess.setEnabled(false);
-
-        if (scaledValue < channel.getMaxValue()) mMore.setEnabled(true);
-        if (scaledValue > channel.getMinValue()) mLess.setEnabled(true);
-    }
-
-    public void setSelection(final double value) {
-        mCurrent.setText(String.valueOf(value));
     }
 
     private void variation(final Context context, final int step) {

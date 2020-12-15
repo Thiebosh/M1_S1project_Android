@@ -69,6 +69,17 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mUnitSpinner.setAdapter(mUnitAdapter);
     }
 
+    public void setScale(final Scale scale) {
+        mScaleSpinner.setSelection(mScaleAdapter.getPosition(scale.name()));
+    }
+
+    public void decreaseVisibility() {//appel par un autre holder
+        mContainer.setBackgroundColor(Color.TRANSPARENT);
+
+        mDigitGroup.setSelectionRequired(false);
+        mDigitGroup.clearChecked();
+    }
+
     public void setInitialDisplay(MainBoardAdapter adapter, Channel channel) {
         mChannelActivation.setBackgroundColor(itemView.getContext().getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
         mChannelActivation.setText(itemView.getContext().getString(R.string.input, channel.getId()));
@@ -85,6 +96,19 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
             if (adapter.getDigitSelected() == -1) mContainer.callOnClick();
             else mDigitGroup.check(adapter.getDigitSelected());//englobe
         }
+    }
+
+    public void setDigitsDisplay(final double value) {
+        StringBuilder tmp = new StringBuilder(String.valueOf(Math.abs(value)));
+        tmp.insert(0, value >= 0 ? '+' : '-');
+        while (tmp.length() < 6) tmp.append('0');
+        char[] digits = tmp.toString().toCharArray();
+
+        mDigitSign.setText(String.valueOf(digits[0]));
+        mDigit1.setText(String.valueOf(digits[1]));
+        mDigit2.setText(String.valueOf(digits[3]));
+        mDigit3.setText(String.valueOf(digits[4]));
+        mDigit4.setText(String.valueOf(digits[5]));
     }
 
     public void setInteractions(MainBoardAdapter adapter, Channel channel, int position) {
@@ -195,29 +219,5 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
             }
         });
-    }
-
-    public void decreaseVisibility() {//appel par un autre holder
-        mContainer.setBackgroundColor(Color.TRANSPARENT);
-
-        mDigitGroup.setSelectionRequired(false);
-        mDigitGroup.clearChecked();
-    }
-
-    public void setDigitsDisplay(final double value) {
-        StringBuilder tmp = new StringBuilder(String.valueOf(Math.abs(value)));
-        tmp.insert(0, value >= 0 ? '+' : '-');
-        while (tmp.length() < 6) tmp.append('0');
-        char[] digits = tmp.toString().toCharArray();
-
-        mDigitSign.setText(String.valueOf(digits[0]));
-        mDigit1.setText(String.valueOf(digits[1]));
-        mDigit2.setText(String.valueOf(digits[3]));
-        mDigit3.setText(String.valueOf(digits[4]));
-        mDigit4.setText(String.valueOf(digits[5]));
-    }
-
-    public void setScale(final Scale scale) {
-        mScaleSpinner.setSelection(mScaleAdapter.getPosition(scale.name()));
     }
 }

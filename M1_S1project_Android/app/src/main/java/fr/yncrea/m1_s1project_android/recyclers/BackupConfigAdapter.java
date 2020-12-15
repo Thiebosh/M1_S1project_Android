@@ -51,15 +51,22 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
         this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
     }
 
-    @NonNull
-    @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_channel_display, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull Holder holder, int position) {
-        holder.setDisplay(mChannelList.get(position));
+    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+        /*
+        if (index == -1) {
+            boolean active = tmp.get(0).isActive();
+            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
+            this.notifyDataSetChanged();
+        }
+        else if (index == -2) {
+            mChannelList.clear();
+            mChannelList.addAll(tmp);
+            this.notifyDataSetChanged();
+        }
+        else {
+            mChannelList.set(index, tmp.get(index));
+            this.notifyItemChanged(index);
+        }*/
     }
 
     @Override
@@ -69,5 +76,21 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
 
     public ArrayList<Channel> getChannelList() {
         return mChannelList;
+    }
+
+    public void setChannelList(ArrayList<Channel> channelList) {
+        mChannelList.clear();
+        mChannelList.addAll(channelList);
+    }
+
+    @NonNull
+    @Override
+    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_channel_display, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull Holder holder, int position) {
+        holder.setDisplay(mChannelList.get(position));
     }
 }

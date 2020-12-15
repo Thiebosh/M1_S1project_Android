@@ -13,8 +13,9 @@ public class Generator {
         this.channelList = channelList;
     }
 
-    public void setAllChannelActive(final boolean active) {
+    public Generator setAllChannelActive(final boolean active) {
         for (Channel channel : channelList) channel.setActive(active);
+        return this;
     }
 
     public Channel getChannel(final int id) {
