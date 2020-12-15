@@ -57,7 +57,7 @@ public class BackupSlotAdapter extends RecyclerView.Adapter<BackupSlotAdapter.Ho
                     ((BluetoothParent) getActivity(context)).sendData("slot"+getAdapterPosition());
 
                     //sinon
-                    displayer.getChannelList().addAll(config);
+                    displayer.setChannelList(config);
                     displayer.notifyDataSetChanged();
                 }
             });
