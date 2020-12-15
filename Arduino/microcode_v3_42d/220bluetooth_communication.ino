@@ -1,7 +1,6 @@
 void bluetoothCommunication(){
   //Serial.println("exec bluetoothCommunication in 220");
   if (hc06.available() > 0) {
-    int storesUsed[] = {0,1,5};
     strCmd = hc06.readString();
     Serial.print("I received : ");
     Serial.println(strCmd);
@@ -9,6 +8,8 @@ void bluetoothCommunication(){
     //hc06.println("\n");
     if (strCmd.equals("initPlz")) {
       //json : accès direct aux attributs, sans passer par méthodes
+      initPlz();
+      /*
       String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":9.6,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
       String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
       String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
@@ -20,11 +21,18 @@ void bluetoothCommunication(){
       String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
       Serial.println(init);
       hc06.print(init);
+      */
     }
     else if (strCmd.equals("getStores")) {
-      Serial.println("{\"getStores\":[1,1,0,0,0,1,0,0]}");
-      hc06.print("{\"getStores\":[1,1,0,0,0,1,0,0]}");
+      getAllStores();
+      //Serial.println("{\"getStores\":[1,1,0,0,0,1,0,0]}");
+      //hc06.print("{\"getStores\":[1,1,0,0,0,1,0,0]}");
     }
+    else if (strCmd.startsWith("store"){
+      uint8_t store_number = (uint8_t)strCmd.substring(5);
+      getStore(store_number);
+    }
+    /*
     else if (strCmd.equals("store0")) {
       String c1 = "{\"id\":0,\"isActive\":true,\"currentValue\":4.2,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
       String c2 = "{\"id\":1,\"isActive\":false,\"currentValue\":1.3,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
@@ -45,6 +53,7 @@ void bluetoothCommunication(){
       String store1 = "{\"store1\":["+c1+c3+c4+c8+"]}";
       hc06.print(store1);
     }
+    */
     else if (strCmd.equals("get")) {
       int reponse = getChannelValue(0);
       hc06.print(reponse);
