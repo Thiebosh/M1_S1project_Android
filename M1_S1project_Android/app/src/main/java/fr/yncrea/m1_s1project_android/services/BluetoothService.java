@@ -95,9 +95,9 @@ public class BluetoothService {
      * Start the ConnectedThread to begin managing a Bluetooth connection
      *
      * @param socket The BluetoothSocket on which the connection was made
-     * @param device The BluetoothDevice that has been connected
+     * //@param device The BluetoothDevice that has been connected
      */
-    public synchronized void connected(final BluetoothSocket socket, final BluetoothDevice device) {
+    public synchronized void connected(final BluetoothSocket socket/*, final BluetoothDevice device*/) {
         // Cancel the thread that completed the connection
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -121,11 +121,13 @@ public class BluetoothService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
+        /*
         final Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_DEVICE_NAME);
         final Bundle bundle = new Bundle();
         bundle.putString(BluetoothConstants.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+        */
 
         updateUserInterface();
     }
@@ -256,7 +258,7 @@ public class BluetoothService {
                             case STATE_LISTEN:
                             case STATE_CONNECTING:
                                 // Situation normal. Start the connected thread.
-                                connected(socket, socket.getRemoteDevice());
+                                connected(socket/*, socket.getRemoteDevice()*/);
                                 break;
                             case STATE_NONE:
                             case STATE_CONNECTED:
@@ -329,7 +331,7 @@ public class BluetoothService {
             }
 
             // Start the connected thread
-            connected(mmSocket, mmDevice);
+            connected(mmSocket/*, mmDevice*/);
         }
 
         public void cancel() {

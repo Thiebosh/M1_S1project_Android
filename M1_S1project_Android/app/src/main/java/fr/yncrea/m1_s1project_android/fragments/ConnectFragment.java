@@ -70,7 +70,8 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
         SharedPreferences loginPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(BluetoothConstants.PREF_SLOT_ACCESS, MODE_PRIVATE);
         SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
         if (((BluetoothParent) getActivity()).getAutoConnect() && loginPreferences.getBoolean(BluetoothConstants.PREF_IS_SAVED, false)) {
-            ((BluetoothParent) getActivity()).connectDevice(loginPreferences.getString(BluetoothConstants.PREF_ACCESS_ADDRESS, ""));
+            ((BluetoothParent) getActivity()).connectDevice(loginPreferences.getString(BluetoothConstants.PREF_ACCESS_NAME, ""),
+                                                            loginPreferences.getString(BluetoothConstants.PREF_ACCESS_ADDRESS, ""));
             ((BluetoothParent) getActivity()).setAutoConnect(false);
         }
 
@@ -94,13 +95,14 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
             mTitle.setText(getString(R.string.frag_conn_connecting_device, deviceName));
 
             // Connexion test : if success, handler will change fragment
-            ((BluetoothParent) getActivity()).connectDevice(address);
+            ((BluetoothParent) getActivity()).connectDevice(deviceName, address);
             ((BluetoothParent) getActivity()).setAutoConnect(false);
 
             //remember mac adress
             if (((CheckBox) view.findViewById(R.id.frag_conn_checkbox_remember)).isChecked()) {
                 loginPrefsEditor.putBoolean(BluetoothConstants.PREF_IS_SAVED, true);
                 loginPrefsEditor.putString(BluetoothConstants.PREF_ACCESS_ADDRESS, address);
+                loginPrefsEditor.putString(BluetoothConstants.PREF_ACCESS_NAME, deviceName);
             }
             else loginPrefsEditor.clear();
             loginPrefsEditor.apply();

@@ -15,13 +15,14 @@ public interface BluetoothParent {
         add(new Generator());
     }};
 
-    void connectDevice(final String deviceMacAddress);
+    boolean getAutoConnect();
+    void setAutoConnect(boolean state);
+    void connectDevice(final String deviceName, final String deviceMacAddress);
     void disconnectDevice();
+
     void sendData(final Channel data);//emission / reception
     void sendData(final String data);//emission / reception
     Generator getGenerator();
     ArrayList<Generator> getBackupGenerator();
     boolean getStoreCharged(final int store);
-    boolean getAutoConnect();
-    void setAutoConnect(boolean state);
 }
