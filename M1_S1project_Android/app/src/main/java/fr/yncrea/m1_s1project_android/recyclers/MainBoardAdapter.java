@@ -200,21 +200,25 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                         mLastHolderSelected.setScale(maxScale);
                         mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
                         ((BluetoothParent) holder.itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(maxScale));
+                        updateDisplay = true;
                     }
 
-                    if (input.charAt(1) == '.' && input.length() > 5) {
-                        Scale minScale = Scale.getMinValue(unit);
+                    if (input.charAt(1) == '.') {
+                        if (input.length() > 5) {
+                            Scale minScale = Scale.getMinValue(unit);
 
-                        if (currentScale.getValue() > minScale.getValue() && input.startsWith("0.00")) {//change scale
-                            input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, minScale));
-                            channel.setScale(minScale);
-                            mLastHolderSelected.setScale(minScale);
-                            mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
-                            ((BluetoothParent) holder.itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(minScale));
+                            if (currentScale.getValue() > minScale.getValue() && input.startsWith("0.00")) {//change scale
+                                input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, minScale));
+                                Log.d("testy", "new input : "+input);
+                                channel.setScale(minScale);
+                                mLastHolderSelected.setScale(minScale);
+                                mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+                                ((BluetoothParent) holder.itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(minScale));
+                            }
+                            else input = input.substring(0, 5);//1 avant virgule, virgule, 3 apres virgule
+
+                            updateDisplay = true;
                         }
-                        else input = input.substring(0, 5);//1 avant virgule, virgule, 3 apres virgule
-
-                        updateDisplay = true;
                     }
                     else {
                         ((EditText) view).setText(String.valueOf(channel.getCurrentValue()));
@@ -284,7 +288,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     else mMax.setText(String.valueOf(max));
                 }
                 else if (id == R.id.frag_main_input_current && value != current) {
-                    double limitScaledValue = Scale.changeScale(value, channel.getScale(), limitScale);
+                    double limitScaledValue = Scale.changeScale(value, channel.getScale(), unit == Unit.V ? limitScale : Scale.u);//rustine
 
                     if (min <= limitScaledValue && limitScaledValue <= max) {//comparaison sur même échelle
                         channel.setCurrentValue(value);//application de la valeur sur l'échelle du canal
