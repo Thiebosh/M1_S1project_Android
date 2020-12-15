@@ -30,7 +30,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
     private final MaterialButton mChannelActivation;
 
     private final MaterialButtonToggleGroup mDigitGroup;
-    private final ArrayList<Integer> digitsIds;
+    private final ArrayList<Integer> mDigitsIds;
     private final Button mDigitSign;
     private final Button mDigit1;
     private final Button mDigit2;
@@ -55,7 +55,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mDigit2 = itemView.findViewById(R.id.item_channel_button_digit2);
         mDigit3 = itemView.findViewById(R.id.item_channel_button_digit3);
         mDigit4 = itemView.findViewById(R.id.item_channel_button_digit4);
-        digitsIds = new ArrayList<>(Arrays.asList(mDigit1.getId(), mDigit2.getId(), mDigit3.getId(), mDigit4.getId()));
+        mDigitsIds = new ArrayList<>(Arrays.asList(mDigit1.getId(), mDigit2.getId(), mDigit3.getId(), mDigit4.getId()));
 
         mScaleSpinner = itemView.findViewById(R.id.item_channel_spinner_scale);
         mUnitSpinner = itemView.findViewById(R.id.item_channel_spinner_unit);
@@ -91,8 +91,8 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mScaleSpinner.setSelection(mScaleAdapter.getPosition(channel.getScale().name()));
 
         mUnitSpinner.setSelection(mUnitAdapter.getPosition(channel.getUnit().name()));
-
-        if (adapter.getLastHolderSelected() == this) {
+        
+        if (MainBoardHolder.this == adapter.getLastHolderSelected()) {//cas item recyclé
             if (adapter.getDigitSelected() == -1) mContainer.callOnClick();
             else mDigitGroup.check(adapter.getDigitSelected());//englobe
         }
@@ -142,7 +142,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mDigitGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 if (this != adapter.getLastHolderSelected()) mContainer.callOnClick();
-                adapter.setDigitSelected(digitsIds.indexOf(checkedId));
+                adapter.setDigitSelected(mDigitsIds.indexOf(checkedId));
             }
         });
 
@@ -208,7 +208,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     channel.setCurrentValue(0);
                     setDigitsDisplay(channel.getCurrentValue());
 
-                    ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setUnit(selected).setCurrentValue(0));
+                    ((BluetoothParent) itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setActive(false).setUnit(selected).setCurrentValue(0));
 
                     if (MainBoardHolder.this == adapter.getLastHolderSelected()) {
                         adapter.setSelection(channel.getCurrentValue());

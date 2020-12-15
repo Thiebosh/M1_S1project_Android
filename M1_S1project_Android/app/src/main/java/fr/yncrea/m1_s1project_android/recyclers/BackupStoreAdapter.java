@@ -75,7 +75,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
     }
 
-    private final ArrayList<Generator> mConfigList;
+    private final ArrayList<Generator> mConfigList;//arrayList<bool> mConfigList => récupère tableau de bool des acquis ou non
     private final BackupConfigAdapter mConfigDisplayer;
 
     private BackupStoreAdapter.Holder mLastHolderSelected = null;
