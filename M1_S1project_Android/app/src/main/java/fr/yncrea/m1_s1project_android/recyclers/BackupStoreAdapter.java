@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
@@ -57,15 +58,11 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
                     //Log.d("testy", "direct test "+BluetoothParent.mGenerator.getChannel(5).getCurrentValue());
 
                     //si pas encore acquis données de cette config => tableau de bool faux, met à true quand demandé ? permet de passer outre stores vides
-                    if(!((BluetoothParent) getActivity(context)).getStoreCharged(getAdapterPosition())){
+                    if(!BluetoothParent.isStoreCharged[getAdapterPosition()]){
                         ((BluetoothParent) getActivity(context)).sendData("store"+getAdapterPosition());
                     }
                     else {
-
-                        //while(BluetoothParent.mBackupGenerator.get(getAdapterPosition()) != null){}
-
-                        //sinon
-                        displayer.setChannelList(((BluetoothParent) getActivity(context)).getBackupGenerator().get(getAdapterPosition()).getChannelList());
+                        displayer.setChannelList(BluetoothParent.mBackupGenerator.get(getAdapterPosition()).getChannelList());
                         displayer.notifyDataSetChanged();
                         Log.d("testy", "direct test " + BluetoothParent.isStoreCharged[getAdapterPosition()]);
                     }
@@ -191,9 +188,9 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             //récupère config
             ArrayList<Channel> savedConfig = mConfigList.get(mFocusedIndex).getChannelList();
 
-            if (savedConfig != ((BluetoothParent) getActivity(context)).getGenerator().setAllChannelActive(false).getChannelList()) {//vérifier que fonctionne sans casser mainboard
+            if (savedConfig != BluetoothParent.mGenerator.setAllChannelActive(false).getChannelList()) {//vérifier que fonctionne sans casser mainboard
                 //la charge
-                ((BluetoothParent) getActivity(context)).getGenerator().setChannelList(savedConfig);
+                BluetoothParent.mGenerator.setChannelList(savedConfig);
 
                 //envoie commande à arduino : contient déjà données
                 ((BluetoothParent) getActivity(context)).sendData("load_store_" + mFocusedIndex);
