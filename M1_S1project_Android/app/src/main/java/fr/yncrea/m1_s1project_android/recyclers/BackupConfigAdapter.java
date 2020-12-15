@@ -1,5 +1,6 @@
 package fr.yncrea.m1_s1project_android.recyclers;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,10 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
     }
 
     public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+        Log.d("testy", "update in config"+tmp.size());
+        mChannelList.clear();
+        mChannelList.addAll(tmp);
+        this.notifyDataSetChanged();
         /*
         if (index == -1) {
             boolean active = tmp.get(0).isActive();
