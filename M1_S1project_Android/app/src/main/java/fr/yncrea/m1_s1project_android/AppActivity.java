@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Stack;
@@ -234,7 +235,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 str = getString(R.string.blt_not_connected);
                                 BluetoothParent.mGenerator.getChannelList().clear();
                                 BluetoothParent.mIsStores.clear();
-                                BluetoothParent.mIsStores.addAll(Arrays.asList(true, true, false));
                                 BluetoothParent.mBackupGenerator.clear();
                                 break;
 
@@ -281,6 +281,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 for (int i = 0; i < jArray.length(); i++){
                                     try {
                                         mIsStores.add(jArray.getInt(i)==1);
+                                        BluetoothParent.mBackupGenerator.add(new Generator());
                                         Log.d("testy", "jsonObject : "+i+" = "+ mIsStores.get(i));
                                         //listdata.add(jsonObject.getString(i));
                                     } catch (JSONException e) {
