@@ -158,38 +158,26 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
         Context context = holder.itemView.getContext();
         mSave.setOnClickListener(v -> {
-            //set tous les canaux à faux
             Generator toSave = (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false);
 
-            if (toSave != BluetoothParent.mBackupGenerators.get(mFocusedIndex)) {//fonctionne pas. conversion en string par json ?
-                Log.d("testy", "nouvelle config à enregistrer");
+            BluetoothParent.mBackupGenerators.set(mFocusedIndex, toSave);
+            BluetoothParent.mIsStores.set(mFocusedIndex, true);
 
-                //remplace config précédente
-                BluetoothParent.mBackupGenerators.set(mFocusedIndex, toSave);
-                BluetoothParent.mIsStores.set(mFocusedIndex, true);
+            notifyItemChanged(position, mLastHolderSelected);//change coloration si nécessaire
+            mConfigDisplayer.setChannelList(toSave.getChannelList());
+            mConfigDisplayer.notifyDataSetChanged();
 
-                notifyItemChanged(position, mLastHolderSelected);//change coloration si nécessaire
-                mConfigDisplayer.setChannelList(toSave.getChannelList());
-                mConfigDisplayer.notifyDataSetChanged();
+            ((BluetoothParent) getActivity(context)).sendData("save_store_" + mFocusedIndex);
 
-                ((BluetoothParent) getActivity(context)).sendData("save_store_"+mFocusedIndex);
-
-                mLoad.setEnabled(true);
-                mDelete.setEnabled(true);
-            }
-            else Log.d("testy", "connait déjà config");
+            mLoad.setEnabled(true);
+            mDelete.setEnabled(true);
         });
 
         mLoad.setOnClickListener(v -> {
-            //récupère config
             ArrayList<Channel> savedConfig = BluetoothParent.mBackupGenerators.get(mFocusedIndex).getChannelList();
-            Generator current = (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false);
+            BluetoothParent.mGenerator.setChannelList(savedConfig);
 
-            if (savedConfig != current.getChannelList()) {//fonctionne sans doute pas. conversion en string par json ?
-                BluetoothParent.mGenerator.setChannelList(savedConfig);
-
-                ((BluetoothParent) getActivity(context)).sendData("load_store_" + mFocusedIndex);
-            }
+            ((BluetoothParent) getActivity(context)).sendData("load_store_" + mFocusedIndex);
         });
 
         mDelete.setOnClickListener(v -> {
