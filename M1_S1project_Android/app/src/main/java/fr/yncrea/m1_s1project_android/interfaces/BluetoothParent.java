@@ -11,6 +11,7 @@ public interface BluetoothParent {
     Generator mGenerator = new Generator();
     ArrayList<Boolean> isStoreCharged = new ArrayList<>(Arrays.asList(true, true, false));
     ArrayList<Generator> mBackupGenerator = new ArrayList<>(Arrays.asList(new Generator(), new Generator(), new Generator()));
+    ArrayList<Boolean> isStore = new ArrayList<>();
 
     boolean getAutoConnect();
     void setAutoConnect(boolean state);
@@ -19,4 +20,6 @@ public interface BluetoothParent {
 
     void sendData(final Channel data);//emission / reception
     void sendData(final String data);//emission / reception
+    boolean getIsStoresInitialized();
+    void setIsStoresInitialized(boolean init);
 }

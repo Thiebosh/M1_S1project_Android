@@ -38,6 +38,9 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
         }
 
         public void setDisplay(final int position) {
+            if(BluetoothParent.isStore.get(position)){
+                mStoreContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.green));
+            }
             mStoreContainer.setText(itemView.getContext().getString(R.string.store, position));
             mStoreContainer.setTag(position);
         }
@@ -103,7 +106,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
     @Override
     public int getItemCount() {
-        return BluetoothParent.mBackupGenerator.size();
+        return BluetoothParent.isStore.size();
     }
 
     private static Activity getActivity(Context context) {

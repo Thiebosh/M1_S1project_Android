@@ -60,7 +60,6 @@ void extractFromDisplayedValue(float value, uint8_t unit, uint8_t sourceType) {
 */
 
 void extractDisplayValueFromDACValue(uint8_t channel) {
-  Serial.println("exec fct extractDisplayValueFromDACValue in 090"); // changement
 
   if (channelModeStatus & 0x01 << channel ) {
 
