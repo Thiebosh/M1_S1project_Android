@@ -73,14 +73,14 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mLess = view.findViewById(R.id.frag_main_button_less);
     }
 
-    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+    public void updateChannelListData(ArrayList<Channel> data, int index) {
         if (index == -1) {
-            boolean active = tmp.get(0).isActive();
+            boolean active = data.get(0).isActive();
             for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
             this.notifyDataSetChanged();
         }
         else {
-            mChannelList.set(index, tmp.get(index));
+            mChannelList.set(index, data.get(index));
             this.notifyItemChanged(index, mLastHolderSelected);//modifie instance plutôt que de la recréer
             if (mFocusedIndex != -1 && mChannelList.get(index).getId() == mChannelList.get(mFocusedIndex).getId()) {
                 setLastHolderSelected(mLastHolderSelected, mChannelList.get(index), mFocusedIndex);

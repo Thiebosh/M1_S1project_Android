@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -145,21 +146,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
     }
 
     @Override
-    public Generator getGenerator() {
-        return mGenerator;
-    }
-
-    @Override
-    public ArrayList<Generator> getBackupGenerator() {
-        return mBackupGenerator;
-    }
-
-    @Override
-    public boolean getStoreCharged(int store) {
-        return isStoreCharged[store];
-    }
-
-    @Override
     public boolean getAutoConnect() {
         return mAutoConnect;
     }
@@ -247,6 +233,9 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             case BluetoothService.STATE_DISCONNECT:
                                 loadFragment(new ConnectFragment(), true);//charge premier fragment
                                 str = getString(R.string.blt_not_connected);
+                                BluetoothParent.mGenerator.getChannelList().clear();
+                                BluetoothParent.mIsStores.clear();
+                                BluetoothParent.mBackupGenerator.clear();
                                 break;
 
                             default:
@@ -259,7 +248,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        int index = -2;
+                        int index;
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = JsonConverterService.createJsonObject(str);
@@ -291,8 +280,9 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             if (jArray != null) {
                                 for (int i = 0; i < jArray.length(); i++){
                                     try {
-                                        isStore.add(jArray.getInt(i)==1);
-                                        Log.d("testy", "jsonObject : "+i+" = "+isStore.get(i));
+                                        mIsStores.add(jArray.getInt(i)==1);
+                                        BluetoothParent.mBackupGenerator.add(new Generator());
+                                        Log.d("testy", "jsonObject : "+i+" = "+ mIsStores.get(i));
                                         //listdata.add(jsonObject.getString(i));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -311,7 +301,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             Log.d("testy", str);
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if(storage != null){
-                                isStoreCharged[store_number] = true;
+                                mIsStores.set(store_number, true);
                                 mBackupGenerator.get(store_number).setChannelList(storage.getChannelList());
                                 Log.d("testy", "store charged"+storage.getChannelList().size());
 

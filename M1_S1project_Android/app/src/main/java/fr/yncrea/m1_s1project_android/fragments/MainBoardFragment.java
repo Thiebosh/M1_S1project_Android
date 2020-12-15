@@ -69,7 +69,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
         View view = inflater.inflate(R.layout.fragment_main_board, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        mAdapter = new MainBoardAdapter(view, ((BluetoothParent) Objects.requireNonNull(getActivity())).getGenerator().getChannelList());
+        mAdapter = new MainBoardAdapter(view, BluetoothParent.mGenerator.getChannelList());
         RecyclerView recycler = view.findViewById(R.id.frag_main_recycler);
         recycler.setAdapter(mAdapter);
 
@@ -88,7 +88,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
             int id = v.getId();
             if(((ToggleButton) view.findViewById(id)).isChecked()) {
                 ((ToggleButton) view.findViewById(id == R.id.frag_main_allOn ? R.id.frag_main_allOff : R.id.frag_main_allOn)).setChecked(false);
-                ((BluetoothParent) getActivity()).getGenerator().setAllChannelActive(id == R.id.frag_main_allOn);
+                BluetoothParent.mGenerator.setAllChannelActive(id == R.id.frag_main_allOn);
                 ((BluetoothParent) getActivity()).sendData((new Channel()).setId(-1).setActive(id == R.id.frag_main_allOn));
                 mAdapter.notifyDataSetChanged();//changer par un adapter.allOn ? évite plantage
             }

@@ -46,41 +46,18 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
         }
     }
 
-    private final ArrayList<Channel> mChannelList;
+    private final ArrayList<Channel> mChannelList = new ArrayList<>();
 
-    public BackupConfigAdapter(ArrayList<Channel> channelList) {
-        this.mChannelList = channelList != null ? channelList : new ArrayList<>();//secu
-    }
-
-    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
-        Log.d("testy", "update in config"+tmp.size());
+    public void updateChannelListData(ArrayList<Channel> data) {
+        Log.d("testy", "update in config"+data.size());
         mChannelList.clear();
-        mChannelList.addAll(tmp);
+        mChannelList.addAll(data);
         this.notifyDataSetChanged();
-        /*
-        if (index == -1) {
-            boolean active = tmp.get(0).isActive();
-            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
-            this.notifyDataSetChanged();
-        }
-        else if (index == -2) {
-            mChannelList.clear();
-            mChannelList.addAll(tmp);
-            this.notifyDataSetChanged();
-        }
-        else {
-            mChannelList.set(index, tmp.get(index));
-            this.notifyItemChanged(index);
-        }*/
     }
 
     @Override
     public int getItemCount() {
         return mChannelList.size();
-    }
-
-    public ArrayList<Channel> getChannelList() {
-        return mChannelList;
     }
 
     public void setChannelList(ArrayList<Channel> channelList) {

@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
@@ -39,8 +38,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
         }
 
         public void setDisplay(final int position) {
-            if(BluetoothParent.isStore.get(position)){
-                Log.d("testy", "store of position "+position+" = "+BluetoothParent.isStore.get(position));
+            if(BluetoothParent.mIsStores.get(position)){
                 mStoreContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.green));
             }
             mStoreContainer.setText(itemView.getContext().getString(R.string.store, position));
@@ -62,13 +60,15 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
                     //Log.d("testy", "direct test "+BluetoothParent.mGenerator.getChannel(5).getCurrentValue());
 
                     //si pas encore acquis données de cette config => tableau de bool faux, met à true quand demandé ? permet de passer outre stores vides
-                    if(!BluetoothParent.isStoreCharged[getAdapterPosition()]){
+                    if(BluetoothParent.mIsStores.get(getAdapterPosition()) && BluetoothParent.mBackupGenerator.get(getAdapterPosition()).getChannelList().isEmpty()){
                         ((BluetoothParent) getActivity(context)).sendData("store"+getAdapterPosition());
+                        displayer.setChannelList(new ArrayList<>());
+                        displayer.notifyDataSetChanged();
                     }
                     else {
                         displayer.setChannelList(BluetoothParent.mBackupGenerator.get(getAdapterPosition()).getChannelList());
                         displayer.notifyDataSetChanged();
-                        Log.d("testy", "direct test " + BluetoothParent.isStoreCharged[getAdapterPosition()]);
+                        Log.d("testy", "direct test " + BluetoothParent.mIsStores.get(getAdapterPosition()));
                     }
                 }
             });
@@ -76,7 +76,6 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
     }
 
-    private final ArrayList<Generator> mConfigList;//arrayList<bool> mConfigList => récupère tableau de bool des acquis ou non
     private final BackupConfigAdapter mConfigDisplayer;
 
     private BackupStoreAdapter.Holder mLastHolderSelected = null;
@@ -87,40 +86,27 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
     private final Button mDelete;
 
 
-    public BackupStoreAdapter(View view, BackupConfigAdapter configDisplayer, ArrayList<Generator> configList) {
+    public BackupStoreAdapter(View view, BackupConfigAdapter configDisplayer) {
         this.mConfigDisplayer = configDisplayer;
-        this.mConfigList = configList != null ? configList : new ArrayList<>(8);//secu
 
         mSave = view.findViewById(R.id.frag_back_button_save);
         mLoad = view.findViewById(R.id.frag_back_button_load);
         mDelete = view.findViewById(R.id.frag_back_button_delete);
     }
 
-    public void updateChannelListData(ArrayList<Channel> tmp, int index) {
+    public void updateChannelListData(ArrayList<Channel> data, int index) {
         Log.d("testy", "update in store adapter");
-        mConfigList.set(index, (new Generator()).setChannelList(tmp));
-        mConfigDisplayer.updateChannelListData(tmp, index);
-        //notifyDataSetChanged();
-        /*
-        if (index == -1) {
-            boolean active = tmp.get(0).isActive();
-            for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
-            this.notifyDataSetChanged();
-        }
-        else if (index == -2) {
-            mChannelList.clear();
-            mChannelList.addAll(tmp);
-            this.notifyDataSetChanged();
-        }
-        else {
-            mChannelList.set(index, tmp.get(index));
-            this.notifyItemChanged(index);
-        }*/
+        BluetoothParent.mBackupGenerator.set(index, (new Generator()).setChannelList(data));
+        mConfigDisplayer.updateChannelListData(data);
+
+        mSave.setEnabled(true);
+        mLoad.setEnabled(true);
+        mDelete.setEnabled(true);
     }
 
     @Override
     public int getItemCount() {
-        return BluetoothParent.isStore.size();
+        return BluetoothParent.mIsStores.size();
     }
 
     private static Activity getActivity(Context context) {
@@ -138,14 +124,26 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
     public void setLastHolderSelected(final Holder holder, final int position){
         this.mLastHolderSelected = holder;
         mFocusedIndex = position;
+
         mSave.setVisibility(View.VISIBLE);
         mLoad.setVisibility(View.VISIBLE);
         mDelete.setVisibility(View.VISIBLE);
-        mSave.setEnabled(true);
 
-
-        if (!mConfigList.get(mFocusedIndex).getChannelList().isEmpty()) mLoad.setActivated(true);
-        if (!mConfigList.get(mFocusedIndex).getChannelList().isEmpty()) mDelete.setActivated(true);
+        if (!BluetoothParent.mIsStores.get(mFocusedIndex)) {
+            mSave.setEnabled(true);
+            mLoad.setEnabled(false);
+            mDelete.setEnabled(false);
+        }
+        else if (BluetoothParent.mBackupGenerator.get(mFocusedIndex).getChannelList().isEmpty()) {
+            mSave.setEnabled(false);
+            mLoad.setEnabled(false);
+            mDelete.setEnabled(false);
+        }
+        else {
+            mSave.setEnabled(true);
+            mLoad.setEnabled(true);
+            mDelete.setEnabled(true);
+        }
     }
 
     @NonNull
@@ -172,9 +170,9 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             save.setChannelList(BluetoothParent.mGenerator.getChannelList());
             save.setAllChannelActive(false);
 
-            if (save != mConfigList.get(mFocusedIndex)) {//verifier que fonctionne bien
+            if (save != BluetoothParent.mBackupGenerator.get(mFocusedIndex)) {//verifier que fonctionne bien
                 //remplace config précédente
-                mConfigList.set(mFocusedIndex, save);
+                BluetoothParent.mBackupGenerator.set(mFocusedIndex, save);
 
                 //actualise oneConfigRecycler (config affichée)
                 mConfigDisplayer.setChannelList(save.getChannelList());
@@ -190,7 +188,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
         mLoad.setOnClickListener(v -> {
             //récupère config
-            ArrayList<Channel> savedConfig = mConfigList.get(mFocusedIndex).getChannelList();
+            ArrayList<Channel> savedConfig = BluetoothParent.mBackupGenerator.get(mFocusedIndex).getChannelList();
 
             if (savedConfig != BluetoothParent.mGenerator.setAllChannelActive(false).getChannelList()) {//vérifier que fonctionne sans casser mainboard
                 //la charge
@@ -203,7 +201,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
         mDelete.setOnClickListener(v -> {
             //supprime config
-            mConfigList.get(mFocusedIndex).setChannelList(new ArrayList<>());
+            BluetoothParent.mBackupGenerator.get(mFocusedIndex).setChannelList(new ArrayList<>());
 
             //actualise oneConfigRecycler (config affichée)
             mConfigDisplayer.setChannelList(new ArrayList<>());

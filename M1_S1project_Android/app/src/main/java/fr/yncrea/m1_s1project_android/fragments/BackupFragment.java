@@ -11,8 +11,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 import fr.yncrea.m1_s1project_android.R;
@@ -36,8 +34,13 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
     @Override
     public void applyChanges(Generator generator, int index) {
         //update nb generator
-        mSlotsAdapter.updateChannelListData(generator.getChannelList(), index);
+        if (generator == null) {//déjà envoyé dans BluetoothParent.mBackupGenerator
+            mSlotsAdapter.notifyDataSetChanged();
+            return;
+        }
+
         //update store x
+        mSlotsAdapter.updateChannelListData(generator.getChannelList(), index);
 
         //update par commande (save, load, delete)
     }
@@ -67,20 +70,16 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         View view = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);//call onPrepareOptionsMenu
 
-        Generator tmp = BluetoothParent.mGenerator;
-        ArrayList<Generator> tmpList = new ArrayList<>(Arrays.asList(tmp, new Generator()));
-
         RecyclerView oneConfigRecycler = view.findViewById(R.id.frag_back_recycler_config);
         oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.VERTICAL));
         oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
-        //BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(tmp.getChannelList());
-        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter(new Generator().getChannelList());
+        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter();
         oneConfigRecycler.setAdapter(oneConfigAdapter);
 
         RecyclerView storeRecycler = view.findViewById(R.id.frag_back_recycler_stores);
         storeRecycler.addItemDecoration(new DividerItemDecoration(storeRecycler.getContext(), DividerItemDecoration.VERTICAL));
         storeRecycler.addItemDecoration(new DividerItemDecoration(storeRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
-        mSlotsAdapter = new BackupStoreAdapter(view, oneConfigAdapter, tmpList);
+        mSlotsAdapter = new BackupStoreAdapter(view, oneConfigAdapter);
         storeRecycler.setAdapter(mSlotsAdapter);
 
         return view;
