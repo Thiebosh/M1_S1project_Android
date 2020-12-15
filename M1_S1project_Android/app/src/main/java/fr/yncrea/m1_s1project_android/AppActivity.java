@@ -284,8 +284,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                         }
                         else if(str.startsWith("store", 2)){
-                            int store_number = Character.getNumericValue(str.charAt(7));
-                            Log.d("testy", "store received : "+str);
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(2 + 5, str.indexOf(":") - 1));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+
                             str = str.replace("store"+store_number, "channelList");
                             Log.d("testy", str);
                             Generator storage = JsonConverterService.createJsonObject(str);
@@ -315,7 +321,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             break;
                         }
                         else if (str.equals("getStores")) {
-                            String init = "{\"getStores\":[1,1,0,0,0,1,0,0]}";
+                            String init = "{\"getStores\":[1,1,0,0,0,1,0,0,0,0,1]}";
                             sendData(init);
                         }
                         else if (str.equals("store0")) {
@@ -324,6 +330,27 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             String c4 = "{\"id\":3,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
                             String c8 = "{\"id\":7,\"isActive\":false,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
                             String init = "{\"store0\":["+c1+c3+c4+c8+"]}";
+                            sendData(init);
+                        }
+                        else if (str.equals("store1")) {
+                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                            String c3 = "{\"id\":3,\"isActive\":true,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                            String c4 = "{\"id\":6,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                            String c8 = "{\"id\":7,\"isActive\":false,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                            String init = "{\"store1\":["+c1+c3+c4+c8+"]}";
+                            sendData(init);
+                        }
+                        else if (str.equals("store5")) {
+                            String c1 = "{\"id\":1,\"isActive\":false,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                            String c4 = "{\"id\":5,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                            String c8 = "{\"id\":9,\"isActive\":false,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                            String init = "{\"store5\":["+c1+c4+c8+"]}";
+                            sendData(init);
+                        }
+                        else if (str.equals("store10")) {
+                            String c1 = "{\"id\":1,\"isActive\":false,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                            String c4 = "{\"id\":5,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                            String init = "{\"store10\":["+c1+c4+"]}";
                             sendData(init);
                         }
                         else {
