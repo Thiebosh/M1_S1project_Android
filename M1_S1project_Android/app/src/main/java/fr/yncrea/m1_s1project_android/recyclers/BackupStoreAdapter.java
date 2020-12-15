@@ -161,20 +161,23 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             //set tous les canaux à faux
             Generator toSave = (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false);
 
-            if (toSave != BluetoothParent.mBackupGenerators.get(mFocusedIndex)) {//verifier que fonctionne bien
+            if (toSave != BluetoothParent.mBackupGenerators.get(mFocusedIndex)) {//fonctionne pas. conversion en string par json ?
+                Log.d("testy", "nouvelle config à enregistrer");
+
                 //remplace config précédente
                 BluetoothParent.mBackupGenerators.set(mFocusedIndex, toSave);
+                BluetoothParent.mIsStores.set(mFocusedIndex, true);
 
-                //actualise oneConfigRecycler (config affichée)
+                notifyItemChanged(position, mLastHolderSelected);//change coloration si nécessaire
                 mConfigDisplayer.setChannelList(toSave.getChannelList());
                 mConfigDisplayer.notifyDataSetChanged();
 
-                //envoie commande à arduino : contient déjà données
                 ((BluetoothParent) getActivity(context)).sendData("save_store_"+mFocusedIndex);
 
-                mLoad.setActivated(true);
-                mDelete.setActivated(true);
+                mLoad.setEnabled(true);
+                mDelete.setEnabled(true);
             }
+            else Log.d("testy", "connait déjà config");
         });
 
         mLoad.setOnClickListener(v -> {
@@ -182,28 +185,25 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             ArrayList<Channel> savedConfig = BluetoothParent.mBackupGenerators.get(mFocusedIndex).getChannelList();
             Generator current = (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false);
 
-            if (savedConfig != current.getChannelList()) {
-                //la charge
+            if (savedConfig != current.getChannelList()) {//fonctionne sans doute pas. conversion en string par json ?
                 BluetoothParent.mGenerator.setChannelList(savedConfig);
 
-                //envoie commande à arduino : contient déjà données
                 ((BluetoothParent) getActivity(context)).sendData("load_store_" + mFocusedIndex);
             }
         });
 
         mDelete.setOnClickListener(v -> {
-            //supprime config
             BluetoothParent.mBackupGenerators.get(mFocusedIndex).setChannelList(new ArrayList<>());
+            BluetoothParent.mIsStores.set(mFocusedIndex, false);
 
-            //actualise oneConfigRecycler (config affichée)
+            notifyItemChanged(position, mLastHolderSelected);//change coloration si nécessaire
             mConfigDisplayer.setChannelList(new ArrayList<>());
             mConfigDisplayer.notifyDataSetChanged();
 
-            //envoie commande à arduino : contient déjà données
             ((BluetoothParent) getActivity(context)).sendData("delete_store_"+mFocusedIndex);
 
-            mLoad.setActivated(false);
-            mDelete.setActivated(false);
+            mLoad.setEnabled(false);
+            mDelete.setEnabled(false);
         });
     }
 }
