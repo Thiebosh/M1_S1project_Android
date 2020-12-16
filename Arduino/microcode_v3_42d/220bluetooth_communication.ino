@@ -22,7 +22,6 @@ void bluetoothCommunication(){
       Serial.println(init);
       hc06.print(init);
       */
-      strCmd = "";
     }
     else if (strCmd.equals("init_stores")) {
       getAllStores();
@@ -36,7 +35,7 @@ void bluetoothCommunication(){
     }
     
     else if(strCmd.startsWith("{")){
-      //jsonDeserialize(strCmd);
+      jsonDeserialize(strCmd);
       Serial.println("this is a json object");
     }
     /*

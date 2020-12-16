@@ -35,6 +35,8 @@ double allChannels5[4][7] = {
   {6,1.2,1,0.5,1.50,2},
   {7,0.666,0,0,1,0}
 };
+
+String attributes[9] = { "id", "isActive", "currentValue", "unit", "minVoltValue", "minAmpereValue", "maxVoltValue", "maxAmpereValue", "scale" };
 /*
   CreateHashMap (simuChannel0, char *, int, 7);
   simuChannel0["id"] = 0;
@@ -108,21 +110,29 @@ double allChannels5[4][7] = {
   simuChannel7["maxVoltValue"] = 1; 
   simuChannel7["scale"] = "_";
 */
+ /*
+  * Deserialisation à la réception d'un document json
+  */
 
 void jsonDeserialize(String cmd){
+  Serial.println("jsonDeserialize");
   int brace_count = 1;
   for(int i = 1; i < cmd.length(); i++){
     if(cmd.charAt(i) == '{'){ brace_count++; }
     else if(cmd.charAt(i) == '}'){ brace_count--;}
     if(brace_count==0){
       //  if(i!=cmd.length()-1) // verif si c la fin de la string totale reçue
-      //jsonDeserialization(cmd.substring(0, i+1));
+      //execJsonCommand(cmd.substring(0, i+1));
+      Serial.println("count 0");
       jsonDeserialize(cmd.substring(i+1));
     }
   }
 }
-void jsonDeserialization(char* json){
-  const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3) + 30;
+
+
+void execJsonCommand(String json){
+  Serial.println("execJsonCommand");
+  const size_t capacity = 1024;
   DynamicJsonDocument doc(capacity);
   //char json[] = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";//Using a char[] enables the "zero-copy" mode {"sensor":"gps","time":1351824120,"data":[48.756080,2.302038]}
   
@@ -133,7 +143,63 @@ void jsonDeserialization(char* json){
     Serial.println(error.f_str());
     return;
   }
-  
+
+  JsonObject obj = doc.to<JsonObject>();
+  //int errors = 0;
+  uint8_t channel = -2;
+  for(int i = 0; i < 9; i++){
+    if(obj[attributes[i]] && obj["id"]){
+      channel = obj["id"];
+      switch(i){
+        case 1:
+          //channelActiveStatus & 0x01 << channel;
+          allChannels[channel][1] = (obj["isActive"]=="false") ? 0 : 1;
+          Serial.println("case isActive");
+          break;
+        case 2:
+          //setChannelValue(channel, obj["currentValue"];
+          allChannels[channel][2] = obj["currentValue"];
+          Serial.println("case currentValue");
+          break;
+        case 3:
+          //setChannelType(channel, (obj["unit"]=="V") ? 0 : 1);
+          allChannels[channel][3] = (obj["unit"]=="V") ? 0 : 1;
+          Serial.println("case unit");
+          break;
+        case 4:
+          allChannels[channel][4] = obj["minVoltValue"];
+          Serial.println("case minVoltValue");
+          break;
+        case 5:
+          allChannels[channel][4] = obj["minAmpereValue"];
+          Serial.println("case minAmpereValue");
+          break;
+        case 6:
+          allChannels[channel][5] = obj["maxVoltValue"];
+          Serial.println("case maxVoltValue");
+          break;
+        case 7:
+          allChannels[channel][5] = obj["maxAmpereValue"];
+          Serial.println("case maxAmpereValue");
+          break;
+        case 8:
+          {
+            if(obj["scale"]=="_"){ allChannels[channel][6] = 0; Serial.println("case scale _"); }
+            else if(obj["scale"]=="m"){ allChannels[channel][6] = 1; Serial.println("case scale m"); }
+            else if(obj["scale"]=="u"){ allChannels[channel][6] = 2; Serial.println("case scale u"); }
+          }
+          break;
+      }
+    }
+  }
+  //Serial.println("");
+  for(int i = 0; i < 7; i++){
+    Serial.print(allChannels[channel][i]);
+    Serial.print(" , ");
+  }
+  Serial.println("");
+
+  /*
   const char* sensor = doc["sensor"];
   long time = doc["time"];
   double latitude = doc["data"][0];
@@ -143,6 +209,7 @@ void jsonDeserialization(char* json){
   Serial.println(time);
   Serial.println(latitude, 6);
   Serial.println(longitude, 6);
+  */
 }
 
   //Serialisation
@@ -321,6 +388,7 @@ void initPlz(void){
   }
 
   serializeJson(channelList, Serial);
+  Serial.println("");
   serializeJson(channelList, hc06);
 }
 
@@ -339,6 +407,7 @@ void getAllStores(void){
   data.add(0); // if (userConfigStored & 0x01 << 7){ data.add(1); } else{ data.add(0); }
 
   serializeJson(getStores, Serial);
+  Serial.println("");
   serializeJson(getStores, hc06);
 }
 
@@ -367,6 +436,7 @@ void getStore(uint8_t store_number){
         data.add(channel);
       }
       serializeJson(store, Serial);
+      Serial.println("");
       serializeJson(store, hc06);
     }
     break;
@@ -390,6 +460,7 @@ void getStore(uint8_t store_number){
         data.add(channel);
       }
       serializeJson(store, Serial);
+      Serial.println("");
       serializeJson(store, hc06);
     }
     break;
@@ -413,6 +484,7 @@ void getStore(uint8_t store_number){
         data.add(channel);
       }
       serializeJson(store, Serial);
+      Serial.println("");
       serializeJson(store, hc06);
     }
     break;
