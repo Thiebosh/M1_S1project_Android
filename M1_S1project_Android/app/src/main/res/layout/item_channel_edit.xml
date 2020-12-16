@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:height="55dp"
+            android:text="@string/input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,8 +54,9 @@
             <Button
                 android:id="@+id/item_channel_button_digit1"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="@dimen/digit"
-                android:layout_height="wrap_content" />
+                android:layout_width="@dimen/item_chan_edit_digit"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/item_chan_edit_text" />
 
             <Button
                 style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -66,26 +68,29 @@
             <Button
                 android:id="@+id/item_channel_button_digit2"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="@dimen/digit"
-                android:layout_height="wrap_content" />
+                android:layout_width="@dimen/item_chan_edit_digit"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/item_chan_edit_text" />
 
             <Button
                 android:id="@+id/item_channel_button_digit3"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="@dimen/digit"
-                android:layout_height="wrap_content" />
+                android:layout_width="@dimen/item_chan_edit_digit"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/item_chan_edit_text" />
 
             <Button
                 android:id="@+id/item_channel_button_digit4"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="@dimen/digit"
-                android:layout_height="wrap_content" />
+                android:layout_width="@dimen/item_chan_edit_digit"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/item_chan_edit_text" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <Spinner
             android:id="@+id/item_channel_spinner_scale"
-            android:layout_width="@dimen/spinner_width"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_width="@dimen/item_chan_edit_spinner_width"
+            android:layout_height="@dimen/item_chan_edit_spinner_height"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
@@ -99,8 +104,8 @@
 
         <Spinner
             android:id="@+id/item_channel_spinner_unit"
-            android:layout_width="@dimen/spinner_width"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_width="@dimen/item_chan_edit_spinner_width"
+            android:layout_height="@dimen/item_chan_edit_spinner_height"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="@drawable/background_spinner"
