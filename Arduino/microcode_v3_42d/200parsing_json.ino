@@ -109,6 +109,18 @@ double allChannels5[4][7] = {
   simuChannel7["scale"] = '_';
 */
 
+void jsonDeserialize(String cmd){
+  int brace_count = 1;
+  for(int i = 1; i < cmd.length(); i++){
+    if(cmd.charAt(i) == '{'){ brace_count++; }
+    else if(cmd.charAt(i) == '}'){ brace_count--;}
+    if(brace_count==0){
+      //  if(i!=cmd.length()-1) // verif si c la fin de la string totale reçue
+      //jsonDeserialization(cmd.substring(0, i+1));
+      jsonDeserialize(cmd.substring(i+1));
+    }
+  }
+}
 void jsonDeserialization(char* json){
   const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3) + 30;
   DynamicJsonDocument doc(capacity);

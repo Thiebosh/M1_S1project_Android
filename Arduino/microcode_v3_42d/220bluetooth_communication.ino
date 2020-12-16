@@ -32,6 +32,9 @@ void bluetoothCommunication(){
       uint8_t store_number = (uint8_t)strCmd.substring(5).toInt();
       getStore(store_number);
     }
+    else if(strCmd.startsWith("{"){
+      jsonDeserialize(strCmd);
+    }
     /*
     else if (strCmd.equals("store0")) {
       String c1 = "{\"id\":0,\"isActive\":true,\"currentValue\":4.2,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
