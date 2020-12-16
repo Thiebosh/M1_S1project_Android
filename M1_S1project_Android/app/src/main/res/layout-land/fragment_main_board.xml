@@ -48,14 +48,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/allChannel"
-                android:textSize="18sp"
+                android:textSize="@dimen/frag_main_title"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RelativeLayout
                 android:id="@+id/frag_main_relative_allOnOff"
-                android:layout_width="200dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,27 +65,29 @@
 
                 <ToggleButton
                     android:id="@+id/frag_main_allOn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/frag_main_btn_on_off_width"
+                    android:layout_height="@dimen/frag_main_btn_on_off_height"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:textOff="@string/on"
-                    android:textOn="@string/on" />
+                    android:textOn="@string/on"
+                    android:textSize="@dimen/frag_main_text" />
 
                 <ToggleButton
                     android:id="@+id/frag_main_allOff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/frag_main_btn_on_off_width"
+                    android:layout_height="@dimen/frag_main_btn_on_off_height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:textOff="@string/off"
-                    android:textOn="@string/off" />
+                    android:textOn="@string/off"
+                    android:textSize="@dimen/frag_main_text" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/frag_main_relative_limits"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -113,7 +116,10 @@
                         android:minWidth="65dp"
                         android:paddingLeft="6dp"
                         android:paddingRight="6dp"
-                        android:paddingBottom="6dp" />
+                        android:paddingBottom="6dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="@dimen/frag_main_text_input"
+                        android:textStyle="bold" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -138,7 +144,8 @@
                         android:minWidth="65dp"
                         android:paddingLeft="6dp"
                         android:paddingRight="6dp"
-                        android:paddingBottom="6dp" />
+                        android:paddingBottom="6dp"
+                        android:textStyle="bold" />
                 </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>
 
@@ -153,21 +160,29 @@
 
                 <Button
                     android:id="@+id/frag_main_button_less"
-                    android:layout_width="52dp"
-                    android:layout_height="44dp"
+                    android:layout_width="@dimen/frag_main_btn_more_less_width"
+                    android:layout_height="@dimen/frag_main_btn_more_less_height"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:enabled="false"
-                    android:text="@string/less" />
+                    android:insetTop="2dp"
+                    android:insetBottom="2dp"
+                    android:text="@string/less"
+                    android:textSize="@dimen/frag_main_text_more_less"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/frag_main_button_more"
-                    android:layout_width="52dp"
-                    android:layout_height="44dp"
+                    android:layout_width="@dimen/frag_main_btn_more_less_width"
+                    android:layout_height="@dimen/frag_main_btn_more_less_height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:enabled="false"
-                    android:text="@string/more" />
+                    android:insetTop="2dp"
+                    android:insetBottom="2dp"
+                    android:text="@string/more"
+                    android:textSize="@dimen/frag_main_text_more_less"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -193,10 +208,12 @@
                     android:gravity="center"
                     android:inputType="numberSigned|numberDecimal"
                     android:maxLines="1"
-                    android:minWidth="160dp"
+                    android:minWidth="150dp"
                     android:paddingLeft="6dp"
                     android:paddingRight="6dp"
-                    android:paddingBottom="6dp" />
+                    android:paddingBottom="6dp"
+                    android:textSize="@dimen/frag_main_text_input"
+                    android:textStyle="bold" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

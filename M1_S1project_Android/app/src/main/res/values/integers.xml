@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="ref_item_channel_display_switch">600</integer>
+
     <integer name="absolute_limit_volt_value">8</integer>
     <integer name="absolute_limit_volt_scale_value">0</integer>
     <integer name="absolute_limit_volt_scale_display">0</integer>

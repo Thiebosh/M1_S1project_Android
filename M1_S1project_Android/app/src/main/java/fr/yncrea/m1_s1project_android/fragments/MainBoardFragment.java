@@ -73,7 +73,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        if ((metrics.widthPixels * 160 / metrics.densityDpi) > 600) {//width screen for card item
+        if ((metrics.widthPixels * 160.0 / metrics.densityDpi) > getResources().getInteger(R.integer.ref_item_channel_display_switch)) {
             recycler.addItemDecoration(new DividerItemDecoration(recycler.getContext(), DividerItemDecoration.VERTICAL));
             recycler.addItemDecoration(new DividerItemDecoration(recycler.getContext(), DividerItemDecoration.HORIZONTAL));
         }
