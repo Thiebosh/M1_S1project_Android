@@ -17,12 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.Executors;
 
 import fr.yncrea.m1_s1project_android.fragments.BackupFragment;
 import fr.yncrea.m1_s1project_android.fragments.ConnectFragment;
@@ -225,7 +223,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                     ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
                                 }
                                 str = getString(R.string.blt_connected, mConnectedDeviceName);
-                                sendData("initPlz");//requete pour les données
+                                sendData(getString(R.string.blt_command_init_main));//requete pour les données
                                 break;
 
                             case BluetoothService.STATE_DISCONNECT:
@@ -246,12 +244,12 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        int index = -2;
+                        Log.d("testy", "recieve : "+str);
 
                         if (str.startsWith("channelList", 2)) {
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if (storage == null) {
-                                sendData("initPlz");//requête pour les données
+                                sendData(getString(R.string.blt_command_init_main));//requête pour les données
                                 Toast.makeText(AppActivity.this, "Erreur de réception : nouvel essai", Toast.LENGTH_SHORT).show();
                                 break;
                             }
@@ -259,49 +257,40 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                             break;
                         }
-                        else if(str.startsWith("getStores", 2)){
-                            setIsStoresInitialized(true);
-                            JSONArray jArray = null;
-                            try {
-                                jArray = (new JSONObject(str)).getJSONArray("getStores");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            if (jArray != null) {
-                                for (int i = 0; i < jArray.length(); i++){
-                                    try {
-                                        BluetoothParent.mIsStores.add(jArray.getInt(i)==1);
-                                        BluetoothParent.mBackupGenerators.add(new Generator());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                        else if(str.startsWith(getString(R.string.blt_command_init_backup), 2)){
+                            ArrayList<Integer> array = JsonConverterService.extractIntegerArray(str, getString(R.string.blt_command_init_backup));
+                            if (array != null) {
+                                setIsStoresInitialized(true);
+                                for (int value : array) {
+                                    BluetoothParent.mIsStores.add(value == 1);
+                                    BluetoothParent.mBackupGenerators.add(new Generator());
+                                }
+                                if (mFragmentStack.peek() instanceof BackupFragment) {
+                                    ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
                                 }
                             }
-
-                            //loadFragment(new BackupFragment(), true);
-                            ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
                             break;
-
                         }
-                        else if(str.startsWith("store", 2)){
-                            int store_number = Character.getNumericValue(str.charAt(7));
-                            Log.d("testy", "store received : "+str);
-                            str = str.replace("store"+store_number, "channelList");
-                            Log.d("testy", str);
+                        else if(str.startsWith(getString(R.string.blt_command_backup_get), 2)){
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(2 + getString(R.string.blt_command_backup_get).length(), str.indexOf(":") - 1));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+
+                            str = str.replace(getString(R.string.blt_command_backup_get)+store_number, "channelList");
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if(storage != null){
                                 mIsStores.set(store_number, true);
                                 mBackupGenerators.get(store_number).setChannelList(storage.getChannelList());
-                                Log.d("testy", "store charged"+storage.getChannelList().size());
-
                             }
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, store_number);
                             break;
-
                         }
-                        // le else if qui suit ne sert que pour l'utilisation entre 2 android
-                        else if (str.equals("initPlz")) {
-                            //TMP : simule envoi des données de l'arduino
+                        // 3 if suivants servent à communication entre 2 android
+                        else if (str.equals(getString(R.string.blt_command_init_main))) {
                             String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":9.6,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
                             String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
                             String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
@@ -314,24 +303,187 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             sendData(init);
                             break;
                         }
-                        else if (str.equals("getStores")) {
-                            String init = "{\"getStores\":[1,1,0,0,0,1,0,0]}";
+                        else if (str.equals(getString(R.string.blt_command_init_backup))) {
+                            String init = "{\""+getString(R.string.blt_command_init_backup)+"\":[1,1,0,0,0,1,0,0,0,0,1]}";
                             sendData(init);
                         }
-                        else if (str.equals("store0")) {
-                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                            String c3 = "{\"id\":2,\"isActive\":true,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                            String c4 = "{\"id\":3,\"isActive\":true,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                            String c8 = "{\"id\":7,\"isActive\":false,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                            String init = "{\"store0\":["+c1+c3+c4+c8+"]}";
+                        else if (str.startsWith(getString(R.string.blt_command_backup_get))) {
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(getString(R.string.blt_command_backup_get).length()));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+
+                            String init="";
+                            if (store_number == 0) {
+                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c3 = "{\"id\":2,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                                String c4 = "{\"id\":3,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                                init = "{\"" + getString(R.string.blt_command_backup_get) + "0\":[" + c1 + c3 + c4 + c8 + "]}";
+                            }
+                            else if (store_number == 1) {
+                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c3 = "{\"id\":3,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                                String c4 = "{\"id\":6,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                                init = "{\""+getString(R.string.blt_command_backup_get)+"1\":["+c1+c3+c4+c8+"]}";
+                            }
+                            else if (store_number == 5) {
+                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                String c8 = "{\"id\":9,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                                init = "{\""+getString(R.string.blt_command_backup_get)+"5\":["+c1+c4+c8+"]}";
+                            }
+                            else if (store_number == 10) {
+                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                init = "{\""+getString(R.string.blt_command_backup_get)+"10\":["+c1+c4+"]}";
+                            }
                             sendData(init);
+                        }
+                        else if (str.startsWith(getString(R.string.blt_command_backup_save))) {
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(getString(R.string.blt_command_backup_save).length()));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+                            if (!BluetoothParent.mBackupGenerators.isEmpty()) {
+                                BluetoothParent.mBackupGenerators.set(store_number, (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false));
+                                BluetoothParent.mIsStores.set(store_number, true);
+                                if (mFragmentStack.peek() instanceof BackupFragment) {
+                                    ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
+                                }
+                            }
+                            else {
+                                sendData(getString(R.string.blt_command_init_backup));
+
+                                Executors.newSingleThreadExecutor().execute(() -> {
+                                    while (BluetoothParent.mBackupGenerators.isEmpty()) {
+                                        try {
+                                            Thread.sleep(10);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    BluetoothParent.mBackupGenerators.set(store_number, (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false));
+                                    BluetoothParent.mIsStores.set(store_number, true);
+                                    if (mFragmentStack.peek() instanceof BackupFragment) {
+                                        ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
+                                    }                                });
+                            }
+                        }
+                        else if (str.startsWith(getString(R.string.blt_command_backup_load))) {
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(getString(R.string.blt_command_backup_load).length()));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+                            if (!BluetoothParent.mBackupGenerators.isEmpty()) {
+                                if (!BluetoothParent.mBackupGenerators.get(store_number).getChannelList().isEmpty()) {
+                                    BluetoothParent.mGenerator.setChannelList(BluetoothParent.mBackupGenerators.get(store_number).getChannelList());
+                                    if (mFragmentStack.peek() instanceof MainBoardFragment) {
+                                        loadFragment(new MainBoardFragment(), true);
+                                    }
+                                } else {
+                                    sendData(getString(R.string.blt_command_backup_get) + store_number);
+
+                                    Executors.newSingleThreadExecutor().execute(() -> {
+                                        while (BluetoothParent.mBackupGenerators.get(store_number).getChannelList().isEmpty()) {
+                                            try {
+                                                Thread.sleep(10);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        BluetoothParent.mGenerator.setChannelList(BluetoothParent.mBackupGenerators.get(store_number).getChannelList());
+                                        if (mFragmentStack.peek() instanceof MainBoardFragment) {
+                                            loadFragment(new MainBoardFragment(), true);
+                                        }
+                                    });
+                                }
+                            }
+                            else {
+                                sendData(getString(R.string.blt_command_init_backup));
+
+                                Executors.newSingleThreadExecutor().execute(() -> {
+                                    while (BluetoothParent.mBackupGenerators.isEmpty()) {
+                                        try {
+                                            Thread.sleep(10);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    if (!BluetoothParent.mBackupGenerators.get(store_number).getChannelList().isEmpty()) {
+                                        BluetoothParent.mGenerator.setChannelList(BluetoothParent.mBackupGenerators.get(store_number).getChannelList());
+                                        if (mFragmentStack.peek() instanceof MainBoardFragment) {
+                                            loadFragment(new MainBoardFragment(), true);
+                                        }
+                                    } else {
+                                        sendData(getString(R.string.blt_command_backup_get) + store_number);
+
+                                        Executors.newSingleThreadExecutor().execute(() -> {
+                                            while (BluetoothParent.mBackupGenerators.get(store_number).getChannelList().isEmpty()) {
+                                                try {
+                                                    Thread.sleep(10);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            BluetoothParent.mGenerator.setChannelList(BluetoothParent.mBackupGenerators.get(store_number).getChannelList());
+                                            if (mFragmentStack.peek() instanceof MainBoardFragment) {
+                                                loadFragment(new MainBoardFragment(), true);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                        else if (str.startsWith(getString(R.string.blt_command_backup_delete))) {
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(getString(R.string.blt_command_backup_delete).length()));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+                            if (!BluetoothParent.mBackupGenerators.isEmpty()) {
+                                BluetoothParent.mBackupGenerators.get(store_number).setChannelList(new ArrayList<>());
+                                BluetoothParent.mIsStores.set(store_number, false);
+                                if (mFragmentStack.peek() instanceof BackupFragment) {
+                                    loadFragment(new BackupFragment(), true);
+                                }
+                            }
+                            else {
+                                sendData(getString(R.string.blt_command_init_backup));
+
+                                Executors.newSingleThreadExecutor().execute(() -> {
+                                    while (BluetoothParent.mBackupGenerators.isEmpty()) {
+                                        try {
+                                            Thread.sleep(10);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    BluetoothParent.mBackupGenerators.get(store_number).setChannelList(new ArrayList<>());
+                                    BluetoothParent.mIsStores.set(store_number, false);
+                                    if (mFragmentStack.peek() instanceof BackupFragment) {
+                                        loadFragment(new BackupFragment(), true);
+                                    }
+                                });
+                            }
                         }
                         else {
-                            index = JsonConverterService.applyJsonData(mGenerator, str);
+                            int index = JsonConverterService.applyJsonData(mGenerator, str);
                             if (index == -10) break;//error
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(mGenerator, index);
                         }
-
                         break;
                 }
             }

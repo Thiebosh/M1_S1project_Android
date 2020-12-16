@@ -6,6 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
 import fr.yncrea.m1_s1project_android.models.Unit;
@@ -35,6 +41,28 @@ public class JsonConverterService {
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
 
         return json.toString();
+    }
+
+    public static ArrayList<Integer> extractIntegerArray(final String str, final String key) {
+        JSONArray jArray;
+        try {
+            jArray = (new JSONObject(str)).getJSONArray(key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (jArray == null) return null;
+
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < jArray.length(); ++i) {
+            try {
+                result.add(jArray.getInt(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return result;
     }
 
     public static int applyJsonData(final Generator generator, final String json) {
