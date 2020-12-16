@@ -36,9 +36,13 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             return mStoreContainer;
         }
 
-        public void setDisplay(final int position) {
+        public void setInitialDisplay(final BackupStoreAdapter adapter, final int position) {
             mStoreContainer.setBackgroundColor(mContext.getResources().getColor(
-                    BluetoothParent.mIsStores.get(position) ? R.color.colorPrimary : R.color.gray));
+                    position == adapter.getFocusedIndex() ?
+                            (BluetoothParent.mIsStores.get(position) ?
+                                    R.color.colorSecondaryLight : R.color.colorSecondaryDark) :
+                            (BluetoothParent.mIsStores.get(position) ?
+                                    R.color.colorPrimary : R.color.gray)));
 
             mStoreContainer.setText(mContext.getString(R.string.store, position));
             mStoreContainer.setTag(position);
@@ -51,7 +55,8 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
                         adapter.getLastHolderSelected().getStoreContainer().setBackgroundColor(mContext.getResources().getColor(
                                 BluetoothParent.mIsStores.get(adapter.getFocusedIndex()) ? R.color.colorPrimary : R.color.gray));
                     }
-                    mStoreContainer.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                    mStoreContainer.setBackgroundColor(mContext.getResources().getColor(
+                            BluetoothParent.mIsStores.get(getLayoutPosition()) ? R.color.colorSecondaryLight : R.color.colorSecondaryDark));
 
                     adapter.setLastHolderSelected(this, getLayoutPosition());
 
@@ -149,7 +154,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        holder.setDisplay(position);
+        holder.setInitialDisplay(this, position);
         holder.setInteractions(this, mConfigDisplayer, holder.itemView.getContext());
         //((TextView)holder.itemView).setText(holder.itemView.getContext().getString(R.string.store, position));
 
