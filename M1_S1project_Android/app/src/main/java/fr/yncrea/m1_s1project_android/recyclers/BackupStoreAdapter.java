@@ -3,7 +3,6 @@ package fr.yncrea.m1_s1project_android.recyclers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
                     adapter.setLastHolderSelected(this, getLayoutPosition());
 
                     if(BluetoothParent.mIsStores.get(getLayoutPosition()) && BluetoothParent.mBackupGenerators.get(getLayoutPosition()).getChannelList().isEmpty()){
-                        ((BluetoothParent) getActivity(context)).sendData("store"+getLayoutPosition());
+                        ((BluetoothParent) getActivity(context)).sendData(context.getString(R.string.blt_command_backup_get)+getLayoutPosition());
                         displayer.setChannelList(new ArrayList<>());
                     }
                     else displayer.setChannelList(BluetoothParent.mBackupGenerators.get(getLayoutPosition()).getChannelList());
@@ -87,7 +86,6 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
     }
 
     public void updateChannelListData(ArrayList<Channel> data, int index) {
-        Log.d("testy", "update in store adapter");
         BluetoothParent.mBackupGenerators.set(index, (new Generator()).setChannelList(data));
         mConfigDisplayer.updateChannelListData(data);
 
@@ -167,7 +165,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             mConfigDisplayer.setChannelList(toSave.getChannelList());
             mConfigDisplayer.notifyDataSetChanged();
 
-            ((BluetoothParent) getActivity(context)).sendData("save_store_" + mFocusedIndex);
+            ((BluetoothParent) getActivity(context)).sendData(context.getString(R.string.blt_command_backup_save) + mFocusedIndex);
 
             mLoad.setEnabled(true);
             mDelete.setEnabled(true);
@@ -177,7 +175,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             ArrayList<Channel> savedConfig = BluetoothParent.mBackupGenerators.get(mFocusedIndex).getChannelList();
             BluetoothParent.mGenerator.setChannelList(savedConfig);
 
-            ((BluetoothParent) getActivity(context)).sendData("load_store_" + mFocusedIndex);
+            ((BluetoothParent) getActivity(context)).sendData(context.getString(R.string.blt_command_backup_load) + mFocusedIndex);
         });
 
         mDelete.setOnClickListener(v -> {
@@ -188,10 +186,14 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             mConfigDisplayer.setChannelList(new ArrayList<>());
             mConfigDisplayer.notifyDataSetChanged();
 
-            ((BluetoothParent) getActivity(context)).sendData("delete_store_"+mFocusedIndex);
+            ((BluetoothParent) getActivity(context)).sendData(context.getString(R.string.blt_command_backup_delete) + mFocusedIndex);
 
             mLoad.setEnabled(false);
             mDelete.setEnabled(false);
+
+            mSave.setVisibility(View.INVISIBLE);
+            mLoad.setVisibility(View.INVISIBLE);
+            mDelete.setVisibility(View.INVISIBLE);
         });
     }
 }

@@ -11,6 +11,13 @@
     <string name="blt_connection_failed">Échec de connexion à l\'appareil</string>
     <string name="blt_disabled_exit_app">Impossible d\'activer le bluetooth</string>
 
+    <string name="blt_command_init_main">init_main</string>
+    <string name="blt_command_init_backup">init_stores</string>
+    <string name="blt_command_backup_get">store_get_</string>
+    <string name="blt_command_backup_save">store_save_</string>
+    <string name="blt_command_backup_load">store_load_</string>
+    <string name="blt_command_backup_delete">store_del_</string>
+
 
     <!-- Menu -->
     <string name="menu_disconnect">Déconnecter</string>

@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Objects;
-
 import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.recyclers.MainBoardAdapter;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
