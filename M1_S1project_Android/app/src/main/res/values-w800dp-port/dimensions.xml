@@ -4,31 +4,34 @@
     <dimen name="frag_conn_title">25sp</dimen>
 
     <!-- Fragment MainBoard -->
-    <dimen name="frag_main_title">28sp</dimen>
-    <dimen name="frag_main_text">20sp</dimen>
-    <dimen name="frag_main_text_input">22sp</dimen>
-    <dimen name="frag_main_text_more_less">28sp</dimen>
-    <dimen name="frag_main_btn_on_off_width">1200dp</dimen>
-    <dimen name="frag_main_btn_on_off_height">80dp</dimen>
-    <dimen name="frag_main_btn_more_less_width">100dp</dimen>
-    <dimen name="frag_main_btn_more_less_height">90dp</dimen>
-    <dimen name="frag_main_input_limit_min_width">90dp</dimen>
-    <dimen name="frag_main_input_current_min_width">180dp</dimen>
+    <dimen name="frag_main_title">24sp</dimen>
+    <dimen name="frag_main_text">18sp</dimen>
+    <dimen name="frag_main_text_input">20sp</dimen>
+    <dimen name="frag_main_text_more_less">24sp</dimen>
+    <dimen name="frag_main_btn_on_off_width">100dp</dimen>
+    <dimen name="frag_main_btn_on_off_height">70dp</dimen>
+    <dimen name="frag_main_btn_more_less_width">80dp</dimen>
+    <dimen name="frag_main_btn_more_less_height">70dp</dimen>
+    <dimen name="frag_main_input_limit_min_width">80dp</dimen>
+    <dimen name="frag_main_input_current_min_width">170dp</dimen>
+    <dimen name="frag_main_btn_container">240dp</dimen>
 
     <!-- Fragment Backup -->
+    <dimen name="frag_back_text">18sp</dimen>
     <dimen name="frag_back_btn_height">70dp</dimen>
 
     <!-- Item Channel Edit -->
-    <dimen name="item_chan_edit_text">18sp</dimen>
-    <dimen name="item_chan_edit_digit">60dp</dimen>
-    <dimen name="item_chan_edit_spinner_width">70dp</dimen>
-    <dimen name="item_chan_edit_spinner_height">50dp</dimen>
+    <dimen name="item_chan_edit_text">16sp</dimen>
+    <dimen name="item_chan_edit_digit">50dp</dimen>
+    <dimen name="item_chan_edit_spinner_width">60dp</dimen>
+    <dimen name="item_chan_edit_spinner_height">40dp</dimen>
 
     <!-- Item Channel Display -->
-    <dimen name="item_chan_disp_text">22sp</dimen>
+    <dimen name="item_chan_disp_text">20sp</dimen>
+    <dimen name="item_chan_disp_padding_left">50dp</dimen>
 
     <!-- Item Store -->
-    <dimen name="item_store_text">26sp</dimen>
-    <dimen name="item_store_height">100dp</dimen>
-    <dimen name="item_store_width">180dp</dimen>
+    <dimen name="item_store_text">24sp</dimen>
+    <dimen name="item_store_height">80dp</dimen>
+    <dimen name="item_store_width">160dp</dimen>
 </resources>
