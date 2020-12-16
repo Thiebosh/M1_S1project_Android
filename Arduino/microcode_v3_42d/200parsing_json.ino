@@ -89,7 +89,12 @@ void execJsonCommand(String json){
       switch(i){
         case 1:
           //channelActiveStatus & 0x01 << channel;
-          allChannels[channel][1] = obj["isActive"];
+          if(channel==-1){
+            for(int i = 0; i < 8; i++) allChannels[i][1] = obj["isActive"];
+          }
+          else{ 
+            allChannels[channel][1] = obj["isActive"]; 
+          }
           Serial.print("channelActiveStatus & 0x01 << "); Serial.println(channel);
           break;
         case 2:
