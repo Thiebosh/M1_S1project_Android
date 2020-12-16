@@ -137,7 +137,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final String data) {
-        Log.d("testy send", ""+data);
         if (mBluetoothService != null) mBluetoothService.send(data);
     }
 
@@ -244,7 +243,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        Log.d("testy", "recieve : "+str);
 
                         if (str.startsWith("channelList", 2)) {//init_main
                             Generator storage = JsonConverterService.createJsonObject(str);
