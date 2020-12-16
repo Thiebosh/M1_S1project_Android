@@ -36,7 +36,6 @@ void bluetoothCommunication(){
     
     else if(strCmd.startsWith("{")){
       jsonDeserialize(strCmd);
-      Serial.println("this is a json object");
     }
     /*
     else if (strCmd.equals("store_get_0")) {

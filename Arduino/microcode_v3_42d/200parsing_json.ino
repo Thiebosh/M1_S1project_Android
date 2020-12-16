@@ -43,7 +43,7 @@ String attributes[9] = { "id", "isActive", "currentValue", "unit", "minVoltValue
   */
 
 void jsonDeserialize(String cmd){
-  Serial.println("jsonDeserialize");
+  /*
   int brace_count = 1;
   for(int i = 1; i < cmd.length(); i++){
     Serial.print(cmd.charAt(i));
@@ -57,12 +57,18 @@ void jsonDeserialize(String cmd){
       jsonDeserialize(cmd.substring(i+1));
     }
   }
+  */
+  if(cmd.indexOf("}{") > 0){
+    execJsonCommand(cmd.substring(0, cmd.indexOf("}{")+1));
+    jsonDeserialize(cmd.substring(cmd.indexOf("}{")+1));
+  }
+  else{
+    execJsonCommand(cmd);
+  }
 }
 
 
 void execJsonCommand(String json){
-  Serial.println("execJsonCommand");
-  Serial.println(json);
   const size_t capacity = 1024;
   DynamicJsonDocument doc(capacity);
   
@@ -74,50 +80,43 @@ void execJsonCommand(String json){
     return;
   }
 
-  serializeJson(doc, Serial);
-  Serial.println("");
   JsonObject obj = doc.as<JsonObject>();
-  serializeJson(obj, Serial);
-  Serial.println("");
   //int errors = 0;
   uint8_t channel = -2;
   for(int i = 0; i < 9; i++){
-    if(obj[attributes[i]] && obj["id"]){
+    if(!obj[attributes[i]].isNull() && obj["id"]){
       channel = obj["id"];
-      Serial.print("attribute : ");
-      Serial.println(i);
       switch(i){
         case 1:
           //channelActiveStatus & 0x01 << channel;
-          allChannels[channel][1] = (obj["isActive"]) ? 1 : 0;
-          serializeJson(obj["isActive"], Serial);
-          Serial.println("case isActive");
+          allChannels[channel][1] = obj["isActive"];
+          Serial.print("channelActiveStatus & 0x01 << "); Serial.println(channel);
           break;
         case 2:
-          //setChannelValue(channel, obj["currentValue"];
+          //setChannelValue(channel, obj["currentValue"]);
           allChannels[channel][2] = obj["currentValue"];
-          Serial.println("case currentValue");
+          Serial.print("setChannelValue("); Serial.print(channel); Serial.print(", "); serializeJson(obj["currentValue"], Serial); Serial.println(")");
           break;
         case 3:
           //setChannelType(channel, (obj["unit"]=="V") ? 0 : 1);
           allChannels[channel][3] = (obj["unit"]=="V") ? 0 : 1;
-          Serial.println("case unit");
+          Serial.print("setChannelType("); Serial.print(channel); Serial.print(", "); Serial.print((obj["unit"]=="V") ? "0" : "1"); Serial.println(")");
           break;
         case 4:
           allChannels[channel][4] = obj["minVoltValue"];
-          Serial.println("case minVoltValue");
+          Serial.print("channelMinVoltage["); Serial.print(channel); Serial.println("]");
           break;
         case 5:
           allChannels[channel][4] = obj["minAmpereValue"];
-          Serial.println("case minAmpereValue");
+          Serial.print("channelMinCurrent["); Serial.print(channel); Serial.println("]");
           break;
         case 6:
           allChannels[channel][5] = obj["maxVoltValue"];
-          Serial.println("case maxVoltValue");
+          Serial.print("channelMaxCurrent["); Serial.print(channel); Serial.println("]");
           break;
         case 7:
           allChannels[channel][5] = obj["maxAmpereValue"];
-          Serial.println("case maxAmpereValue");
+          Serial.print("channelMaxVoltage["); Serial.print(channel); Serial.println("]");
           break;
         case 8:
           {
@@ -150,8 +149,8 @@ void initPlz(void){
   JsonArray data = channelList.createNestedArray("channelList");
   
   const size_t capacityChannel = JSON_OBJECT_SIZE(7);
-  DynamicJsonDocument channel(capacityChannel);
   for(int i = 0; i < 8; i++){
+    DynamicJsonDocument channel(capacityChannel);
     // check if channel i exists or is empty
     channel["id"] = allChannels[i][0];
     channel["isActive"] = (allChannels[i][1]==0) ? "false" : "true";                                          // (channelActiveStatus & 0x01 << i) ? "true" : "false";
@@ -199,7 +198,6 @@ void getAllStores(void){
  */
 void getStore(uint8_t store_number){
   const size_t capacityChannel = JSON_OBJECT_SIZE(7);
-  DynamicJsonDocument channel(capacityChannel);
   switch(store_number){
     case 0:
     {
@@ -207,12 +205,13 @@ void getStore(uint8_t store_number){
       DynamicJsonDocument store(capacity);
       JsonArray data = store.createNestedArray("store_get_0");
       for(int i = 0; i < 8; i++){
+        DynamicJsonDocument channel(capacityChannel);
         // check if channel i exists or is empty
         channel["id"] = allChannels0[i][0];
-        //channel["isActive"] = (allChannels0[i][1]==0) ? "false" : "true";  // if (channelActiveStatus & 0x01 << i){"true"}else{"false"} || (channelActiveStatus & 0x01 << i) ? "true" : "false";
-        channel["currentValue"] = allChannels0[i][2];                  // getChannelValue(i);
-        channel["unit"] = (allChannels0[i][3]==0) ? "V" : "I";             // if(getChannelType(i)==0){channel["unit"] = "V"; channel["minVoltValue"] = channelMinVoltage[i]; channel["maxVoltValue"] = channelMaxVoltage[i];}
-                                                                      // else{channel["unit"] = "I"; channel["minAmpereValue"] = channelMinCurrent[i]; channel["maxAmpereValue"] = channelMaxCurrent[i];}
+        //channel["isActive"] = (allChannels0[i][1]==0) ? "false" : "true";                                         // if (channelActiveStatus & 0x01 << i){"true"}else{"false"} || (channelActiveStatus & 0x01 << i) ? "true" : "false";
+        channel["currentValue"] = allChannels0[i][2];                                                               // getChannelValue(i);
+        channel["unit"] = (allChannels0[i][3]==0) ? "V" : "I";                                                      // if(getChannelType(i)==0){channel["unit"] = "V"; channel["minVoltValue"] = channelMinVoltage[i]; channel["maxVoltValue"] = channelMaxVoltage[i];}
+                                                                                                                    // else{channel["unit"] = "I"; channel["minAmpereValue"] = channelMinCurrent[i]; channel["maxAmpereValue"] = channelMaxCurrent[i];}
         channel[(allChannels0[i][3]==0) ? "minVoltValue" : "minAmpereValue"] = allChannels0[i][4];                  // channelMinVoltage[i];
         channel[(allChannels0[i][3]==0) ? "maxVoltValue" : "maxAmpereValue"] = allChannels0[i][5];                  // channelMaxVoltage[i];
         if(allChannels0[i][6]==0){channel["scale"] = "_";}
@@ -231,12 +230,13 @@ void getStore(uint8_t store_number){
       DynamicJsonDocument store(capacity);
       JsonArray data = store.createNestedArray("store_get_1");
       for(int i = 0; i < 5; i++){
+        DynamicJsonDocument channel(capacityChannel);
         // check if channel i exists or is empty
         channel["id"] = allChannels1[i][0];
-        //channel["isActive"] = (allChannels1[i][1]==0) ? "false" : "true";  // if (channelActiveStatus & 0x01 << i){"true"}else{"false"} || (channelActiveStatus & 0x01 << i) ? "true" : "false";
-        channel["currentValue"] = allChannels1[i][2];                  // getChannelValue(i);
-        channel["unit"] = (allChannels1[i][3]==0) ? "V" : "I";             // if(getChannelType(i)==0){channel["unit"] = "V"; channel["minVoltValue"] = channelMinVoltage[i]; channel["maxVoltValue"] = channelMaxVoltage[i];}
-                                                                      // else{channel["unit"] = "I"; channel["minAmpereValue"] = channelMinCurrent[i]; channel["maxAmpereValue"] = channelMaxCurrent[i];}
+        //channel["isActive"] = (allChannels1[i][1]==0) ? "false" : "true";                                         // if (channelActiveStatus & 0x01 << i){"true"}else{"false"} || (channelActiveStatus & 0x01 << i) ? "true" : "false";
+        channel["currentValue"] = allChannels1[i][2];                                                               // getChannelValue(i);
+        channel["unit"] = (allChannels1[i][3]==0) ? "V" : "I";                                                      // if(getChannelType(i)==0){channel["unit"] = "V"; channel["minVoltValue"] = channelMinVoltage[i]; channel["maxVoltValue"] = channelMaxVoltage[i];}
+                                                                                                                     // else{channel["unit"] = "I"; channel["minAmpereValue"] = channelMinCurrent[i]; channel["maxAmpereValue"] = channelMaxCurrent[i];}
         channel[(allChannels1[i][3]==0) ? "minVoltValue" : "minAmpereValue"] = allChannels1[i][4];                  // channelMinVoltage[i];
         channel[(allChannels1[i][3]==0) ? "maxVoltValue" : "maxAmpereValue"] = allChannels1[i][5];                  // channelMaxVoltage[i];
         if(allChannels1[i][6]==0){channel["scale"] = "_";}
@@ -255,12 +255,13 @@ void getStore(uint8_t store_number){
       DynamicJsonDocument store(capacity);
       JsonArray data = store.createNestedArray("store_get_5");
       for(int i = 0; i < 4; i++){
+        DynamicJsonDocument channel(capacityChannel);
         // check if channel i exists or is empty
         channel["id"] = allChannels5[i][0];
-        //channel["isActive"] = (allChannels5[i][1]==0) ? "false" : "true";  // if (channelActiveStatus & 0x01 << i){"true"}else{"false"} || (channelActiveStatus & 0x01 << i) ? "true" : "false";
-        channel["currentValue"] = allChannels5[i][2];                  // getChannelValue(i);
-        channel["unit"] = (allChannels5[i][3]==0) ? "V" : "I";             // if(getChannelType(i)==0){channel["unit"] = "V"; channel["minVoltValue"] = channelMinVoltage[i]; channel["maxVoltValue"] = channelMaxVoltage[i];}
-                                                                      // else{channel["unit"] = "I"; channel["minAmpereValue"] = channelMinCurrent[i]; channel["maxAmpereValue"] = channelMaxCurrent[i];}
+        //channel["isActive"] = (allChannels5[i][1]==0) ? "false" : "true";                                         // if (channelActiveStatus & 0x01 << i){"true"}else{"false"} || (channelActiveStatus & 0x01 << i) ? "true" : "false";
+        channel["currentValue"] = allChannels5[i][2];                                                               // getChannelValue(i);
+        channel["unit"] = (allChannels5[i][3]==0) ? "V" : "I";                                                      // if(getChannelType(i)==0){channel["unit"] = "V"; channel["minVoltValue"] = channelMinVoltage[i]; channel["maxVoltValue"] = channelMaxVoltage[i];}
+                                                                                                                    // else{channel["unit"] = "I"; channel["minAmpereValue"] = channelMinCurrent[i]; channel["maxAmpereValue"] = channelMaxCurrent[i];}
         channel[(allChannels5[i][3]==0) ? "minVoltValue" : "minAmpereValue"] = allChannels5[i][4];                  // channelMinVoltage[i];
         channel[(allChannels5[i][3]==0) ? "maxVoltValue" : "maxAmpereValue"] = allChannels5[i][5];                  // channelMaxVoltage[i];
         if(allChannels5[i][6]==0){channel["scale"] = "_";}
