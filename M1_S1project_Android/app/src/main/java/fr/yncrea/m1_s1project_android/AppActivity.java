@@ -246,7 +246,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
                         Log.d("testy", "recieve : "+str);
 
-                        if (str.startsWith("channelList", 2)) {
+                        if (str.startsWith("channelList", 2)) {//init_main
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if (storage == null) {
                                 sendData(getString(R.string.blt_command_init_main));//requête pour les données
@@ -257,7 +257,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             loadFragment(new MainBoardFragment(), true);//peut revenir à l'écran de connexion
                             break;
                         }
-                        else if(str.startsWith(getString(R.string.blt_command_init_backup), 2)){
+                        else if (str.startsWith(getString(R.string.blt_command_init_backup), 2)){
                             ArrayList<Integer> array = JsonConverterService.extractIntegerArray(str, getString(R.string.blt_command_init_backup));
                             if (array != null) {
                                 setIsStoresInitialized(true);
@@ -271,7 +271,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             }
                             break;
                         }
-                        else if(str.startsWith(getString(R.string.blt_command_backup_get), 2)){
+                        else if (str.startsWith(getString(R.string.blt_command_backup_get), 2)){
                             int store_number;
                             try {
                                 store_number = Integer.parseInt(str.substring(2 + getString(R.string.blt_command_backup_get).length(), str.indexOf(":") - 1));
@@ -288,61 +288,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                             }
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(storage, store_number);
                             break;
-                        }
-                        // 3 if suivants servent à communication entre 2 android
-                        else if (str.equals(getString(R.string.blt_command_init_main))) {
-                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":9.6,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                            String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
-                            String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                            String c4 = "{\"id\":3,\"isActive\":false,\"currentValue\":1.4,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                            String c5 = "{\"id\":4,\"isActive\":false,\"currentValue\":6.7,\"unit\":I,\"minAmpereValue\":2,\"maxAmpereValue\":7,\"scale\":m},";
-                            String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.587,\"unit\":V,\"minVoltValue\":-0.54,\"maxVoltValue\":5,\"scale\":_},";
-                            String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":1.02,\"unit\":I,\"minAmpereValue\":0.5,\"maxAmpereValue\":1.50,\"scale\":u},";
-                            String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                            String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
-                            sendData(init);
-                            break;
-                        }
-                        else if (str.equals(getString(R.string.blt_command_init_backup))) {
-                            String init = "{\""+getString(R.string.blt_command_init_backup)+"\":[1,1,0,0,0,1,0,0,0,0,1]}";
-                            sendData(init);
-                        }
-                        else if (str.startsWith(getString(R.string.blt_command_backup_get))) {
-                            int store_number;
-                            try {
-                                store_number = Integer.parseInt(str.substring(getString(R.string.blt_command_backup_get).length()));
-                            }
-                            catch (Exception ignore) {
-                                break;
-                            }
-
-                            String init="";
-                            if (store_number == 0) {
-                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c3 = "{\"id\":2,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                                String c4 = "{\"id\":3,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                                init = "{\"" + getString(R.string.blt_command_backup_get) + "0\":[" + c1 + c3 + c4 + c8 + "]}";
-                            }
-                            else if (store_number == 1) {
-                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c3 = "{\"id\":3,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                                String c4 = "{\"id\":6,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                                init = "{\""+getString(R.string.blt_command_backup_get)+"1\":["+c1+c3+c4+c8+"]}";
-                            }
-                            else if (store_number == 5) {
-                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                String c8 = "{\"id\":9,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                                init = "{\""+getString(R.string.blt_command_backup_get)+"5\":["+c1+c4+c8+"]}";
-                            }
-                            else if (store_number == 10) {
-                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                init = "{\""+getString(R.string.blt_command_backup_get)+"10\":["+c1+c4+"]}";
-                            }
-                            sendData(init);
                         }
                         else if (str.startsWith(getString(R.string.blt_command_backup_save))) {
                             int store_number;
@@ -374,7 +319,8 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                     BluetoothParent.mIsStores.set(store_number, true);
                                     if (mFragmentStack.peek() instanceof BackupFragment) {
                                         ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
-                                    }                                });
+                                    }
+                                });
                             }
                         }
                         else if (str.startsWith(getString(R.string.blt_command_backup_load))) {
@@ -479,7 +425,64 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 });
                             }
                         }
-                        else {
+
+                        // 3 if suivants servent à communication entre 2 android
+                        else if (str.equals(getString(R.string.blt_command_init_main))) {
+                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":9.6,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                            String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
+                            String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                            String c4 = "{\"id\":3,\"isActive\":false,\"currentValue\":1.4,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                            String c5 = "{\"id\":4,\"isActive\":false,\"currentValue\":6.7,\"unit\":I,\"minAmpereValue\":2,\"maxAmpereValue\":7,\"scale\":m},";
+                            String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.587,\"unit\":V,\"minVoltValue\":-0.54,\"maxVoltValue\":5,\"scale\":_},";
+                            String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":1.02,\"unit\":I,\"minAmpereValue\":0.5,\"maxAmpereValue\":1.50,\"scale\":u},";
+                            String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                            String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
+                            sendData(init);
+                            break;
+                        }
+                        else if (str.equals(getString(R.string.blt_command_init_backup))) {
+                            String init = "{\""+getString(R.string.blt_command_init_backup)+"\":[1,1,0,0,0,1,0,0,0,0,1]}";
+                            sendData(init);
+                        }
+                        else if (str.startsWith(getString(R.string.blt_command_backup_get))) {
+                            int store_number;
+                            try {
+                                store_number = Integer.parseInt(str.substring(getString(R.string.blt_command_backup_get).length()));
+                            }
+                            catch (Exception ignore) {
+                                break;
+                            }
+
+                            String init="";
+                            if (store_number == 0) {
+                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c3 = "{\"id\":2,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                                String c4 = "{\"id\":3,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                                init = "{\"" + getString(R.string.blt_command_backup_get) + "0\":["+c1+c3+c4+c8+"]}";
+                            }
+                            else if (store_number == 1) {
+                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c3 = "{\"id\":3,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
+                                String c4 = "{\"id\":6,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                                init = "{\""+getString(R.string.blt_command_backup_get)+"1\":["+c1+c3+c4+c8+"]}";
+                            }
+                            else if (store_number == 5) {
+                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
+                                String c8 = "{\"id\":9,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
+                                init = "{\""+getString(R.string.blt_command_backup_get)+"5\":["+c1+c4+c8+"]}";
+                            }
+                            else if (store_number == 10) {
+                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
+                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m}";
+                                init = "{\""+getString(R.string.blt_command_backup_get)+"10\":["+c1+c4+"]}";
+                            }
+                            sendData(init);
+                        }
+
+                        else {//réception d'objet partiel
                             int index = JsonConverterService.applyJsonData(mGenerator, str);
                             if (index == -10) break;//error
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(mGenerator, index);

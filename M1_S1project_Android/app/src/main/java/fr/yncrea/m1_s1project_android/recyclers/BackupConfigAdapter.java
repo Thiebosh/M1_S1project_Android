@@ -31,7 +31,7 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
             mCurrent = itemView.findViewById(R.id.item_channel_text_current);
         }
 
-        public void setDisplay(final Channel channel) {
+        public void setInitialDisplay(final Channel channel) {
             mId.setText(itemView.getContext().getString(R.string.input, channel.getId()));
 
             String qualifier = channel.getScale().name()+channel.getUnit().name();
@@ -71,6 +71,6 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        holder.setDisplay(mChannelList.get(position));
+        holder.setInitialDisplay(mChannelList.get(position));
     }
 }

@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -131,7 +132,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     adapter.getLastHolderSelected().decreaseVisibility();
                 }
 
-                mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.yellow));
+                mContainer.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.colorSecondaryLight));
 
                 mDigitGroup.setSelectionRequired(true);
 
