@@ -14,9 +14,10 @@
     <dimen name="frag_main_btn_more_less_height">44dp</dimen>
     <dimen name="frag_main_input_limit_min_width">75dp</dimen>
     <dimen name="frag_main_input_current_min_width">160dp</dimen>
-
+    <dimen name="frag_main_btn_container">120dp</dimen>
 
     <!-- Fragment Backup -->
+    <dimen name="frag_back_text">14sp</dimen>
     <dimen name="frag_back_btn_height">55dp</dimen>
 
     <!-- Item Channel Edit -->
@@ -27,6 +28,7 @@
 
     <!-- Item Channel Display -->
     <dimen name="item_chan_disp_text">18sp</dimen>
+    <dimen name="item_chan_disp_padding_left">5dp</dimen>
 
     <!-- Item Store -->
     <dimen name="item_store_text">20sp</dimen>

@@ -43,12 +43,13 @@
         android:id="@+id/frag_back_button_save"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/frag_back_btn_height"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:text="@string/save"
+        android:textSize="@dimen/frag_back_text"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/frag_back_button_load"
         app:layout_constraintEnd_toStartOf="@+id/frag_back_button_load"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/frag_back_divider"
         app:layout_constraintTop_toTopOf="@+id/frag_back_button_load" />
 
     <Button
@@ -57,6 +58,7 @@
         android:layout_height="@dimen/frag_back_btn_height"
         android:layout_marginBottom="16dp"
         android:text="@string/load"
+        android:textSize="@dimen/frag_back_text"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,11 +68,12 @@
         android:id="@+id/frag_back_button_delete"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/frag_back_btn_height"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:text="@string/delete"
+        android:textSize="@dimen/frag_back_text"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/frag_back_button_load"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toEndOf="@+id/frag_back_button_load"
         app:layout_constraintTop_toTopOf="@+id/frag_back_button_load" />
 
