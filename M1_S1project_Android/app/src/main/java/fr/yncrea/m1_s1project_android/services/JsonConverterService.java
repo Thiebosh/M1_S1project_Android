@@ -33,11 +33,11 @@ public class JsonConverterService {
         JsonObject json = new JsonObject();
 
         json.addProperty("id", data.getId());
-        if (data.isSetActive()) json.addProperty("isActive", data.isActive());
+        if (data.isSetActive()) json.addProperty("isActive", (data.isActive()) ? 1 : 0);
         if (data.isSetCurrentValue()) json.addProperty("currentValue", data.getCurrentValue());
         if (data.isSetMinValue()) json.addProperty("minValue", data.getMinValue());
         if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
-        if (data.isSetUnit()) json.addProperty("type", data.getUnit().name());
+        if (data.isSetUnit()) json.addProperty("unit", data.getUnit().name());
         if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
 
         return json.toString();
@@ -157,7 +157,7 @@ public class JsonConverterService {
             }
         }
 
-        attribute = "type";
+        attribute = "unit";
         if(data.has(attribute)){
             try {
                 Unit tmp = Unit.valueOf(data.get(attribute).getAsString());
