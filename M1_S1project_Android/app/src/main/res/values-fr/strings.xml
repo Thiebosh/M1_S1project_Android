@@ -3,41 +3,39 @@
 
 
     <!-- Bluetooth states -->
-    <string name="blt_not_connected">Non connecté</string>
-    <string name="blt_connecting">Connexion…</string>
-    <string name="blt_connected">Connecté à <xliff:g id="device_name">%1$s</xliff:g></string>
-    <string name="blt_disconnected">Déconnecté de l\'appareil</string>
-    <string name="blt_connection_failed">Échec de connexion à l\'appareil</string>
-    <string name="blt_reception_failed">Erreur de réception : nouvel essai</string>
+    <string name="blt_connected"        >Connecté à <xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="blt_connecting"       >Connexion…</string>
+    <string name="blt_not_connected"    >Non connecté</string>
+    <string name="blt_reception_failed" >Erreur de réception : nouvel essai</string>
     <string name="blt_disabled_exit_app">Impossible d\'activer le bluetooth</string>
 
 
     <!-- Menu -->
-    <string name="menu_disconnect">Déconnecter</string>
-    <string name="menu_toMainBoard">Écran principal</string>
-    <string name="menu_toBackup">Sauvegardes</string>
+    <string name="menu_toBackup"    >Sauvegardes</string>
+    <string name="menu_disconnect"  >Déconnecter</string>
+    <string name="menu_toMainBoard" >Écran principal</string>
 
 
     <!-- Fragment Connect -->
-    <string name="frag_conn_select_device">Sélectionnez un appareil</string>
-    <string name="frag_conn_paired_devices">Appareils connus</string>
-    <string name="frag_conn_none_paired">Aucun appareil n\'a été jumelé</string>
-    <string name="frag_conn_connecting_device">Tentative de connexion à \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
-    <string name="frag_conn_connexion_failed">Échec de la connexion à \"<xliff:g id="device_name">%1$s</xliff:g>\"</string>
-    <string name="frag_conn_retrieve_data">Chargement des données depuis \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
-    <string name="frag_conn_autoConnect">Reconnexion automatique ?</string>
+    <string name="frag_conn_autoConnect"        >Reconnexion automatique ?</string>
+    <string name="frag_conn_none_paired"        >Aucun appareil n\'a été jumelé</string>
+    <string name="frag_conn_select_device"      >Sélectionnez un appareil</string>
+    <string name="frag_conn_paired_devices"     >Appareils connus</string>
+    <string name="frag_conn_loading_data"       >Chargement des données depuis \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
+    <string name="frag_conn_connexion_failed"   >Échec de la connexion à \"<xliff:g id="device_name">%1$s</xliff:g>\"</string>
+    <string name="frag_conn_connecting_device"  >Tentative de connexion à \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
 
 
     <!-- Fragment MainBoard -->
-    <string name="allChannel">Tous les canaux</string>
-    <string name="noSelection">Pas de sélection</string>
-    <string name="input">Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
-    <string name="inputScaleUnit">Canal <xliff:g id="id_channel">%1$d</xliff:g> - <xliff:g id="scale">%2$s</xliff:g><xliff:g id="unit">%3$s</xliff:g></string>
+    <string name="frag_main_all_channel"        >Tous les canaux</string>
+    <string name="frag_main_no_selection"       >Pas de sélection</string>
+    <string name="frag_main_channel_id"         >Canal <xliff:g id="id_channel">%1$d</xliff:g></string>
+    <string name="frag_main_channel_scale_unit" >Canal <xliff:g id="id_channel">%1$d</xliff:g> - <xliff:g id="scale">%2$s</xliff:g><xliff:g id="unit">%3$s</xliff:g></string>
 
 
     <!-- Fragment Backup -->
-    <string name="store">Store <xliff:g id="id_channel">%1$d</xliff:g></string>
-    <string name="save">Enregistre courant</string>
-    <string name="load">Charge affiché</string>
+    <string name="save"  >Enregistre courant</string>
+    <string name="load"  >Charge affiché</string>
+    <string name="store" >Store <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="delete">Supprime affiché</string>
 </resources>

@@ -32,7 +32,7 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
         }
 
         public void setInitialDisplay(final Channel channel) {
-            mId.setText(itemView.getContext().getString(R.string.input, channel.getId()));
+            mId.setText(itemView.getContext().getString(R.string.frag_main_channel_id, channel.getId()));
 
             String qualifier = channel.getScale().name()+channel.getUnit().name();
             String min = channel.getMinValue()+qualifier;

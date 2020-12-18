@@ -223,7 +223,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 break;
 
                             case BluetoothService.STATE_CONNECTED:
-                                str = getString(R.string.frag_conn_retrieve_data, mConnectedDeviceName);
+                                str = getString(R.string.frag_conn_loading_data, mConnectedDeviceName);
                                 if (mFragmentStack.peek() instanceof BluetoothConnect) {
                                     ((BluetoothConnect) mFragmentStack.peek()).updateTitle(str);
                                 }

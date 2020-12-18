@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Vibrator;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -138,9 +136,9 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 channel.getUnit() == Unit.V ?
                         R.integer.absolute_limit_volt_scale_display : R.integer.absolute_limit_ampere_scale_display)));
 
-        mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
-        mHintMin.setHint(holder.itemView.getContext().getString(R.string.minScaleUnit, limitScale.name(), channel.getUnit().name()));
-        mHintMax.setHint(holder.itemView.getContext().getString(R.string.maxScaleUnit, limitScale.name(), channel.getUnit().name()));
+        mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.frag_main_channel_scale_unit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+        mHintMin.setHint(holder.itemView.getContext().getString(R.string.frag_main_min_scale_unit, limitScale.name(), channel.getUnit().name()));
+        mHintMax.setHint(holder.itemView.getContext().getString(R.string.frag_main_max_scale_unit, limitScale.name(), channel.getUnit().name()));
     }
 
     public void setDigitSelected(final int digit) {
@@ -199,7 +197,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                         input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, maxScale));
                         channel.setScale(maxScale);
                         mLastHolderSelected.setScale(maxScale);
-                        mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+                        mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.frag_main_channel_scale_unit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
                         ((BluetoothParent) holder.itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(maxScale));
                         updateDisplay = true;
                     }
@@ -212,7 +210,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                                 input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, minScale));
                                 channel.setScale(minScale);
                                 mLastHolderSelected.setScale(minScale);
-                                mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+                                mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.frag_main_channel_scale_unit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
                                 ((BluetoothParent) holder.itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(minScale));
                             }
                             else input = input.substring(0, 5);//1 avant virgule, virgule, 3 apres virgule
@@ -372,7 +370,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                 channel.setScale(limitScale);
                 mLastHolderSelected.setScale(limitScale);
-                mHintCurrent.setHint(context.getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
+                mHintCurrent.setHint(context.getString(R.string.frag_main_channel_scale_unit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
 
                 ((BluetoothParent) context).sendData((new Channel()).setId(channel.getId()).setScale(limitScale));
             }

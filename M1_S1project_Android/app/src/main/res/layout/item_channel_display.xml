@@ -16,7 +16,7 @@
         android:layout_marginLeft="@dimen/item_chan_disp_padding_left"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/input"
+        android:text="@string/frag_main_channel_id"
         android:textSize="@dimen/item_chan_disp_text"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

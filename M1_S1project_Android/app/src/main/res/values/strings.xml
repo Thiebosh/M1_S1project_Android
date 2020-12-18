@@ -3,19 +3,17 @@
 
 
     <!-- Bluetooth states -->
-    <string name="blt_not_connected">Not connected</string>
-    <string name="blt_connecting">Connecting…</string>
-    <string name="blt_connected">Connected to <xliff:g id="device_name">%1$s</xliff:g></string>
-    <string name="blt_disconnected">Disconnected from the device</string>
-    <string name="blt_connection_failed">Unable to connect device</string>
-    <string name="blt_reception_failed">Reception error: retry</string>
+    <string name="blt_connected"        >Connected to <xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="blt_connecting"       >Connecting…</string>
+    <string name="blt_not_connected"    >Not connected</string>
+    <string name="blt_reception_failed" >Reception error: retry</string>
     <string name="blt_disabled_exit_app">Cannot activate bluetooth</string>
 
-    <string name="blt_command_init_main" translatable="false">init_main</string>
-    <string name="blt_command_init_backup" translatable="false">init_stores</string>
-    <string name="blt_command_backup_get" translatable="false">store_get_</string>
-    <string name="blt_command_backup_save" translatable="false">store_save_</string>
-    <string name="blt_command_backup_load" translatable="false">store_load_</string>
+    <string name="blt_command_init_main"     translatable="false">init_main</string>
+    <string name="blt_command_init_backup"   translatable="false">init_stores</string>
+    <string name="blt_command_backup_get"    translatable="false">store_get_</string>
+    <string name="blt_command_backup_save"   translatable="false">store_save_</string>
+    <string name="blt_command_backup_load"   translatable="false">store_load_</string>
     <string name="blt_command_backup_delete" translatable="false">store_del_</string>
 
     <string-array name="blt_commands_array" translatable="false">
@@ -29,45 +27,42 @@
 
 
     <!-- Menu -->
-    <string name="menu_disconnect">Disconnect</string>
-    <string name="menu_toMainBoard">Main board</string>
-    <string name="menu_toBackup">Backups</string>
+    <string name="menu_toBackup"    >Backups</string>
+    <string name="menu_disconnect"  >Disconnect</string>
+    <string name="menu_toMainBoard" >Main board</string>
 
 
     <!-- Fragment Connect -->
-    <string name="frag_conn_select_device">Select a device</string>
-    <string name="frag_conn_paired_devices">Paired Devices</string>
-    <string name="frag_conn_none_paired">No devices have been paired</string>
-    <string name="frag_conn_connecting_device">Try to connect to \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
-    <string name="frag_conn_connexion_failed">Failed to connect to \"<xliff:g id="device_name">%1$s</xliff:g>\"</string>
-    <string name="frag_conn_retrieve_data">Loading data from \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
-    <string name="frag_conn_autoConnect">Auto connect?</string>
+    <string name="frag_conn_autoConnect"        >Auto connect?</string>
+    <string name="frag_conn_none_paired"        >No devices have been paired</string>
+    <string name="frag_conn_select_device"      >Select a device</string>
+    <string name="frag_conn_paired_devices"     >Paired Devices</string>
+    <string name="frag_conn_loading_data"       >Loading data from \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
+    <string name="frag_conn_connexion_failed"   >Failed to connect to \"<xliff:g id="device_name">%1$s</xliff:g>\"</string>
+    <string name="frag_conn_connecting_device"  >Try to connect to \"<xliff:g id="device_name">%1$s</xliff:g>\"…</string>
 
 
     <!-- Fragment MainBoard -->
-    <string name="allChannel">All Channel</string>
-    <string name="noSelection">No Input Selected</string>
-    <string name="input">Channel <xliff:g id="id_channel">%1$d</xliff:g></string>
-    <string name="inputScaleUnit">Channel <xliff:g id="id_channel">%1$d</xliff:g> - <xliff:g id="scale">%2$s</xliff:g><xliff:g id="unit">%3$s</xliff:g></string>
+    <string name="frag_main_all_channel"        >All Channel</string>
+    <string name="frag_main_no_selection"       >No selection</string>
+    <string name="frag_main_channel_id"         >Channel <xliff:g id="id_channel">%1$d</xliff:g></string>
+    <string name="frag_main_channel_scale_unit" >Channel <xliff:g id="id_channel">%1$d</xliff:g> - <xliff:g id="scale">%2$s</xliff:g><xliff:g id="unit">%3$s</xliff:g></string>
 
-    <string name="OnOff" translatable="false">On/Off</string>
-    <string name="modeVolt" translatable="false"><xliff:g id="scale_channel1">%s</xliff:g>V</string>
-    <string name="modeCurrent" translatable="false"><xliff:g id="scale_channel2">%s</xliff:g>I</string>
-    <string name="max" translatable="false">Max</string>
-    <string name="min" translatable="false">Min</string>
-    <string name="maxScaleUnit" translatable="false">Max <xliff:g id="scale">%1$s</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
-    <string name="minScaleUnit" translatable="false">Min <xliff:g id="scale">%1$s</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
-    <string name="point" translatable="false">.</string>
-    <string name="more" translatable="false">+</string>
-    <string name="less" translatable="false">-</string>
-    <string name="on" translatable="false">ON</string>
-    <string name="off" translatable="false">OFF</string>
+    <string name="frag_main_dot"  translatable="false">.</string>
+    <string name="frag_main_more" translatable="false">+</string>
+    <string name="frag_main_less" translatable="false">-</string>
+    <string name="frag_main_on"   translatable="false">ON</string>
+    <string name="frag_main_off"  translatable="false">OFF</string>
+    <string name="frag_main_min"  translatable="false">Min</string>
+    <string name="frag_main_max"  translatable="false">Max</string>
+    <string name="frag_main_min_scale_unit" translatable="false">Min <xliff:g id="scale">%1$s</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="frag_main_max_scale_unit" translatable="false">Max <xliff:g id="scale">%1$s</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
 
 
     <!-- Fragment Backup -->
-    <string name="store">Store <xliff:g id="id_channel">%1$d</xliff:g></string>
-    <string name="save">Save current</string>
-    <string name="load">Load displayed</string>
+    <string name="save"  >Save current</string>
+    <string name="load"  >Load displayed</string>
+    <string name="store" >Store <xliff:g id="id_channel">%1$d</xliff:g></string>
     <string name="delete">Delete displayed</string>
 
     <string name="lesserThan" translatable="false">≤</string>
