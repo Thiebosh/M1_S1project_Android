@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -137,7 +136,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final String data) {
-        Log.d("testy send", ""+data);
+        //Log.d("testy", "send : "+data);
         if (mBluetoothService != null) mBluetoothService.send(data);
     }
 
@@ -189,7 +188,9 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
      */
     private void setupBluetooth() {
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mBluetoothService = new BluetoothService(new Handler(Looper.myLooper()) {
+        mBluetoothService = new BluetoothService(
+                getResources().getStringArray(R.array.blt_commands_array),
+                new Handler(Looper.myLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 // The Handler that gets information back from the BluetoothChatService
@@ -244,7 +245,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        Log.d("testy", "recieve : "+str);
+                        //Log.d("testy", "recieve : "+str);
 
                         if (str.startsWith("channelList", 2)) {//init_main
                             Generator storage = JsonConverterService.createJsonObject(str);

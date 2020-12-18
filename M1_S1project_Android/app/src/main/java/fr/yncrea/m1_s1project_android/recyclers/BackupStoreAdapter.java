@@ -24,7 +24,7 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
     public static class Holder extends RecyclerView.ViewHolder {
 
         private final TextView mStoreContainer;
-        public Context mContext;
+        private final Context mContext;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -171,6 +171,8 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
             mConfigDisplayer.notifyDataSetChanged();
 
             ((BluetoothParent) getActivity(context)).sendData(context.getString(R.string.blt_command_backup_save) + mFocusedIndex);
+
+            mLastHolderSelected.getStoreContainer().setBackgroundColor(context.getResources().getColor(R.color.colorSecondaryLight));
 
             mLoad.setEnabled(true);
             mDelete.setEnabled(true);

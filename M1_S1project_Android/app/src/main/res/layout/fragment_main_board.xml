@@ -185,7 +185,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/frag_main_input_current"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/frag_main_input_current_min_width"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:enabled="false"
