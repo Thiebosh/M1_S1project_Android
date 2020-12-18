@@ -210,7 +210,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                             if (currentScale.getValue() > minScale.getValue() && input.startsWith("0.00")) {//change scale
                                 input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, minScale));
-                                Log.d("testy", "new input : "+input);
                                 channel.setScale(minScale);
                                 mLastHolderSelected.setScale(minScale);
                                 mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.inputScaleUnit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));

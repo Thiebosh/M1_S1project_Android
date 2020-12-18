@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.Executors;
@@ -31,6 +33,8 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.interfaces.FragmentSwitcher;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
+import fr.yncrea.m1_s1project_android.models.Scale;
+import fr.yncrea.m1_s1project_android.models.Unit;
 import fr.yncrea.m1_s1project_android.services.BluetoothService;
 import fr.yncrea.m1_s1project_android.services.JsonConverterService;
 
@@ -136,7 +140,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final String data) {
-        //Log.d("testy", "send : "+data);
+        Log.d("testy", "send : "+data);
         if (mBluetoothService != null) mBluetoothService.send(data);
     }
 
@@ -245,13 +249,13 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        //Log.d("testy", "recieve : "+str);
+                        Log.d("testy", "recieve : "+str);
 
-                        if (str.startsWith("channelList", 2)) {//init_main
+                        if (str.startsWith(Generator.ATTRIBUTE_CHANNEL_LIST, 2)) {//init_main
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if (storage == null) {
                                 sendData(getString(R.string.blt_command_init_main));//requête pour les données
-                                Toast.makeText(AppActivity.this, "Erreur de réception : nouvel essai", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AppActivity.this, getString(R.string.blt_reception_failed), Toast.LENGTH_SHORT).show();
                                 break;
                             }
                             mGenerator.setChannelList(storage.getChannelList());
@@ -267,7 +271,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                     BluetoothParent.mBackupGenerators.add(new Generator());
                                 }
                                 if (mFragmentStack.peek() instanceof BackupFragment) {
-                                    ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
+                                    ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, JsonConverterService.APPLYING_GLOBAL);
                                 }
                             }
                             break;
@@ -275,13 +279,14 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                         else if (str.startsWith(getString(R.string.blt_command_backup_get), 2)){
                             int store_number;
                             try {
-                                store_number = Integer.parseInt(str.substring(2 + getString(R.string.blt_command_backup_get).length(), str.indexOf(":") - 1));
+                                store_number = Integer.parseInt(str.substring(2 + getString(R.string.blt_command_backup_get).length(),
+                                        str.indexOf(JsonConverterService.OBJECT_SEPARATOR) - 1));
                             }
                             catch (Exception ignore) {
                                 break;
                             }
 
-                            str = str.replace(getString(R.string.blt_command_backup_get)+store_number, "channelList");
+                            str = str.replace(getString(R.string.blt_command_backup_get)+store_number, Generator.ATTRIBUTE_CHANNEL_LIST);
                             Generator storage = JsonConverterService.createJsonObject(str);
                             if(storage != null){
                                 mIsStores.set(store_number, true);
@@ -302,7 +307,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 BluetoothParent.mBackupGenerators.set(store_number, (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false));
                                 BluetoothParent.mIsStores.set(store_number, true);
                                 if (mFragmentStack.peek() instanceof BackupFragment) {
-                                    ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
+                                    ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, JsonConverterService.APPLYING_GLOBAL);
                                 }
                             }
                             else {
@@ -319,7 +324,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                     BluetoothParent.mBackupGenerators.set(store_number, (new Generator()).setChannelList(BluetoothParent.mGenerator.getChannelList()).setAllChannelActive(false));
                                     BluetoothParent.mIsStores.set(store_number, true);
                                     if (mFragmentStack.peek() instanceof BackupFragment) {
-                                        ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, -1);
+                                        ((BluetoothChildren) mFragmentStack.peek()).applyChanges(null, JsonConverterService.APPLYING_GLOBAL);
                                     }
                                 });
                             }
@@ -429,20 +434,17 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                         // 3 if suivants servent à communication entre 2 android
                         else if (str.equals(getString(R.string.blt_command_init_main))) {
-                            String c1 = "{\"id\":0,\"isActive\":false,\"currentValue\":9.6,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                            String c2 = "{\"id\":1,\"isActive\":true,\"currentValue\":3.8,\"unit\":I,\"minAmpereValue\":-6,\"maxAmpereValue\":5,\"scale\":u},";
-                            String c3 = "{\"id\":2,\"isActive\":false,\"currentValue\":6.9,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                            String c4 = "{\"id\":3,\"isActive\":false,\"currentValue\":1.4,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                            String c5 = "{\"id\":4,\"isActive\":false,\"currentValue\":6.7,\"unit\":I,\"minAmpereValue\":2,\"maxAmpereValue\":7,\"scale\":m},";
-                            String c6 = "{\"id\":5,\"isActive\":true,\"currentValue\":2.587,\"unit\":V,\"minVoltValue\":-0.54,\"maxVoltValue\":5,\"scale\":_},";
-                            String c7 = "{\"id\":6,\"isActive\":false,\"currentValue\":1.02,\"unit\":I,\"minAmpereValue\":0.5,\"maxAmpereValue\":1.50,\"scale\":u},";
-                            String c8 = "{\"id\":7,\"isActive\":true,\"currentValue\":0.25,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                            String init = "{\"channelList\":["+c1+c2+c3+c4+c5+c6+c7+c8+"]}";
-                            sendData(init);
+                            Generator init = new Generator().setChannelList(new ArrayList<>(Arrays.asList(
+                                    (new Channel()).setId(0).setCurrentValue(2.4),
+                                    (new Channel()).setId(2).setUnit(Unit.I).setCurrentValue(-0.003),
+                                    (new Channel()).setId(3).setActive(true),
+                                    (new Channel()).setId(4).setCurrentValue(0.14),
+                                    (new Channel()).setId(12).setCurrentValue(-1))));
+                            sendData(JsonConverterService.createJsonString(init));
                             break;
                         }
                         else if (str.equals(getString(R.string.blt_command_init_backup))) {
-                            String init = "{\""+getString(R.string.blt_command_init_backup)+"\":[1,1,0,0,0,1,0,0,0,0,1]}";
+                            String init = "{\""+getString(R.string.blt_command_init_backup)+"\":[0,0,1,0]}";
                             sendData(init);
                         }
                         else if (str.startsWith(getString(R.string.blt_command_backup_get))) {
@@ -454,38 +456,17 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 break;
                             }
 
-                            String init="";
-                            if (store_number == 0) {
-                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c3 = "{\"id\":2,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                                String c4 = "{\"id\":3,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                                init = "{\"" + getString(R.string.blt_command_backup_get) + "0\":["+c1+c3+c4+c8+"]}";
+                            if (store_number == 2) {
+                                String c1 = JsonConverterService.createJsonString((new Channel()).setId(0).setCurrentValue(0.9).setMinValue(-2).setMaxValue(5).setScale(Scale.m));
+                                String c3 = JsonConverterService.createJsonString((new Channel()).setId(2).setCurrentValue(-5.1).setMinValue(-6).setMaxValue(5).setScale(Scale.m));
+                                String c4 = JsonConverterService.createJsonString((new Channel()).setId(3).setUnit(Unit.I).setCurrentValue(3.7).setMinValue(0).setMaxValue(500).setScale(Scale.u));
+                                sendData("{\"" + getString(R.string.blt_command_backup_get) + "0\":["+c1+","+c3+","+c4+"]}");
                             }
-                            else if (store_number == 1) {
-                                String c1 = "{\"id\":0,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c3 = "{\"id\":3,\"currentValue\":5.1,\"unit\":V,\"minVoltValue\":5,\"maxVoltValue\":10,\"scale\":m},";
-                                String c4 = "{\"id\":6,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                String c8 = "{\"id\":7,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                                init = "{\""+getString(R.string.blt_command_backup_get)+"1\":["+c1+c3+c4+c8+"]}";
-                            }
-                            else if (store_number == 5) {
-                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m},";
-                                String c8 = "{\"id\":9,\"currentValue\":0.666,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":1,\"scale\":_}";
-                                init = "{\""+getString(R.string.blt_command_backup_get)+"5\":["+c1+c4+c8+"]}";
-                            }
-                            else if (store_number == 10) {
-                                String c1 = "{\"id\":1,\"currentValue\":0.9,\"unit\":V,\"minVoltValue\":-2,\"maxVoltValue\":5,\"scale\":m},";
-                                String c4 = "{\"id\":5,\"currentValue\":3.7,\"unit\":V,\"minVoltValue\":0,\"maxVoltValue\":5,\"scale\":m}";
-                                init = "{\""+getString(R.string.blt_command_backup_get)+"10\":["+c1+c4+"]}";
-                            }
-                            sendData(init);
                         }
 
                         else {//réception d'objet partiel
                             int index = JsonConverterService.applyJsonData(mGenerator, str);
-                            if (index == -10) break;//error
+                            if (index == JsonConverterService.ERROR_CONVERSION) break;//error
                             ((BluetoothChildren) mFragmentStack.peek()).applyChanges(mGenerator, index);
                         }
                         break;

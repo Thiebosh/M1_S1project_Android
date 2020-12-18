@@ -8,6 +8,7 @@
     <string name="blt_connected">Connecté à <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="blt_disconnected">Déconnecté de l\'appareil</string>
     <string name="blt_connection_failed">Échec de connexion à l\'appareil</string>
+    <string name="blt_reception_failed">Erreur de réception : nouvel essai</string>
     <string name="blt_disabled_exit_app">Impossible d\'activer le bluetooth</string>
 
 

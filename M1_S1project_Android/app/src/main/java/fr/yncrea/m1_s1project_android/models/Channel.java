@@ -1,22 +1,30 @@
 package fr.yncrea.m1_s1project_android.models;
 
 public class Channel {
+    public static final String ATTRIBUTE_ID = "id";
+    public static final String ATTRIBUTE_UNIT = "unit";
+    public static final String ATTRIBUTE_SCALE = "scale";
+    public static final String ATTRIBUTE_IS_ACTIVE = "isActive";
+    public static final String ATTRIBUTE_MIN_VALUE = "minValue";//aiguillage volt / ampere selon unit
+    public static final String ATTRIBUTE_MAX_VALUE = "maxValue";//aiguillage volt / ampere selon unit
+    public static final String ATTRIBUTE_CURRENT_VALUE = "currentValue";
+
     private int id;
+    private Unit unit = Unit.V;
+    private Scale scale = Scale._;
     private boolean isActive = false;
     private double currentValue = 0;
     private double minVoltValue = -3.3;
     private double maxVoltValue = 3.3;
     private double minAmpereValue = -5000;
     private double maxAmpereValue = 5000;
-    private Unit unit = Unit.V;
-    private Scale scale = Scale._;
 
-    private boolean isSetActive = false;
-    private boolean isSetCurrentValue = false;
-    private boolean isSetMinValue = false;
-    private boolean isSetMaxValue = false;
     private boolean isSetUnit = false;
     private boolean isSetScale = false;
+    private boolean isSetActive = false;
+    private boolean isSetMinValue = false;
+    private boolean isSetMaxValue = false;
+    private boolean isSetCurrentValue = false;
 
 
     public int getId() {
@@ -28,6 +36,26 @@ public class Channel {
         return this;
     }
 
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public Channel setUnit(Unit unit) {
+        this.unit = unit;
+        this.isSetUnit = true;
+        return this;
+    }
+
+    public Scale getScale() {
+        return scale;
+    }
+
+    public Channel setScale(Scale scale) {
+        this.scale = scale;
+        this.isSetScale = true;
+        return this;
+    }
+
     public boolean isActive() {
         return isActive;
     }
@@ -35,16 +63,6 @@ public class Channel {
     public Channel setActive(boolean active) {
         this.isActive = active;
         this.isSetActive = true;
-        return this;
-    }
-
-    public double getCurrentValue() {
-        return currentValue;
-    }
-
-    public Channel setCurrentValue(double currentValue) {
-        this.currentValue = currentValue;
-        this.isSetCurrentValue = true;
         return this;
     }
 
@@ -74,23 +92,13 @@ public class Channel {
         return this;
     }
 
-    public Unit getUnit() {
-        return unit;
+    public double getCurrentValue() {
+        return currentValue;
     }
 
-    public Channel setUnit(Unit unit) {
-        this.unit = unit;
-        this.isSetUnit = true;
-        return this;
-    }
-
-    public Scale getScale() {
-        return scale;
-    }
-
-    public Channel setScale(Scale scale) {
-        this.scale = scale;
-        this.isSetScale = true;
+    public Channel setCurrentValue(double currentValue) {
+        this.currentValue = currentValue;
+        this.isSetCurrentValue = true;
         return this;
     }
 
