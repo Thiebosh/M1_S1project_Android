@@ -19,6 +19,7 @@ public class BluetoothService {
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
+    private final String[] mCommands;
     private AcceptThread mSecureAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -43,10 +44,11 @@ public class BluetoothService {
      *
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothService(final Handler handler) {
+    public BluetoothService(final String[] commands, final Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+        mCommands = commands;
     }
 
     /**
@@ -289,10 +291,10 @@ public class BluetoothService {
      */
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
+        //private final BluetoothDevice mmDevice;
 
         public ConnectThread(BluetoothDevice device) {
-            mmDevice = device;
+            //mmDevice = device;
             BluetoothSocket tmp = null;
 
             // Get a BluetoothSocket for a connection with the given BluetoothDevice
@@ -373,6 +375,7 @@ public class BluetoothService {
             byte[] buffer;
             int bytes;
             int brackets = 0;
+            boolean isBrackets = false;
 
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
@@ -385,17 +388,38 @@ public class BluetoothService {
                         str.append(tmp);
 
                         for (char c : tmp.toCharArray()) {
-                            if (c == '{') brackets++;
+                            if (c == '{') {
+                                brackets++;
+                                isBrackets = true;
+                            }
                             else if (c == '}') brackets--;
                         }
 
-                        if (brackets == 0) {
+                        if (isBrackets && brackets == 0) {
                             Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
                             Bundle bundle = new Bundle();
                             bundle.putString(BluetoothConstants.RECEIVE, str.toString());
                             msg.setData(bundle);
                             mHandler.sendMessage(msg);
                             str = new StringBuilder();
+                            isBrackets = false;
+                        }
+                        else if (!isBrackets) {
+                            for (String command : mCommands) {
+                                if (str.toString().startsWith(command)) {
+                                    // if reception time is too short for getting correct id or digit number,
+                                    // here, simply save string command and continue for doing one more loop.
+                                    // then, between if and elif, add another elif : commandString != null.
+                                    // if this condition is true, program will access code below and send message
+                                    Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(BluetoothConstants.RECEIVE, str.toString());
+                                    msg.setData(bundle);
+                                    mHandler.sendMessage(msg);
+                                    str = new StringBuilder();
+                                    isBrackets = false;
+                                }
+                            }
                         }
                     }
                 }

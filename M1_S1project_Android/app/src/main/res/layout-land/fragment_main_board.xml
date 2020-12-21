@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/allChannel"
+                android:text="@string/frag_main_all_channel"
                 android:textSize="@dimen/frag_main_title"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,8 +69,8 @@
                     android:layout_height="@dimen/frag_main_btn_on_off_height"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
-                    android:textOff="@string/on"
-                    android:textOn="@string/on"
+                    android:textOff="@string/frag_main_on"
+                    android:textOn="@string/frag_main_on"
                     android:textSize="@dimen/frag_main_text" />
 
                 <ToggleButton
@@ -79,8 +79,8 @@
                     android:layout_height="@dimen/frag_main_btn_on_off_height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:textOff="@string/off"
-                    android:textOn="@string/off"
+                    android:textOff="@string/frag_main_off"
+                    android:textOn="@string/frag_main_off"
                     android:textSize="@dimen/frag_main_text" />
 
             </RelativeLayout>
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
-                    android:hint="@string/min"
+                    android:hint="@string/frag_main_min"
                     app:boxStrokeColor="@color/colorSecondary"
                     app:hintTextColor="@color/colorSecondaryDark">
 
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:hint="@string/max"
+                    android:hint="@string/frag_main_max"
                     app:boxStrokeColor="@color/colorSecondary"
                     app:hintTextColor="@color/colorSecondaryDark">
 
@@ -166,7 +166,7 @@
                     android:enabled="false"
                     android:insetTop="2dp"
                     android:insetBottom="2dp"
-                    android:text="@string/less"
+                    android:text="@string/frag_main_less"
                     android:textSize="@dimen/frag_main_text_more_less"
                     android:textStyle="bold" />
 
@@ -179,7 +179,7 @@
                     android:enabled="false"
                     android:insetTop="2dp"
                     android:insetBottom="2dp"
-                    android:text="@string/more"
+                    android:text="@string/frag_main_more"
                     android:textSize="@dimen/frag_main_text_more_less"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
-                android:hint="@string/noSelection"
+                android:hint="@string/frag_main_no_selection"
                 app:boxStrokeColor="@color/colorSecondary"
                 app:hintTextColor="@color/colorSecondaryDark"
                 app:layout_constraintBottom_toBottomOf="parent"

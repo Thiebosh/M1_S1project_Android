@@ -17,7 +17,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:height="55dp"
-        android:text="@string/input"
+        android:text="@string/frag_main_channel_id"
         android:textSize="@dimen/item_chan_edit_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="@string/more" />
+            android:text="@string/frag_main_more" />
 
         <Button
             android:id="@+id/item_channel_button_digit1"
@@ -55,7 +55,7 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="@string/point" />
+            android:text="@string/frag_main_dot" />
 
         <Button
             android:id="@+id/item_channel_button_digit2"

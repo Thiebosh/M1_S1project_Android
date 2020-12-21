@@ -19,6 +19,7 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Generator;
+import fr.yncrea.m1_s1project_android.services.JsonConverterService;
 
 public class MainBoardFragment extends Fragment implements BluetoothChildren/*, View.OnClickListener*/ {
 
@@ -33,7 +34,7 @@ public class MainBoardFragment extends Fragment implements BluetoothChildren/*, 
     @Override
     public void applyChanges(Generator generator, int index) {
         mAdapter.updateChannelListData(generator.getChannelList(), index);
-        if (index == -1) {
+        if (index == JsonConverterService.APPLYING_GLOBAL) {
             if (generator.getChannel(0).isActive()) {
                 mAllOnBtn.setChecked(true);
                 mAllOffBtn.setChecked(false);

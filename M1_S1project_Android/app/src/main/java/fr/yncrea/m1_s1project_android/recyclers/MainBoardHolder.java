@@ -9,7 +9,6 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -83,7 +82,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
 
     public void setInitialDisplay(MainBoardAdapter adapter, Channel channel) {
         mChannelActivation.setBackgroundColor(itemView.getContext().getResources().getColor(channel.isActive() ? R.color.green : R.color.red));
-        mChannelActivation.setText(itemView.getContext().getString(R.string.input, channel.getId()));
+        mChannelActivation.setText(itemView.getContext().getString(R.string.frag_main_channel_id, channel.getId()));
         setDigitsDisplay(channel.getCurrentValue());
 
         mScaleData.clear();

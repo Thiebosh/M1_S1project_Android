@@ -19,6 +19,7 @@ import fr.yncrea.m1_s1project_android.recyclers.BackupConfigAdapter;
 import fr.yncrea.m1_s1project_android.recyclers.BackupStoreAdapter;
 import fr.yncrea.m1_s1project_android.interfaces.BluetoothChildren;
 import fr.yncrea.m1_s1project_android.models.Generator;
+import fr.yncrea.m1_s1project_android.services.JsonConverterService;
 
 /**
  * Activité secondaire : gestion du module de sauvegarde du MIVS
@@ -33,16 +34,8 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
 
     @Override
     public void applyChanges(Generator generator, int index) {
-        //update nb generator
-        if (generator == null) {//déjà envoyé dans BluetoothParent.mBackupGenerator
-            mSlotsAdapter.notifyDataSetChanged();
-            return;
-        }
-
-        //update store x
-        mSlotsAdapter.updateChannelListData(generator.getChannelList(), index);
-
-        //update par commande (save, load, delete)
+        if (index == JsonConverterService.APPLYING_GLOBAL) mSlotsAdapter.notifyDataSetChanged();
+        else /*if (generator != null)*/ mSlotsAdapter.updateChannelListData(generator.getChannelList(), index);
     }
 
 
