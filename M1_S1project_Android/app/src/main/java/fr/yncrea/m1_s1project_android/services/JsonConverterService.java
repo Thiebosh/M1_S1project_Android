@@ -38,12 +38,12 @@ public class JsonConverterService {
         JsonObject json = new JsonObject();
 
         json.addProperty(Channel.ATTRIBUTE_ID, data.getId());
-        if (data.isSetActive()) json.addProperty("isActive", (data.isActive()) ? 1 : 0);
-        if (data.isSetCurrentValue()) json.addProperty("currentValue", data.getCurrentValue());
-        if (data.isSetMinValue()) json.addProperty("minValue", data.getMinValue());
-        if (data.isSetMaxValue()) json.addProperty("maxValue", data.getMaxValue());
-        if (data.isSetUnit()) json.addProperty("unit", data.getUnit().name());
-        if (data.isSetScale()) json.addProperty("scale", data.getScale().name());
+        if (data.isSetUnit()) json.addProperty(Channel.ATTRIBUTE_UNIT, data.getUnit().name());
+        if (data.isSetScale()) json.addProperty(Channel.ATTRIBUTE_SCALE, data.getScale().name());
+        if (data.isSetActive()) json.addProperty(Channel.ATTRIBUTE_IS_ACTIVE, (data.isActive()) ? 1 : 0);
+        if (data.isSetCurrentValue()) json.addProperty(Channel.ATTRIBUTE_CURRENT_VALUE, data.getCurrentValue());
+        if (data.isSetMinValue()) json.addProperty(Channel.ATTRIBUTE_MIN_VALUE, data.getMinValue());
+        if (data.isSetMaxValue()) json.addProperty(Channel.ATTRIBUTE_MAX_VALUE, data.getMaxValue());
 
         return json.toString();
     }
@@ -108,18 +108,6 @@ public class JsonConverterService {
             return ERROR_CONVERSION;
         }
 
-
-        attribute = Channel.ATTRIBUTE_IS_ACTIVE;
-        if(data.has(attribute)){
-            try {
-                boolean tmp = data.get(attribute).getAsBoolean();
-                generator.getChannel(channel).setActive(tmp);
-            }
-            catch (Exception ignore) {
-                return ERROR_CONVERSION;
-            }
-        }
-
         attribute = Channel.ATTRIBUTE_UNIT;
         if(data.has(attribute)){
             try {
@@ -142,6 +130,29 @@ public class JsonConverterService {
             }
         }
 
+
+        attribute = Channel.ATTRIBUTE_IS_ACTIVE;
+        if(data.has(attribute)){
+            try {
+                boolean tmp = data.get(attribute).getAsBoolean();
+                generator.getChannel(channel).setActive(tmp);
+            }
+            catch (Exception ignore) {
+                return ERROR_CONVERSION;
+            }
+        }
+
+        attribute = Channel.ATTRIBUTE_CURRENT_VALUE;
+        if(data.has(attribute)){
+            try {
+                double tmp = data.get(attribute).getAsDouble();
+                generator.getChannel(channel).setCurrentValue(tmp);
+            }
+            catch (Exception ignore) {
+                return ERROR_CONVERSION;
+            }
+        }
+
         attribute = Channel.ATTRIBUTE_MIN_VALUE;
         if(data.has(attribute)){
             try {
@@ -158,17 +169,6 @@ public class JsonConverterService {
             try {
                 double tmp = data.get(attribute).getAsDouble();
                 generator.getChannel(channel).setMaxValue(tmp);
-            }
-            catch (Exception ignore) {
-                return ERROR_CONVERSION;
-            }
-        }
-
-        attribute = Channel.ATTRIBUTE_CURRENT_VALUE;
-        if(data.has(attribute)){
-            try {
-                double tmp = data.get(attribute).getAsDouble();
-                generator.getChannel(channel).setCurrentValue(tmp);
             }
             catch (Exception ignore) {
                 return ERROR_CONVERSION;

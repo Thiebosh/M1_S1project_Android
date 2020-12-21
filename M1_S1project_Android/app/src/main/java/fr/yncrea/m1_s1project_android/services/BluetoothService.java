@@ -30,6 +30,7 @@ public class BluetoothService {
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     //private static final UUID MY_UUID_SECURE = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    public static final int MAX_LENGTH_MSG = 100;
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -380,45 +381,43 @@ public class BluetoothService {
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
                 try {
-                    buffer = new byte[100];
+                    buffer = new byte[MAX_LENGTH_MSG];
                     bytes = mmInStream.read(buffer);
 
-                    if (bytes != 0) {
-                        String tmp = new String(buffer, 0, bytes);
-                        str.append(tmp);
+                    if (bytes != 0) continue;
 
-                        for (char c : tmp.toCharArray()) {
-                            if (c == '{') {
-                                brackets++;
-                                isBrackets = true;
-                            }
-                            else if (c == '}') brackets--;
-                        }
+                    String tmp = new String(buffer, 0, bytes);
+                    str.append(tmp);
 
-                        if (isBrackets && brackets == 0) {
-                            Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
-                            Bundle bundle = new Bundle();
-                            bundle.putString(BluetoothConstants.RECEIVE, str.toString());
-                            msg.setData(bundle);
-                            mHandler.sendMessage(msg);
-                            str = new StringBuilder();
-                            isBrackets = false;
-                        }
-                        else if (!isBrackets) {
-                            for (String command : mCommands) {
-                                if (str.toString().startsWith(command)) {
-                                    // if reception time is too short for getting correct id or digit number,
-                                    // here, simply save string command and continue for doing one more loop.
-                                    // then, between if and elif, add another elif : commandString != null.
-                                    // if this condition is true, program will access code below and send message
-                                    Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(BluetoothConstants.RECEIVE, str.toString());
-                                    msg.setData(bundle);
-                                    mHandler.sendMessage(msg);
-                                    str = new StringBuilder();
-                                    isBrackets = false;
-                                }
+                    for (char c : tmp.toCharArray()) {
+                        if (c == '{') {
+                            brackets++;
+                            isBrackets = true;
+                        } else if (c == '}') brackets--;
+                    }
+
+                    if (isBrackets && brackets == 0) {
+                        Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(BluetoothConstants.RECEIVE, str.toString());
+                        msg.setData(bundle);
+                        mHandler.sendMessage(msg);
+                        str = new StringBuilder();
+                        isBrackets = false;
+                    } else if (!isBrackets) {
+                        for (String command : mCommands) {
+                            if (str.toString().startsWith(command)) {
+                                // if reception time is too short for getting correct id or digit number,
+                                // here, simply save string command and continue for doing one more loop.
+                                // then, between if and elif, add another elif : commandString != null.
+                                // if this condition is true, program will access code below and send message
+                                Message msg = mHandler.obtainMessage(BluetoothConstants.MESSAGE_RECEIVE);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(BluetoothConstants.RECEIVE, str.toString());
+                                msg.setData(bundle);
+                                mHandler.sendMessage(msg);
+                                str = new StringBuilder();
+                                isBrackets = false;
                             }
                         }
                     }
