@@ -1,3 +1,4 @@
+// Tableau de valeurs pour l'exemple
 //{id,b,val,u,mi,M,s} 
 double allChannels[8][7] = {
   {0,0,9.6,0,-2,5,1},
@@ -180,6 +181,7 @@ void initPlz(void){
  * renvoi le nombre de stores en différenciant ceux qui sont vides et ceux qui sont occupés
  */
 void getAllStores(void){
+  // appel de recallUserCongig()
   const size_t capacity = JSON_ARRAY_SIZE(8) + JSON_OBJECT_SIZE(1);
   DynamicJsonDocument getStores(capacity);
   JsonArray data = getStores.createNestedArray("init_stores");
@@ -280,4 +282,14 @@ void getStore(uint8_t store_number){
     }
     break;
   }
+}
+
+
+void saveStore(uint8_t store_number){
+  // remplace FRAME_MEMORY correspondant à store_number
+}
+
+
+void deleteStore(uint8_t store_number){
+  // vide FRAME_MEMORY correspondant à store_number
 }
