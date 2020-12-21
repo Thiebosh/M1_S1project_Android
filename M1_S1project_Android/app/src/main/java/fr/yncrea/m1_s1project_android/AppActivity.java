@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -130,13 +129,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void disconnectDevice() {
-        if (mBluetoothService != null) {
-            mBluetoothService.stop();
-            mGenerator.getChannelList().clear();
-            mBackupGenerators.clear();
-            mIsStores.clear();
-            setIsStoresInitialized(false);
-        }
+        if (mBluetoothService != null) mBluetoothService.stop();
     }
 
     @Override
@@ -146,7 +139,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void sendData(final String data) {
-        Log.d("testy", "send : "+data);
+        //Log.d("testy", "send : "+data);
         if (mBluetoothService != null) mBluetoothService.send(data);
     }
 
@@ -241,6 +234,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
                                 loadFragment(new ConnectFragment(), true);//charge premier fragment
                                 str = getString(R.string.blt_not_connected);
                                 BluetoothParent.mGenerator.getChannelList().clear();
+                                setIsStoresInitialized(false);
                                 BluetoothParent.mIsStores.clear();
                                 BluetoothParent.mBackupGenerators.clear();
                                 break;
@@ -255,7 +249,7 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
                     case BluetoothConstants.MESSAGE_RECEIVE:
                         str = msg.getData().getString(BluetoothConstants.RECEIVE);
-                        Log.d("testy", "recieve : "+str);
+                        //Log.d("testy", "recieve : "+str);
 
                         if (str.startsWith(Generator.ATTRIBUTE_CHANNEL_LIST, 2)) {//init_main
                             Generator storage = JsonConverterService.createJsonObject(str);
