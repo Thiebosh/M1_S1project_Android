@@ -86,7 +86,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         setDigitsDisplay(channel.getCurrentValue());
 
         mScaleData.clear();
-        mScaleData.addAll(Scale.getNames(channel.getUnit()));
+        mScaleData.addAll(Scale.getNames(itemView.getResources(), channel.getUnit()));
         mScaleAdapter.notifyDataSetChanged();
         mScaleSpinner.setSelection(mScaleAdapter.getPosition(channel.getScale().name()));
 
@@ -154,7 +154,7 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                 if (channel.getScale() != selectedScale) {
                     //if (channel.isActive()) mChannelActivation.callOnClick();
 
-                    if (selectedScale.getValue() == Scale.getMaxValue(channel.getUnit()).getValue()) {//risque de dépassement des limites
+                    if (selectedScale.getValue() == Scale.getMaxValue(itemView.getResources(), channel.getUnit()).getValue()) {//risque de dépassement des limites
                         if (channel.getCurrentValue() > channel.getMaxValue()) {
                             channel.setCurrentValue(channel.getMaxValue());
                             setDigitsDisplay(channel.getCurrentValue());
@@ -201,11 +201,11 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
                     if (channel.isActive()) mChannelActivation.callOnClick();
 
                     mScaleData.clear();
-                    mScaleData.addAll(Scale.getNames(selected));
+                    mScaleData.addAll(Scale.getNames(itemView.getResources(), selected));
                     mScaleAdapter.notifyDataSetChanged();
 
-                    if (!Scale.getNamesValues(selected).contains(channel.getScale())) {
-                        channel.setScale(Scale.getNamesValues(selected).get(0));
+                    if (!Scale.getNamesValues(itemView.getResources(), selected).contains(channel.getScale())) {
+                        channel.setScale(Scale.getNamesValues(itemView.getResources(), selected).get(0));
                     }
                     mScaleSpinner.setSelection(mScaleAdapter.getPosition(channel.getScale().name()));
 

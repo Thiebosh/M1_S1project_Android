@@ -190,7 +190,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                 Unit unit = channel.getUnit();
                 //troncature
                 if (id == R.id.frag_main_input_current && input.length() >= 2) {
-                    Scale maxScale = Scale.getMaxValue(unit);
+                    Scale maxScale = Scale.getMaxValue(holder.itemView.getResources(), unit);
                     Scale currentScale = channel.getScale();
 
                     if (input.charAt(1) != '.' && currentScale.getValue() < maxScale.getValue()) {
@@ -204,7 +204,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
 
                     if (input.charAt(1) == '.') {
                         if (input.length() > 5) {
-                            Scale minScale = Scale.getMinValue(unit);
+                            Scale minScale = Scale.getMinValue(holder.itemView.getResources(), unit);
 
                             if (currentScale.getValue() > minScale.getValue() && input.startsWith("0.00")) {//change scale
                                 input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, minScale));

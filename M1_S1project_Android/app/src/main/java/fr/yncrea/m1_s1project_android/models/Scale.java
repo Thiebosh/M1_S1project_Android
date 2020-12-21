@@ -1,9 +1,11 @@
 package fr.yncrea.m1_s1project_android.models;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import fr.yncrea.m1_s1project_android.R;
 
 public enum Scale {
     u(-6), m(-3), _(0);
@@ -31,32 +33,32 @@ public enum Scale {
         }
     }
 
-    public static ArrayList<Scale> getNamesValues(final Unit unit) {
+    public static ArrayList<Scale> getNamesValues(final Resources resources, final Unit unit) {
         ArrayList<Scale> enumNames = new ArrayList<>();
 
-        if (unit.equals(Unit.I)) enumNames.addAll(Arrays.asList(u, m));
-        else /*unit.equals(Unit.V) */ enumNames.addAll(Arrays.asList(m, _));
+        int[] values = resources.getIntArray(unit.equals(Unit.I) ? R.array.ampere_scales : R.array.volt_scales);
+        for (int value : values) enumNames.add(scaleOf(value));
 
         return enumNames;
     }
 
-    public static ArrayList<String> getNames(final Unit unit) {
+    public static ArrayList<String> getNames(final Resources resources, final Unit unit) {
         ArrayList<String> enumNames = new ArrayList<>();
 
-        for (Scale tmp : Scale.getNamesValues(unit)) enumNames.add(tmp.name());
+        for (Scale tmp : Scale.getNamesValues(resources, unit)) enumNames.add(tmp.name());
 
         return enumNames;
     }
 
-    public static Scale getMinValue(final Unit unit) {
+    public static Scale getMinValue(final Resources resources, final Unit unit) {
         Scale min = Scale._;
-        for (Scale current: getNamesValues(unit)) if (current.getValue() < min.getValue()) min = current;
+        for (Scale current: getNamesValues(resources, unit)) if (current.getValue() < min.getValue()) min = current;
         return min;
     }
 
-    public static Scale getMaxValue(final Unit unit) {
+    public static Scale getMaxValue(final Resources resources, final Unit unit) {
         Scale max = Scale.u;
-        for (Scale current: getNamesValues(unit)) if (current.getValue() > max.getValue()) max = current;
+        for (Scale current: getNamesValues(resources, unit)) if (current.getValue() > max.getValue()) max = current;
         return max;
     }
 
@@ -70,16 +72,16 @@ public enum Scale {
         if (Math.abs(value) >= 0.001) shifter = new StringBuilder(String.valueOf(Math.abs(value)));
         else {
             shifter = new StringBuilder(String.format("%.6f", Math.abs(value)));
-            shifter.deleteCharAt(1);
+            shifter.deleteCharAt(1);//',' if fr
             shifter.insert(1, '.');
         }
-
 
         int dotPos = shifter.indexOf(".");
         if (dotPos == -1) {
             dotPos = shifter.length();//pas de point
             shifter.append('.');
         }
+
 
         if (shift > 0) {//échelle inférieure
             for (int i = shifter.length(); i <= dotPos + shift; ++i) shifter.append('0');

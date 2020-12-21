@@ -12,9 +12,17 @@
     <integer name="absolute_limit_volt_value">8</integer>
     <integer name="absolute_limit_volt_scale_value">0</integer>
     <integer name="absolute_limit_volt_scale_display">0</integer>
-
+    <integer-array name="volt_scales">
+        <item>0</item>
+        <item>-3</item>
+    </integer-array>
+e
     <integer name="absolute_limit_ampere_value">5</integer>
     <integer name="absolute_limit_ampere_scale_value">-3</integer>
     <integer name="absolute_limit_ampere_scale_display">-6</integer>
+    <integer-array name="ampere_scales">
+        <item>-3</item>
+        <item>-6</item>
+    </integer-array>
 
 </resources>
