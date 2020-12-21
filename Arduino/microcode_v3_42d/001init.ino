@@ -116,7 +116,7 @@ uint8_t initAll(void) {
      STEP9: locks calibration features, unlock TS
   */
   calibrationLocked = 1;
-  touchscreenLocked = 0; // changement : touchscreenLocked = 0; SY:TS:LOCK
+  touchscreenLocked = 0;
 
   /*
     STEP10: terminates

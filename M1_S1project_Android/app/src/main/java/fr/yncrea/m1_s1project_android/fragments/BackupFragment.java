@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -27,6 +28,7 @@ import fr.yncrea.m1_s1project_android.services.JsonConverterService;
 public class BackupFragment extends Fragment implements BluetoothChildren {
 
     private BackupStoreAdapter mSlotsAdapter;
+    private BackupConfigAdapter oneConfigAdapter;
 
     /*
      * Section BluetoothChildren
@@ -66,7 +68,7 @@ public class BackupFragment extends Fragment implements BluetoothChildren {
         RecyclerView oneConfigRecycler = view.findViewById(R.id.frag_back_recycler_config);
         oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.VERTICAL));
         oneConfigRecycler.addItemDecoration(new DividerItemDecoration(oneConfigRecycler.getContext(), DividerItemDecoration.HORIZONTAL));
-        BackupConfigAdapter oneConfigAdapter = new BackupConfigAdapter();
+        oneConfigAdapter = new BackupConfigAdapter();
         oneConfigRecycler.setAdapter(oneConfigAdapter);
 
         RecyclerView storeRecycler = view.findViewById(R.id.frag_back_recycler_stores);

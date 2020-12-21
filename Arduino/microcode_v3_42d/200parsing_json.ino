@@ -287,9 +287,13 @@ void getStore(uint8_t store_number){
 
 void saveStore(uint8_t store_number){
   // remplace FRAME_MEMORY correspondant à store_number
+  Serial.print("Enregistrement du mainboard dans le store ");
+  Serial.println(store_number);
 }
 
 
 void deleteStore(uint8_t store_number){
   // vide FRAME_MEMORY correspondant à store_number
+  Serial.print("Suppression du store ");
+  Serial.println(store_number);
 }

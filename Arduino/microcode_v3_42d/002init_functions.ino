@@ -55,7 +55,7 @@ uint8_t testDac(void) {
   Serial.print("Test of dac1 returns: ");
   Serial.println(result);
 #endif
-  return 0; // changement : return result;
+  return result;
 }
 
 
@@ -315,8 +315,7 @@ void defaultsRestore(uint8_t factory) {
   //digitSelected = DEF_SELECTED_DIGIT;
   minLimitSelectedStatus = DEF_MIN_CHANNEL_LIMIT_SELECTED;
   maxLimitSelectedStatus = DEF_MAX_CHANNEL_LIMIT_SELECTED;
-  //userConfigStored = fram.readByte((FRAM_ADDRESS << 8) + USER_CONFIG_BASE_ADDRESS); // changement : ligne non commentée
-  Serial.println("In defaultsRestore"); // changement : ligne inexistante, la ligne précédente bloque
+  //userConfigStored = fram.readByte((FRAM_ADDRESS << 8) + USER_CONFIG_BASE_ADDRESS); // changement : ligne non commentée car bloque la simulation sur Arduino DUE
 
   
   if (factory) {

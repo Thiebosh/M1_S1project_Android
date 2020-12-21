@@ -86,10 +86,8 @@ char* version_date = "28 may 2020";
 /* Bluetooth & Json changement */
 #include <ArduinoJson.h>
 #define hc06 Serial1
-int intCmd = 0;
-int rep = 9;
 String strCmd = "";
-String str = "";
+/* end Bluetooth & Json */
 
 /*hardware chip select pins*/
 #define TFT_DC 9
@@ -213,7 +211,7 @@ void setup() {
 
    
   Serial.begin(9600); // for early debug purposes
-  hc06.begin(9600);   // changement : ligne inexistante
+  hc06.begin(9600);   // changement : ligne inexistante (déclration du module Bluetooth)
   
   /*
      configures interrupts

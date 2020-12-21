@@ -12,9 +12,8 @@ uint8_t getInputFromTouchScreen() {
   uint8_t y = 255;
 
   if (ts.touched()) { //gets a point if ts touched  during this iteration
-    while (ts.touched()) { // changement : block while vide => while (ts.touched()) {}
-      //bluetoothCommunication();
-      break;
+    while (ts.touched()) {
+      break; // changement : ligne inexistante
     }
 
     while  (!ts.bufferEmpty()) {

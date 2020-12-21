@@ -130,7 +130,13 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
 
     @Override
     public void disconnectDevice() {
-        if (mBluetoothService != null) mBluetoothService.stop();
+        if (mBluetoothService != null) {
+            mBluetoothService.stop();
+            mGenerator.getChannelList().clear();
+            mBackupGenerators.clear();
+            mIsStores.clear();
+            setIsStoresInitialized(false);
+        }
     }
 
     @Override

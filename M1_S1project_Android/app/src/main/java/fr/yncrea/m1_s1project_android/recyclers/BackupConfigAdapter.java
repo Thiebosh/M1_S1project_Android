@@ -1,5 +1,6 @@
 package fr.yncrea.m1_s1project_android.recyclers;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import fr.yncrea.m1_s1project_android.R;
 import fr.yncrea.m1_s1project_android.models.Channel;
 
 public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapter.Holder> {
+
 
     public static class Holder extends RecyclerView.ViewHolder {
 
@@ -67,6 +69,7 @@ public class BackupConfigAdapter extends RecyclerView.Adapter<BackupConfigAdapte
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_channel_display, parent, false));
+
     }
 
     @Override

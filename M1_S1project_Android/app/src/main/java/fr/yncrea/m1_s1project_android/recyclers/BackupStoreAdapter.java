@@ -3,6 +3,7 @@ package fr.yncrea.m1_s1project_android.recyclers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,6 @@ public class BackupStoreAdapter extends RecyclerView.Adapter<BackupStoreAdapter.
 
     public BackupStoreAdapter(View view, BackupConfigAdapter configDisplayer) {
         this.mConfigDisplayer = configDisplayer;
-
         mSave = view.findViewById(R.id.frag_back_button_save);
         mLoad = view.findViewById(R.id.frag_back_button_load);
         mDelete = view.findViewById(R.id.frag_back_button_delete);
