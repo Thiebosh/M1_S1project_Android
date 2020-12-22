@@ -204,7 +204,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     }
 
                     if (input.charAt(1) == '.') {
-                        if (input.length() > 5) {
+                        if (input.length() > holder.getNbDigits() + 1) {//digits + virgule
                             Scale minScale = Scale.getMinValue(holder.itemView.getResources(), unit);
 
                             if (currentScale.getValue() > minScale.getValue() && input.startsWith("0.00")) {//change scale
@@ -214,7 +214,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                                 mHintCurrent.setHint(holder.itemView.getContext().getString(R.string.frag_main_channel_scale_unit, channel.getId(), channel.getScale().name(), channel.getUnit().name()));
                                 ((BluetoothParent) holder.itemView.getContext()).sendData((new Channel()).setId(channel.getId()).setScale(minScale));
                             }
-                            else input = input.substring(0, 5);//1 avant virgule, virgule, 3 apres virgule
+                            else input = input.substring(0, holder.getNbDigits() + 1);//digits + virgule
 
                             updateDisplay = true;
                         }
@@ -225,12 +225,12 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     }
                 }
                 else {//min ou max
-                    if (unit == Unit.V && input.length() > 5) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
-                        input = input.substring(0, 5);
+                    if (unit == Unit.V && input.length() > holder.itemView.getContext().getResources().getInteger(R.integer.nb_max_char_limit_volt)) {//1 chiffre avant virgule, virgule, 3 chiffres apres virgule
+                        input = input.substring(0, holder.itemView.getContext().getResources().getInteger(R.integer.nb_max_char_limit_volt));
                         updateDisplay = true;
                     }
-                    if (unit == Unit.I && input.length() > 4) {//4 chiffres avant virgule
-                        input = input.substring(0, 4);
+                    if (unit == Unit.I && input.length() > holder.itemView.getContext().getResources().getInteger(R.integer.nb_max_char_limit_ampere)) {//4 chiffres avant virgule
+                        input = input.substring(0, holder.itemView.getContext().getResources().getInteger(R.integer.nb_max_char_limit_ampere));
                         updateDisplay = true;
                     }
                 }
@@ -319,11 +319,15 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         //normalize number description
         StringBuilder litteralValue = new StringBuilder(String.valueOf(channel.getCurrentValue()));
         if (channel.getCurrentValue() >= 0) litteralValue.insert(0, '+');
-        while (litteralValue.length() < 6) litteralValue.append('0');//+x.xxx ou -x.xxx
+        while (litteralValue.length() < getLastHolderSelected().getNbDigits() + 2) {//digits + virgule + signe
+            litteralValue.append('0');//+x.xxx ou -x.xxx
+        }
 
         //double to int : exact values
         StringBuilder stepBuilder = new StringBuilder("1");
-        while (stepBuilder.length() < (4 - mDigitSelected)) stepBuilder.append('0');//4 digits - le 1 positionné
+        while (stepBuilder.length() < (getLastHolderSelected().getNbDigits() - mDigitSelected)) {//digits - le 1 positionné
+            stepBuilder.append('0');
+        }
         if (step < 0) stepBuilder.insert(0, '-');
         int integerStep = Integer.parseInt(stepBuilder.toString());
 
@@ -335,11 +339,15 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         //int to double : exact representation
         litteralValue = new StringBuilder(String.valueOf(integerValue));
         boolean isPositive = integerValue >= 0;
-        if (litteralValue.length() == (isPositive ? 4 : 5)) litteralValue.insert(isPositive ? 1 : 2, '.');
+        if (litteralValue.length() == (isPositive ? getLastHolderSelected().getNbDigits() : getLastHolderSelected().getNbDigits() + 1)) {//signe
+            litteralValue.insert(isPositive ? 1 : 2, '.');
+        }
         else {
             if (Math.abs(integerValue) < 10000) {
                 litteralValue.insert(isPositive ? 0 : 1, "0.");
-                while (litteralValue.length() < (isPositive ? 5 : 6)) litteralValue.insert(isPositive ? 2 : 3, '0');
+                while (litteralValue.length() < (isPositive ? getLastHolderSelected().getNbDigits() + 1 : getLastHolderSelected().getNbDigits() + 2)) {//double + point + éventuel signe
+                    litteralValue.insert(isPositive ? 2 : 3, '0');
+                }
             }
             else litteralValue.insert(isPositive ? 2 : 3, '.');//si necessaire, flag pour changement de scale
         }

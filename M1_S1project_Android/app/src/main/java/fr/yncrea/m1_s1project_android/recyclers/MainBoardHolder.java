@@ -69,6 +69,10 @@ public class MainBoardHolder extends RecyclerView.ViewHolder {
         mUnitSpinner.setAdapter(mUnitAdapter);
     }
 
+    public int getNbDigits() {
+        return mDigitsIds.size();
+    }
+
     public void setScale(final Scale scale) {
         mScaleSpinner.setSelection(mScaleAdapter.getPosition(scale.name()));
     }
