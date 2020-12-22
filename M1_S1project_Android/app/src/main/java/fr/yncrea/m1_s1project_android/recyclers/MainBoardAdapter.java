@@ -127,7 +127,6 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
         mCurrent.setText(String.valueOf(channel.getCurrentValue()));
         mMin.setText(String.valueOf(channel.getMinValue()));
         mMax.setText(String.valueOf(channel.getMaxValue()));
-
         mMin.setMinimumWidth((int) holder.itemView.getResources().getDimension(R.dimen.frag_main_input_limit_min_width));
         mMax.setMinimumWidth((int) holder.itemView.getResources().getDimension(R.dimen.frag_main_input_limit_min_width));
         mCurrent.setMinimumWidth((int) holder.itemView.getResources().getDimension(R.dimen.frag_main_input_current_min_width));
@@ -194,7 +193,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
                     Scale maxScale = Scale.getMaxValue(holder.itemView.getResources(), unit);
                     Scale currentScale = channel.getScale();
 
-                    if (input.charAt(1) != '.' && currentScale.getValue() < maxScale.getValue()) {
+                    if (input.charAt(1) != '.' && currentScale.getValue() < maxScale.getValue() && currentScale.getValue() < maxScale.getValue()) {
                         input = String.valueOf(Scale.changeScale(Double.parseDouble(input), currentScale, maxScale));
                         channel.setScale(maxScale);
                         mLastHolderSelected.setScale(maxScale);
