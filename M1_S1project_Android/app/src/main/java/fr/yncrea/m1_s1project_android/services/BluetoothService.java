@@ -384,7 +384,7 @@ public class BluetoothService {
                     buffer = new byte[MAX_LENGTH_MSG];
                     bytes = mmInStream.read(buffer);
 
-                    if (bytes != 0) continue;
+                    if (bytes == 0) continue;
 
                     String tmp = new String(buffer, 0, bytes);
                     str.append(tmp);

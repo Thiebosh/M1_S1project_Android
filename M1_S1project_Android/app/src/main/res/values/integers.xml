@@ -16,7 +16,7 @@
         <item>0</item>
         <item>-3</item>
     </integer-array>
-e
+
     <integer name="absolute_limit_ampere_value">5</integer>
     <integer name="absolute_limit_ampere_scale_value">-3</integer>
     <integer name="absolute_limit_ampere_scale_display">-6</integer>

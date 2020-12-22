@@ -64,7 +64,6 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
 
         //si était connecté, déconnecte
         ((BluetoothParent) Objects.requireNonNull(getActivity())).disconnectDevice();
-        BluetoothParent.mGenerator.getChannelList().clear();
 
         //si premier lancement et adresse en mémoire, autoconnect
         SharedPreferences loginPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(BluetoothConstants.PREF_SLOT_ACCESS, MODE_PRIVATE);
@@ -84,8 +83,19 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
         ArrayAdapter<String> devicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         pairedListView.setAdapter(devicesAdapter);
 
+        // Get a set of currently paired devices from a local Bluetooth adapter
+        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+        // If there are paired devices, add each one to the ArrayAdapter
+        if (pairedDevices.size() > 0) {
+            view.findViewById(R.id.frag_conn_textView_paired_devices).setVisibility(View.VISIBLE);
+            for (BluetoothDevice device : pairedDevices) {
+                devicesAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        }
+        else devicesAdapter.add(getString(R.string.frag_conn_none_paired));
+
         //The on-click listener for all devices in the ListViews
-        AdapterView.OnItemClickListener deviceClickListener = (av, v, arg2, arg3) -> {
+        pairedListView.setOnItemClickListener((av, v, arg2, arg3) -> {
             // Get the device MAC address, which is the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
@@ -106,20 +116,7 @@ public class ConnectFragment extends Fragment implements BluetoothConnect {
             }
             else loginPrefsEditor.clear();
             loginPrefsEditor.apply();
-        };
-        pairedListView.setOnItemClickListener(deviceClickListener);
-
-        // Get a set of currently paired devices from a local Bluetooth adapter
-        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
-
-        // If there are paired devices, add each one to the ArrayAdapter
-        if (pairedDevices.size() > 0) {
-            view.findViewById(R.id.frag_conn_textView_paired_devices).setVisibility(View.VISIBLE);
-            for (BluetoothDevice device : pairedDevices) {
-                devicesAdapter.add(device.getName() + "\n" + device.getAddress());
-            }
-        }
-        else devicesAdapter.add(getString(R.string.frag_conn_none_paired));
+        });
 
         return view;
     }

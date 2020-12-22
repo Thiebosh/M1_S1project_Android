@@ -26,6 +26,7 @@ import fr.yncrea.m1_s1project_android.interfaces.BluetoothParent;
 import fr.yncrea.m1_s1project_android.models.Channel;
 import fr.yncrea.m1_s1project_android.models.Scale;
 import fr.yncrea.m1_s1project_android.models.Unit;
+import fr.yncrea.m1_s1project_android.services.JsonConverterService;
 
 
 public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
@@ -72,7 +73,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardHolder> {
     }
 
     public void updateChannelListData(ArrayList<Channel> data, int index) {
-        if (index == -1) {
+        if (index == JsonConverterService.APPLYING_GLOBAL) {
             boolean active = data.get(0).isActive();
             for (int i = 0; i < mChannelList.size(); ++i) mChannelList.get(i).setActive(active);
             this.notifyDataSetChanged();
