@@ -44,21 +44,7 @@ String attributes[9] = { "id", "isActive", "currentValue", "unit", "minVoltValue
   */
 
 void jsonDeserialize(String cmd){
-  /*
-  int brace_count = 1;
-  for(int i = 1; i < cmd.length(); i++){
-    Serial.print(cmd.charAt(i));
-    if(cmd.charAt(i) == '{'){ brace_count++; }
-    else if(cmd.charAt(i) == '}'){ brace_count--;}
-    if(brace_count==0){
-      //  if(i!=cmd.length()-1) // verif si c la fin de la string totale reçue
-      Serial.println("");
-      Serial.println("count 0");
-      execJsonCommand(cmd.substring(0, i+1));
-      jsonDeserialize(cmd.substring(i+1));
-    }
-  }
-  */
+ 
   if(cmd.indexOf("}{") > 0){
     execJsonCommand(cmd.substring(0, cmd.indexOf("}{")+1));
     jsonDeserialize(cmd.substring(cmd.indexOf("}{")+1));
