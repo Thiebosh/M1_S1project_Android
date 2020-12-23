@@ -103,7 +103,6 @@ public class AppActivity extends AppCompatActivity implements FragmentSwitcher, 
             i++;
         }
         
-        //mFragmentStack.addAll(copy);
         for (int j = 0; j < i; j++) mFragmentStack.push(copy.pop());
 
         loadFragment(mFragmentStack.peek(), true);
